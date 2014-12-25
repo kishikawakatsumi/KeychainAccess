@@ -1,0 +1,14 @@
+language: objective-c
+cache:
+  directories:
+    - Lib/vendor/bundle
+before_install:
+  - sudo easy_install cpp-coveralls
+install:
+  - (cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)
+script:
+  - (cd Lib && bundle exec rake test)
+env:
+  global:
+    - LANG=en_US.UTF-8
+    - LC_ALL=en_US.UTF-8
