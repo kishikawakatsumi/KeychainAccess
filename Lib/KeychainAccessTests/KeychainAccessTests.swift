@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 kishikawa katsumi. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import XCTest
 
 import KeychainAccess
