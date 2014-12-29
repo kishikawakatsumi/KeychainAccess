@@ -22,9 +22,7 @@ public struct Options {
     public var accessibility: Accessibility = .AfterFirstUnlock
     public var synchronizable: Bool = false
     
-    init() {
-        
-    }
+    init() {}
 }
 
 public enum ItemClass {
@@ -171,12 +169,14 @@ public class Keychain {
         var result: AnyObject?
         var status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
         
-        if status == errSecSuccess {
+        switch status {
+        case errSecSuccess:
             if let data = result as NSData? {
                 return (NSString(data: data, encoding: NSUTF8StringEncoding), data, nil)
             }
-        } else if status != errSecItemNotFound {
+        case errSecItemNotFound:
             return (nil, nil, error(status: status))
+        default: ()
         }
         return (nil, nil, nil)
     }
@@ -195,21 +195,22 @@ public class Keychain {
         query[kSecAttrAccount] = key
         
         var status = SecItemCopyMatching(query, nil)
-        if status == errSecSuccess {
+        switch status {
+        case errSecSuccess:
             var attributes = options.attributes(value: value)
             
             status = SecItemUpdate(query, attributes)
             if status != errSecSuccess {
                 return error(status: status)
             }
-        } else if status == errSecItemNotFound {
+        case errSecItemNotFound:
             var attributes = options.attributes(key: key, value: value)
             
             status = SecItemAdd(attributes, nil)
             if status != errSecSuccess {
                 return error(status: status)
             }
-        } else {
+        default:
             return error(status: status)
         }
         return nil
@@ -277,87 +278,105 @@ public class Keychain {
     
     // MARK:
     
-    public func allItems(service:String? = nil, accessGroup: String? = nil, failure: ((NSError) -> ())? = nil) -> [[String: AnyObject]]? {
+    public class func allItems(itemClass: ItemClass) -> [[String: AnyObject]]? {
         var query = [String: AnyObject]()
         query[kSecClass] = itemClass.rawValue
-        query[kSecAttrSynchronizable] = kSecAttrSynchronizableAny
-        query[kSecMatchLimit] = kSecMatchLimitAll
         query[kSecReturnAttributes] = kCFBooleanTrue
         query[kSecReturnData] = kCFBooleanTrue
-        if service != nil {
-            query[kSecAttrService] = service
-        }
-        #if (!arch(i386) && !arch(x86_64)) || !os(iOS)
-        if accessGroup != nil {
-            query[kSecAttrAccessGroup] = accessGroup
-        }
-        #endif
+        query[kSecMatchLimit] = kSecMatchLimitAll
         
         var result: AnyObject?
         var status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
         
         switch status {
         case errSecSuccess:
-            if let attributes = result as [[String: AnyObject]]? {
-                let items = attributes.map() { attribute -> [String: AnyObject] in
-                    var item = [String: AnyObject]()
-                    
-                    let key = attribute[kSecAttrAccount] as String
-                    item["key"] = key
-                    
-                    let value = attribute[kSecValueData] as NSData
-                    if let text = NSString(data: value, encoding: NSUTF8StringEncoding) {
-                        item["value"] = text
-                    } else  {
-                        item["value"] = value
-                    }
-                    
-                    item["service"] = attribute[kSecAttrService]
-                    item["accessGroup"] = attribute[kSecAttrAccessGroup]
-                    item["accessibility"] = Accessibility(rawValue: attribute[kSecAttrAccessible] as String)?.description
-                    item["synchronizable"] = attribute[kSecAttrSynchronizable]
-                    
-                    return item
-                }
-                return items
+            if let items = result as [[String: AnyObject]]? {
+                return prettify(itemClass: itemClass, items: items)
             }
         case errSecItemNotFound:
             return []
-        default:
-            failure?(error(status: status))
+        default: ()
+        }
+        return nil
+    }
+    
+    public func allItems() -> [[String: AnyObject]]? {
+        if let items = items() {
+            return self.dynamicType.prettify(itemClass: itemClass, items: items)
         }
         return nil
     }
     
     // MARK:
     
-    private func debugItems(service: String?, accessGroup: String?) -> [[String: AnyObject]]? {
-        var query = [String: AnyObject]()
-        query[kSecClass] = itemClass.rawValue
-        query[kSecAttrSynchronizable] = kSecAttrSynchronizableAny
-        query[kSecMatchLimit] = kSecMatchLimitAll
+    private func items() -> [[String: AnyObject]]? {
+        var query = options.query()
         query[kSecReturnAttributes] = kCFBooleanTrue
         query[kSecReturnData] = kCFBooleanTrue
-        if service != nil {
-            query[kSecAttrService] = service
-        }
-        #if (!arch(i386) && !arch(x86_64)) || !os(iOS)
-        if accessGroup != nil {
-            query[kSecAttrAccessGroup] = accessGroup
-        }
-        #endif
+        query[kSecMatchLimit] = kSecMatchLimitAll
         
         var result: AnyObject?
         var status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
         
-        if status == errSecSuccess {
-            if let entries = result as [[String: AnyObject]]? {
-                return entries
+        switch status {
+        case errSecSuccess:
+            if let items = result as [[String: AnyObject]]? {
+                return items
             }
-        } else if status == errSecItemNotFound {
+        case errSecItemNotFound:
             return []
+        default: ()
         }
         return nil
+    }
+    
+    private class func prettify(#itemClass: ItemClass, items: [[String: AnyObject]]) -> [[String: AnyObject]] {
+        let items = items.map() { attributes -> [String: AnyObject] in
+            var item = [String: AnyObject]()
+            
+            item["class"] = itemClass.description
+            
+            switch itemClass {
+            case .GenericPassword:
+                if let service = attributes[kSecAttrService] as? String {
+                    item["service"] = service
+                }
+                if let accessGroup = attributes[kSecAttrAccessGroup] as? String {
+                    item["accessGroup"] = accessGroup
+                }
+            case .InternetPassword:
+                if let server = attributes[kSecAttrServer] as? String {
+                    item["server"] = server
+                }
+                if let protocolType = ProtocolType(rawValue: attributes[kSecAttrProtocol] as String) {
+                    item["protocol"] = protocolType.description
+                }
+                if let authenticationType = AuthenticationType(rawValue: attributes[kSecAttrAuthenticationType] as String) {
+                    item["authenticationType"] = authenticationType.description
+                }
+            }
+            
+            if let key = attributes[kSecAttrAccount] as? String {
+                item["key"] = key
+            }
+            if let data = attributes[kSecValueData] as? NSData {
+                if let text = NSString(data: data, encoding: NSUTF8StringEncoding) {
+                    item["value"] = text
+                } else  {
+                    item["value"] = data
+                }
+            }
+            
+            if let accessibility = Accessibility(rawValue: attributes[kSecAttrAccessible] as String) {
+                item["accessibility"] = accessibility.description
+            }
+            if let synchronizable = attributes[kSecAttrSynchronizable] as? Bool {
+                item["synchronizable"] = synchronizable ? "true" : "false"
+            }
+
+            return item
+        }
+        return items
     }
     
     private func error(#status: OSStatus) -> NSError {
@@ -373,13 +392,17 @@ public class Keychain {
 
 extension Keychain : Printable, DebugPrintable {
     public var description: String {
-        var items = self.allItems(service: service, accessGroup: accessGroup)
-        return "\(items)"
+        if let items = allItems() {
+            return "\(self.dynamicType.prettify(itemClass: itemClass, items: items)))"
+        }
+        return "error"
     }
     
     public var debugDescription: String {
-        var items = self.debugItems(service, accessGroup: accessGroup)
-        return "\(items)"
+        if let items = allItems() {
+            return "\(items)"
+        }
+        return "error"
     }
 }
 
@@ -394,9 +417,9 @@ extension Options {
         case .GenericPassword:
             query[kSecAttrService] = service
             #if (!arch(i386) && !arch(x86_64)) || !os(iOS)
-                if let accessGroup = self.accessGroup {
+            if let accessGroup = self.accessGroup {
                 query[kSecAttrAccessGroup] = accessGroup
-                }
+            }
             #endif
         case .InternetPassword:
             query[kSecAttrServer] = server.host

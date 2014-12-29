@@ -5,6 +5,9 @@
       location = "group:Lib/KeychainAccess.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Examples/KeychainAccess-Playground-iOS.playground">
+      location = "group:Examples/Example-iOS/Example-iOS.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Examples/Playground-iOS.playground">
    </FileRef>
 </Workspace>
