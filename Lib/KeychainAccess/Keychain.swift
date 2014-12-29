@@ -187,7 +187,10 @@ public class Keychain {
         if let data = value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
             return set(data, key: key)
         }
-        return NSError(domain: "com.kishikawakatsumi.KeychainAccess", code: 0, userInfo: nil)
+        
+        println("failed to convert string to data")
+        let userInfo = [NSLocalizedDescriptionKey: "failed to convert string to data"]
+        return NSError(domain: "com.kishikawakatsumi.KeychainAccess", code: 0, userInfo: userInfo)
     }
     
     public func set(value: NSData, key: String) -> NSError? {
