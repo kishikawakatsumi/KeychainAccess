@@ -35,6 +35,20 @@ keychain.remove("username")
 keychain.remove("password")
 
 
+// Error handling
+if let error = keychain.set("kishikawakatsumi", key: "username") {
+    println("error: \(error.localizedDescription)")
+}
+
+if let username = keychain.get("username", { println("error: \($0.localizedDescription)") }).asString {
+    println("username: \(username)")
+}
+
+if let error = keychain.remove("username") {
+    println("error: \(error.localizedDescription)")
+}
+
+
 // Configuration
 
 let background = Keychain(service: "example.com")

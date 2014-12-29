@@ -342,13 +342,17 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(error, "no error occurred")
             }
             
-            let username = keychain.get("username")
-            XCTAssertEqual(username.asString!, "kishikawa_katsumi")
-            XCTAssertNil(username.error, "no error occurred")
+            if let username = keychain.get("username", { XCTAssertNil($0, "no error occurred") }).asString {
+                XCTAssertEqual(username, "kishikawa_katsumi")
+            } else {
+                XCTFail()
+            }
             
-            let password = keychain.get("password")
-            XCTAssertEqual(password.asString!, "password_1234")
-            XCTAssertNil(password.error, "no error occurred")
+            if let password = keychain.get("password", { XCTAssertNil($0, "no error occurred") }).asString {
+                XCTAssertEqual(password, "password_1234")
+            } else {
+                XCTFail()
+            }
         }
         
         locally {
@@ -362,13 +366,17 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(error, "no error occurred")
             }
             
-            let username = keychain.get("username")
-            XCTAssertEqual(username.asString!, "katsumi_kishikawa")
-            XCTAssertNil(username.error, "no error occurred")
+            if let username = keychain.get("username", { XCTAssertNil($0, "no error occurred") }).asString {
+                XCTAssertEqual(username, "katsumi_kishikawa")
+            } else {
+                XCTFail()
+            }
             
-            let password = keychain.get("password")
-            XCTAssertEqual(password.asString!, "1234_password")
-            XCTAssertNil(password.error, "no error occurred")
+            if let password = keychain.get("password", { XCTAssertNil($0, "no error occurred") }).asString {
+                XCTAssertEqual(password, "1234_password")
+            } else {
+                XCTFail()
+            }
         }
         
         locally {
