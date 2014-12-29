@@ -143,7 +143,7 @@ let keychain = Keychain(service: "example.com")
 keychain["password"] = password
 ```
 
-###### One shot
+###### One-shot
 
 ```swift
 let keychain = Keychain(service: "example.com")
@@ -164,7 +164,7 @@ let keychain = Keychain(service: "example.com")
 keychain["password"] = password
 ```
 
-###### One shot
+###### One-shot
 
 ```swift
 let keychain = Keychain(service: "example.com")
@@ -191,7 +191,7 @@ let keychain = Keychain(service: "example.com")
 keychain["password"] = password
 ```
 
-###### One shot
+###### One-shot
 
 ```swift
 let keychain = Keychain(service: "example.com")
