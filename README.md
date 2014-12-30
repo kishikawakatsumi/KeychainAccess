@@ -87,7 +87,7 @@ let data = keychain.getData("username")
 let failable = keychain.getStringOrError("username")
 ```
 
-1. check enum state
+**1. check `enum` state**
 
 ```swift
 switch failable {
@@ -98,7 +98,7 @@ case .Failure:
 }
 ```
 
-2. check error object
+**2. check `error` object**
 
 ```swift
 if let error = failable.error {
@@ -108,7 +108,7 @@ if let error = failable.error {
 }
 ```
 
-3. by failed property
+**3. by `failed` property**
 
 ```swift
 if failable.failed {
