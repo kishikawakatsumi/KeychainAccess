@@ -11,11 +11,11 @@ var keychain: Keychain
 
 /* for Generic Password */
 
-keychain = Keychain(service: "example.com")
+keychain = Keychain(service: "Twitter")
 
 /* for Internet Password */
 
-let URL = NSURL(string: "https://kishikawakatsumi.com")!
+let URL = NSURL(string: "https://example.com")!
 keychain = Keychain(server: URL, protocolType: .HTTPS)
 
 
@@ -38,15 +38,19 @@ keychain.set("abcd1234", key: "password")
  * Obtaining items
  *****************/
 
-/* subscripting */
+/* subscripting (automatically convert to String) */
 
 var username = keychain["username"]
 var password = keychain["password"]
 
 /* get method */
 
+// as String
 username = keychain.get("username")
-password = keychain.get("password")
+password = keychain.getString("password")
+
+// as Data
+let data = keychain.getData("username")
 
 /****************
  * Removing items
@@ -112,17 +116,17 @@ if let error = keychain.remove("username") {
  * Configuration
  ***************/
 
-let background = Keychain(service: "example.com")
+let background = Keychain(service: "Twitter")
     .accessibility(.AfterFirstUnlock) // for background application
 
-let forground = Keychain(service: "example.com")
+let forground = Keychain(service: "Twitter")
     .accessibility(.WhenUnlocked) // for forground application
 
 /* Sharing Keychain Items */
 
-let shared = Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared")
+let shared = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
 
-let iCloud = Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared")
+let iCloud = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
     .synchronizable(true)
 
 /* One-Shot configuration change */
