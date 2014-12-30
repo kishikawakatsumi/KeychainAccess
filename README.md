@@ -9,34 +9,31 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 
 ## Usage
 
-#### Initialization
+See also [Playground](https://github.com/kishikawakatsumi/KeychainAccess/blob/master/Examples/Playground-iOS.playground/section-1.swift).
+
+#### Instantiation
 
 ##### Create Keychain for Generic Password
 
 ```swift
-let keychain = Keychain(service: "example.com")
+let keychain = Keychain(service: "Twitter")
 ```
 
 ```swift
-let keychain = Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared")
+let keychain = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
 ```
 
 ##### Create Keychain for Internet Password
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+let keychain = Keychain(server: NSURL(string: "https://example.com")!, protocolType: .HTTPS)
 ```
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS, authenticationType: .Default)
+let keychain = Keychain(server: NSURL(string: "https://example.com")!, protocolType: .HTTPS, authenticationType: .HTMLForm)
 ```
 
 #### Adding an item
-
-```swift
-keychain.set("kishikawakatsumi", key: "username")
-keychain.set("abcd1234", key: "password")
-```
 
 ##### subscripting
 
@@ -45,31 +42,22 @@ keychain["username"] = "kishikawakatsumi"
 keychain["password"] = "abcd1234"
 ```
 
+##### set method
+
+```swift
+keychain.set("kishikawakatsumi", key: "username")
+keychain.set("abcd1234", key: "password")
+```
+
 ##### error handling
 
 ```swift
 if let error = keychain.set("kishikawakatsumi", key: "username") {
     println("error: \(error)")
 }
-if let error = keychain.set("abcd1234", key: "password") {
-    println("error: \(error)")
-}
 ```
 
 #### Obtaining an item
-
-##### as String
-
-```swift
-let username = keychain.get("username").asString
-let password = keychain.get("password").asString
-```
-
-##### as NSData
-
-```swift
-let data = keychain.get("data").asData
-```
 
 ##### subscripting (automatically converts to string)
 
@@ -78,29 +66,72 @@ let username = keychain["username"]
 let password = keychain["password"]
 ```
 
+##### get methods
+
+###### as String
+
+```swift
+username = keychain.get("username")
+password = keychain.getString("password")
+```
+
+###### as NSData
+
+```swift
+let data = keychain.getData("username")
+```
+
 ##### error handling
 
 ```swift
-let username = keychain.get("username")
-if let error = username.error {
-    println("error: \(error)")
+let failable = keychain.getStringOrError("username")
+```
+
+1. check enum state
+
+```swift
+switch failable {
+case .Success:
+  println("username: \(failable.value)")
+case .Failure:
+  println("error: \(failable.error)")
+}
+```
+
+2. check error object
+
+```swift
+if let error = failable.error {
+    println("error: \(failable.error)")
 } else {
-    println("username: \(username.asString)")
+    println("username: \(failable.value)")
+}
+```
+
+3. by failed property
+
+```swift
+if failable.failed {
+    println("error: \(failable.error)")
+} else {
+    println("username: \(failable.value)")
 }
 ```
 
 #### Removing an item
-
-```swift
-keychain.remove("username")
-keychain.remove("password")
-```
 
 ##### subscripting
 
 ```swift
 keychain["username"] = nil
 keychain["password"] = nil
+```
+
+##### remove method
+
+```swift
+keychain.remove("username")
+keychain.remove("password")
 ```
 
 ##### error handling
@@ -119,7 +150,7 @@ if let error = keychain.remove("password") {
 ###### *Provides fluent interfaces*
 
 ```swift
-let keychain = Keychain(service: "example.com")
+let keychain = Keychain(service: "Twitter")
     .synchronizable(true)
     .accessibility(.AfterFirstUnlock)
 ```
@@ -129,7 +160,7 @@ let keychain = Keychain(service: "example.com")
 ##### Default (=kSecAttrAccessibleAfterFirstUnlock)
 
 ```swift
-let keychain = Keychain(service: "example.com")
+let keychain = Keychain(service: "Twitter")
 ```
 
 ##### For background application
@@ -137,7 +168,7 @@ let keychain = Keychain(service: "example.com")
 ###### Creating instance
 
 ```swift
-let keychain = Keychain(service: "example.com")
+let keychain = Keychain(service: "Twitter")
     .accessibility(.AfterFirstUnlock)
 
 keychain["password"] = password
@@ -146,7 +177,7 @@ keychain["password"] = password
 ###### One-shot
 
 ```swift
-let keychain = Keychain(service: "example.com")
+let keychain = Keychain(service: "Twitter")
 
 keychain
     .accessibility(.AfterFirstUnlock)
@@ -158,7 +189,7 @@ keychain
 ###### Creating instance
 
 ```swift
-let keychain = Keychain(service: "example.com")
+let keychain = Keychain(service: "Twitter")
     .accessibility(.WhenUnlocked)
 
 keychain["password"] = password
@@ -167,7 +198,7 @@ keychain["password"] = password
 ###### One-shot
 
 ```swift
-let keychain = Keychain(service: "example.com")
+let keychain = Keychain(service: "Twitter")
 
 keychain
     .accessibility(.WhenUnlocked)
@@ -177,7 +208,7 @@ keychain
 ##### Sharing Keychain items
 
 ```swift
-let keychain = Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared")
+let keychain = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
 ```
 
 ##### Synchronizing Keychain items with iCloud
@@ -185,7 +216,7 @@ let keychain = Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared"
 ###### Creating instance
 
 ```swift
-let keychain = Keychain(service: "example.com")
+let keychain = Keychain(service: "Twitter")
     .synchronizable(true)
 
 keychain["password"] = password
@@ -194,7 +225,7 @@ keychain["password"] = password
 ###### One-shot
 
 ```swift
-let keychain = Keychain(service: "example.com")
+let keychain = Keychain(service: "Twitter")
 
 keychain
     .synchronizable(true)
