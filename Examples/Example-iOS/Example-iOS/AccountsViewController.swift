@@ -39,10 +39,9 @@ class AccountsViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let services = Array(itemsGroupedByService!.keys)
         let service = services[section]
-        if let items = Keychain(service: service).allItems() {
-            return items.count
-        }
-        return 0
+        
+        let items = Keychain(service: service).allItems()
+        return items.count
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -55,11 +54,12 @@ class AccountsViewController: UITableViewController {
         
         let services = Array(itemsGroupedByService!.keys)
         let service = services[indexPath.section]
-        if let items = Keychain(service: service).allItems() {
-            let item = items[indexPath.row]
-            cell.textLabel?.text = item["key"] as? String
-            cell.detailTextLabel?.text = item["value"] as? String
-        }
+        
+        let items = Keychain(service: service).allItems()
+        let item = items[indexPath.row]
+        
+        cell.textLabel?.text = item["key"] as? String
+        cell.detailTextLabel?.text = item["value"] as? String
         
         return cell
     }
@@ -69,18 +69,18 @@ class AccountsViewController: UITableViewController {
         let service = services[indexPath.section]
         
         let keychain = Keychain(service: service)
-        if let items = keychain.allItems() {
-            let item = items[indexPath.row]
-            let key = item["key"] as String
-            
-            keychain[key] = nil
-            
-            if items.count == 1 {
-                reloadData()
-                tableView.deleteSections(NSIndexSet(index: indexPath.section), withRowAnimation: .Automatic)
-            } else {
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            }
+        let items = keychain.allItems()
+        
+        let item = items[indexPath.row]
+        let key = item["key"] as String
+        
+        keychain[key] = nil
+        
+        if items.count == 1 {
+            reloadData()
+            tableView.deleteSections(NSIndexSet(index: indexPath.section), withRowAnimation: .Automatic)
+        } else {
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         }
     }
     
@@ -88,13 +88,11 @@ class AccountsViewController: UITableViewController {
     
     func reloadData() {
         let items = Keychain.allItems(.GenericPassword)
-        if items != nil {
-            itemsGroupedByService = groupBy(items!) { item -> String in
-                if let service = item["service"] as? String {
-                    return service
-                }
-                return ""
+        itemsGroupedByService = groupBy(items) { item -> String in
+            if let service = item["service"] as? String {
+                return service
             }
+            return ""
         }
     }
 }
