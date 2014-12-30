@@ -118,11 +118,8 @@ public class Value<T> {
 }
 
 public class Keychain {
-    private class var errorDomain: String {
-        return "KeychainAccess"
-    }
-    
     private let options: Options
+    private let errorDomain = "com.kishikawakatsumi.KeychainAccess"
     
     public var service: String {
         return options.service
@@ -348,47 +345,11 @@ public class Keychain {
     
     // MARK:
     
-    public class func allKeys(itemClass: ItemClass) -> [(String, String)] {
+    public class func allItems(itemClass: ItemClass) -> [[String: AnyObject]]? {
         var query = [String: AnyObject]()
         query[kSecClass] = itemClass.rawValue
         query[kSecReturnAttributes] = kCFBooleanTrue
-        query[kSecMatchLimit] = kSecMatchLimitAll
-        
-        var result: AnyObject?
-        var status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
-        
-        switch status {
-        case errSecSuccess:
-            if let items = result as [[String: AnyObject]]? {
-                return prettify(itemClass: itemClass, items: items).map {
-                    switch itemClass {
-                    case .GenericPassword:
-                        return (($0["service"] ?? "") as String, ($0["key"] ?? "") as String)
-                    case .InternetPassword:
-                        return (($0["server"] ?? "") as String, ($0["key"] ?? "") as String)
-                    }
-                }
-            }
-        case errSecItemNotFound:
-            return []
-        default: ()
-        }
-        
-        securityError(status: status)
-        return []
-    }
-    
-    public func allKeys() -> [String] {
-        return self.dynamicType.prettify(itemClass: itemClass, items: items()).map { $0["key"] as String }
-    }
-    
-    public class func allItems(itemClass: ItemClass) -> [[String: AnyObject]] {
-        var query = [String: AnyObject]()
-        query[kSecClass] = itemClass.rawValue
-        query[kSecReturnAttributes] = kCFBooleanTrue
-        #if os(iOS)
         query[kSecReturnData] = kCFBooleanTrue
-        #endif
         query[kSecMatchLimit] = kSecMatchLimitAll
         
         var result: AnyObject?
@@ -403,18 +364,19 @@ public class Keychain {
             return []
         default: ()
         }
-        
-        securityError(status: status)
-        return []
+        return nil
     }
     
-    public func allItems() -> [[String: AnyObject]] {
-        return self.dynamicType.prettify(itemClass: itemClass, items: items())
+    public func allItems() -> [[String: AnyObject]]? {
+        if let items = items() {
+            return self.dynamicType.prettify(itemClass: itemClass, items: items)
+        }
+        return nil
     }
     
     // MARK:
     
-    private func items() -> [[String: AnyObject]] {
+    private func items() -> [[String: AnyObject]]? {
         var query = options.query()
         query[kSecReturnAttributes] = kCFBooleanTrue
         query[kSecReturnData] = kCFBooleanTrue
@@ -432,13 +394,11 @@ public class Keychain {
             return []
         default: ()
         }
-        
-        securityError(status: status)
-        return []
+        return nil
     }
     
     private class func prettify(#itemClass: ItemClass, items: [[String: AnyObject]]) -> [[String: AnyObject]] {
-        let items = items.map { attributes -> [String: AnyObject] in
+        let items = items.map() { attributes -> [String: AnyObject] in
             var item = [String: AnyObject]()
             
             item["class"] = itemClass.description
@@ -455,15 +415,11 @@ public class Keychain {
                 if let server = attributes[kSecAttrServer] as? String {
                     item["server"] = server
                 }
-                if let proto = attributes[kSecAttrProtocol] as? String {
-                    if let protocolType = ProtocolType(rawValue: proto) {
-                        item["protocol"] = protocolType.description
-                    }
+                if let protocolType = ProtocolType(rawValue: attributes[kSecAttrProtocol] as String) {
+                    item["protocol"] = protocolType.description
                 }
-                if let auth = attributes[kSecAttrAuthenticationType] as? String {
-                    if let authenticationType = AuthenticationType(rawValue: auth) {
-                        item["authenticationType"] = authenticationType.description
-                    }
+                if let authenticationType = AuthenticationType(rawValue: attributes[kSecAttrAuthenticationType] as String) {
+                    item["authenticationType"] = authenticationType.description
                 }
             }
             
@@ -479,7 +435,7 @@ public class Keychain {
             }
             
             if let accessible = attributes[kSecAttrAccessible] as? String {
-                if let accessibility = Accessibility(rawValue: accessible) {
+                if let accessibility = Accessibility(rawValue: accessible as String) {
                     item["accessibility"] = accessibility.description
                 }
             }
@@ -492,20 +448,14 @@ public class Keychain {
         return items
     }
     
-    // MARK:
-    
-    private class func conversionError(#message: String) -> NSError {
+    private func conversionError(#message: String) -> NSError {
         let error = NSError(domain: errorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: message])
         log(error)
         
         return error
     }
     
-    private func conversionError(#message: String) -> NSError {
-        return self.dynamicType.conversionError(message: message)
-    }
-    
-    private class func securityError(#status: OSStatus) -> NSError {
+    private func securityError(#status: OSStatus) -> NSError {
         let message = Status(rawValue: status).description
         
         let error = NSError(domain: errorDomain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
@@ -514,16 +464,8 @@ public class Keychain {
         return error
     }
     
-    private func securityError(#status: OSStatus) -> NSError {
-        return self.dynamicType.securityError(status: status)
-    }
-    
-    private class func log(error: NSError) {
-        println("OSStatus error:[\(error.code)] \(error.localizedDescription)")
-    }
-    
     private func log(error: NSError) {
-        self.dynamicType.log(error)
+        println("OSStatus error:[\(error.code)] \(error.localizedDescription)")
     }
 }
 
@@ -545,11 +487,17 @@ struct Options {
 
 extension Keychain : Printable, DebugPrintable {
     public var description: String {
-        return "\(self.dynamicType.prettify(itemClass: itemClass, items: allItems())))"
+        if let items = allItems() {
+            return "\(self.dynamicType.prettify(itemClass: itemClass, items: items)))"
+        }
+        return "error"
     }
     
     public var debugDescription: String {
-        return "\(allItems())"
+        if let items = allItems() {
+            return "\(items)"
+        }
+        return "error"
     }
 }
 
