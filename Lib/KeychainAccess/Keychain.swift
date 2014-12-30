@@ -156,7 +156,11 @@ public class Keychain {
         return options.itemClass
     }
     
-    public init(service: String = "") {
+    public convenience init() {
+        self.init(service: "")
+    }
+    
+    public init(service: String) {
         options = Options()
         options.service = service
     }
@@ -167,7 +171,11 @@ public class Keychain {
         options.accessGroup = accessGroup
     }
     
-    public init(server: NSURL, protocolType: ProtocolType, authenticationType: AuthenticationType = .Default) {
+    public convenience init(server: NSURL, protocolType: ProtocolType) {
+        self.init(server: server, protocolType: protocolType, authenticationType: .Default)
+    }
+    
+    public init(server: NSURL, protocolType: ProtocolType, authenticationType: AuthenticationType) {
         options = Options()
         options.itemClass = .InternetPassword
         options.server = server
