@@ -90,8 +90,10 @@ class AccountsViewController: UITableViewController {
         let items = Keychain.allItems(.GenericPassword)
         if items != nil {
             itemsGroupedByService = groupBy(items!) { item -> String in
-                let service = item["service"] as String
-                return service
+                if let service = item["service"] as? String {
+                    return service
+                }
+                return ""
             }
         }
     }

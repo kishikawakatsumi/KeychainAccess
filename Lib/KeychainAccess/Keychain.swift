@@ -119,6 +119,7 @@ public class Value<T> {
 
 public class Keychain {
     private let options: Options
+    private let errorDomain = "com.kishikawakatsumi.KeychainAccess"
     
     public var service: String {
         return options.service
@@ -433,8 +434,10 @@ public class Keychain {
                 }
             }
             
-            if let accessibility = Accessibility(rawValue: attributes[kSecAttrAccessible] as String) {
-                item["accessibility"] = accessibility.description
+            if let accessible = attributes[kSecAttrAccessible] as? String {
+                if let accessibility = Accessibility(rawValue: accessible as String) {
+                    item["accessibility"] = accessibility.description
+                }
             }
             if let synchronizable = attributes[kSecAttrSynchronizable] as? Bool {
                 item["synchronizable"] = synchronizable ? "true" : "false"
@@ -446,20 +449,16 @@ public class Keychain {
     }
     
     private func conversionError(#message: String) -> NSError {
-        let domain = "com.kishikawakatsumi.KeychainAccess"
-        let code = 90000
-        
-        let error = NSError(domain: domain, code: code, userInfo: [NSLocalizedDescriptionKey: message])
+        let error = NSError(domain: errorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: message])
         log(error)
         
         return error
     }
     
     private func securityError(#status: OSStatus) -> NSError {
-        let domain = "com.kishikawakatsumi.KeychainAccess"
         let message = Status(rawValue: status).description
         
-        let error = NSError(domain: domain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
+        let error = NSError(domain: errorDomain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
         log(error)
         
         return error
