@@ -9,35 +9,9 @@
 import Foundation
 import Security
 
-public struct Options {
-    public var itemClass: ItemClass = .GenericPassword
-    
-    public var service: String = ""
-    public var accessGroup: String? = nil
-    
-    public var server: NSURL!
-    public var protocolType: ProtocolType!
-    public var authenticationType: AuthenticationType = .Default
-    
-    public var accessibility: Accessibility = .AfterFirstUnlock
-    public var synchronizable: Bool = false
-    
-    init() {}
-}
-
 public enum ItemClass {
     case GenericPassword
     case InternetPassword
-}
-
-public enum Accessibility {
-    case WhenUnlocked
-    case AfterFirstUnlock
-    case Always
-    case WhenPasscodeSetThisDeviceOnly
-    case WhenUnlockedThisDeviceOnly
-    case AfterFirstUnlockThisDeviceOnly
-    case AlwaysThisDeviceOnly
 }
 
 public enum ProtocolType {
@@ -85,9 +59,65 @@ public enum AuthenticationType {
     case Default
 }
 
-public class Keychain {
-    public typealias ErrorHandler = (NSError) -> ()
+public enum Accessibility {
+    case WhenUnlocked
+    case AfterFirstUnlock
+    case Always
+    case WhenPasscodeSetThisDeviceOnly
+    case WhenUnlockedThisDeviceOnly
+    case AfterFirstUnlockThisDeviceOnly
+    case AlwaysThisDeviceOnly
+}
+
+public enum FailableOf<T> {
+    case Success(Value<T?>)
+    case Failure(NSError)
     
+    init(_ value: T?) {
+        self = .Success(Value(value))
+    }
+    
+    init(_ error: NSError) {
+        self = .Failure(error)
+    }
+    
+    public var failed: Bool {
+        switch self {
+        case .Failure(let error):
+            return true
+            
+        default:
+            return false
+        }
+    }
+    
+    public var error: NSError? {
+        switch self {
+        case .Failure(let error):
+            return error
+            
+        default:
+            return nil
+        }
+    }
+    
+    public var value: T? {
+        switch self {
+        case .Success(let v):
+            return v.value
+            
+        default:
+            return nil
+        }
+    }
+}
+
+public class Value<T> {
+    let value: T
+    init(_ value: T) { self.value = value }
+}
+
+public class Keychain {
     private let options: Options
     
     public var service: String {
@@ -161,7 +191,38 @@ public class Keychain {
     
     // MARK:
     
-    public func get(key: String, failure: ErrorHandler? = nil) -> (asString: String?, asData: NSData?) {
+    public func get(key: String) -> String? {
+        return getString(key)
+    }
+    
+    public func getString(key: String) -> String? {
+        let failable = getStringOrError(key)
+        return failable.value
+    }
+    
+    public func getData(key: String) -> NSData? {
+        let failable = getDataOrError(key)
+        return failable.value
+    }
+    
+    public func getStringOrError(key: String) -> FailableOf<String> {
+        let failable = getDataOrError(key)
+        switch failable {
+        case .Success:
+            if let data = failable.value {
+                if let string = NSString(data: data, encoding: NSUTF8StringEncoding) {
+                    return FailableOf(string)
+                }
+                return FailableOf(conversionError(message: "failed to convert data to string"))
+            } else {
+                return FailableOf(nil)
+            }
+        case .Failure(let error):
+            return FailableOf(error)
+        }
+    }
+    
+    public func getDataOrError(key: String) -> FailableOf<NSData> {
         var query = options.query()
         query[kSecReturnData] = kCFBooleanTrue
         query[kSecMatchLimit] = kSecMatchLimitOne
@@ -174,30 +235,27 @@ public class Keychain {
         switch status {
         case errSecSuccess:
             if let data = result as NSData? {
-                return (NSString(data: data, encoding: NSUTF8StringEncoding), data)
+                return FailableOf(data)
             }
+            return FailableOf(securityError(status: Status.UnknownError.rawValue))
         case errSecItemNotFound:
-            return (nil, nil)
+            return FailableOf(nil)
         default: ()
         }
         
-        handleError(error(status: status), handler: failure)
-        return (nil, nil)
+        return FailableOf(securityError(status: status))
     }
     
     // MARK:
     
-    public func set(value: String, key: String, failure: ErrorHandler? = nil) -> NSError? {
+    public func set(value: String, key: String) -> NSError? {
         if let data = value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-            return set(data, key: key, failure: failure)
+            return set(data, key: key)
         }
-        
-        println("failed to convert string to data")
-        let userInfo = [NSLocalizedDescriptionKey: "failed to convert string to data"]
-        return NSError(domain: "com.kishikawakatsumi.KeychainAccess", code: 0, userInfo: userInfo)
+        return conversionError(message: "failed to convert string to data")
     }
     
-    public func set(value: NSData, key: String, failure: ErrorHandler? = nil) -> NSError? {
+    public func set(value: NSData, key: String) -> NSError? {
         var query = options.query()
         query[kSecAttrAccount] = key
         
@@ -208,35 +266,35 @@ public class Keychain {
             
             status = SecItemUpdate(query, attributes)
             if status != errSecSuccess {
-                return handleError(error(status: status), handler: failure)
+                return securityError(status: status)
             }
         case errSecItemNotFound:
             var attributes = options.attributes(key: key, value: value)
             
             status = SecItemAdd(attributes, nil)
             if status != errSecSuccess {
-                return handleError(error(status: status), handler: failure)
+                return securityError(status: status)
             }
         default:
-            return handleError(error(status: status), handler: failure)
+            return securityError(status: status)
         }
         return nil
     }
     
     // MARK:
     
-    public func remove(key: String, failure: ErrorHandler? = nil) -> NSError? {
+    public func remove(key: String) -> NSError? {
         var query = options.query()
         query[kSecAttrAccount] = key
         
         let status = SecItemDelete(query)
         if status != errSecSuccess && status != errSecItemNotFound {
-            return handleError(error(status: status), handler: failure)
+            return securityError(status: status)
         }
         return nil
     }
     
-    public func removeAll(failure: ErrorHandler? = nil) -> NSError? {
+    public func removeAll() -> NSError? {
         var query = options.query()
         #if !os(iOS)
         query[kSecMatchLimit] = kSecMatchLimitAll
@@ -244,14 +302,14 @@ public class Keychain {
         
         let status = SecItemDelete(query)
         if status != errSecSuccess && status != errSecItemNotFound {
-            return handleError(error(status: status), handler: failure)
+            return securityError(status: status)
         }
         return nil
     }
     
     // MARK:
     
-    public func contains(key: String, failure: ErrorHandler? = nil) -> Bool? {
+    public func contains(key: String) -> Bool? {
         var query = options.query()
         query[kSecAttrAccount] = key
         
@@ -263,7 +321,7 @@ public class Keychain {
         case errSecItemNotFound:
             return false
         default:
-            handleError(error(status: status), handler: failure)
+            securityError(status: status)
             return false
         }
     }
@@ -272,7 +330,7 @@ public class Keychain {
     
     public subscript(key: String) -> String? {
         get {
-            return get(key).asString
+            return get(key)
         }
         
         set {
@@ -387,20 +445,45 @@ public class Keychain {
         return items
     }
     
-    private func handleError(error: NSError, handler: ErrorHandler?) -> NSError {
-        println("OSStatus error:[\(error.code)] \(error.localizedDescription)")
-        handler?(error)
+    private func conversionError(#message: String) -> NSError {
+        let domain = "com.kishikawakatsumi.KeychainAccess"
+        let code = 90000
+        
+        let error = NSError(domain: domain, code: code, userInfo: [NSLocalizedDescriptionKey: message])
+        log(error)
+        
         return error
     }
     
-    private func error(#status: OSStatus) -> NSError {
-        var error: NSError
+    private func securityError(#status: OSStatus) -> NSError {
         let domain = "com.kishikawakatsumi.KeychainAccess"
         let message = Status(rawValue: status).description
         
-        error = NSError(domain: domain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
+        let error = NSError(domain: domain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
+        log(error)
+        
         return error
     }
+    
+    private func log(error: NSError) {
+        println("OSStatus error:[\(error.code)] \(error.localizedDescription)")
+    }
+}
+
+struct Options {
+    var itemClass: ItemClass = .GenericPassword
+    
+    var service: String = ""
+    var accessGroup: String? = nil
+    
+    var server: NSURL!
+    var protocolType: ProtocolType!
+    var authenticationType: AuthenticationType = .Default
+    
+    var accessibility: Accessibility = .AfterFirstUnlock
+    var synchronizable: Bool = false
+    
+    init() {}
 }
 
 extension Keychain : Printable, DebugPrintable {

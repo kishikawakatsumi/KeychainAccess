@@ -42,10 +42,10 @@ class KeychainAccessTests: XCTestCase {
             keychain.set("kishikawa_katsumi", key: "username")
             keychain.set("password_1234", key: "password")
             
-            let username = keychain.get("username").asString
+            let username = keychain.get("username")
             XCTAssertEqual(username!, "kishikawa_katsumi")
             
-            let password = keychain.get("password").asString
+            let password = keychain.get("password")
             XCTAssertEqual(password!, "password_1234")
         }
         
@@ -56,10 +56,10 @@ class KeychainAccessTests: XCTestCase {
             keychain.set("katsumi_kishikawa", key: "username")
             keychain.set("1234_password", key: "password")
             
-            let username = keychain.get("username").asString
+            let username = keychain.get("username")
             XCTAssertEqual(username!, "katsumi_kishikawa")
             
-            let password = keychain.get("password").asString
+            let password = keychain.get("password")
             XCTAssertEqual(password!, "1234_password")
         }
         
@@ -70,8 +70,8 @@ class KeychainAccessTests: XCTestCase {
             keychain.remove("username")
             keychain.remove("password")
             
-            XCTAssertNil(keychain.get("username").asString)
-            XCTAssertNil(keychain.get("password").asString)
+            XCTAssertNil(keychain.get("username"))
+            XCTAssertNil(keychain.get("password"))
         }
     }
     
@@ -126,10 +126,10 @@ class KeychainAccessTests: XCTestCase {
             keychain.set("kishikawa_katsumi", key: "username")
             keychain.set("password_1234", key: "password")
             
-            let username = keychain.get("username").asString
+            let username = keychain.get("username")
             XCTAssertEqual(username!, "kishikawa_katsumi")
             
-            let password = keychain.get("password").asString
+            let password = keychain.get("password")
             XCTAssertEqual(password!, "password_1234")
         }
         
@@ -140,10 +140,10 @@ class KeychainAccessTests: XCTestCase {
             keychain.set("katsumi_kishikawa", key: "username")
             keychain.set("1234_password", key: "password")
             
-            let username = keychain.get("username").asString
+            let username = keychain.get("username")
             XCTAssertEqual(username!, "katsumi_kishikawa")
             
-            let password = keychain.get("password").asString
+            let password = keychain.get("password")
             XCTAssertEqual(password!, "1234_password")
         }
         
@@ -154,8 +154,8 @@ class KeychainAccessTests: XCTestCase {
             keychain.remove("username")
             keychain.remove("password")
             
-            XCTAssertNil(keychain.get("username").asString)
-            XCTAssertNil(keychain.get("password").asString)
+            XCTAssertNil(keychain.get("username"))
+            XCTAssertNil(keychain.get("password"))
         }
     }
     
@@ -231,16 +231,16 @@ class KeychainAccessTests: XCTestCase {
     func testSetString() {
         let keychain = Keychain(service: "example.com")
         
-        XCTAssertNil(keychain.get("username").asString, "not stored username")
-        XCTAssertNil(keychain.get("password").asString, "not stored password")
+        XCTAssertNil(keychain.get("username"), "not stored username")
+        XCTAssertNil(keychain.get("password"), "not stored password")
         
         keychain.set("kishikawakatsumi", key: "username")
-        XCTAssertEqual(keychain.get("username").asString!, "kishikawakatsumi", "stored username")
-        XCTAssertNil(keychain.get("password").asString, "not stored password")
+        XCTAssertEqual(keychain.get("username")!, "kishikawakatsumi", "stored username")
+        XCTAssertNil(keychain.get("password"), "not stored password")
         
         keychain.set("password1234", key: "password")
-        XCTAssertEqual(keychain.get("username").asString!, "kishikawakatsumi", "stored username")
-        XCTAssertEqual(keychain.get("password").asString!, "password1234", "stored password")
+        XCTAssertEqual(keychain.get("username")!, "kishikawakatsumi", "stored username")
+        XCTAssertEqual(keychain.get("password")!, "password1234", "stored password")
     }
     
     func testSetData() {
@@ -249,31 +249,31 @@ class KeychainAccessTests: XCTestCase {
         
         let keychain = Keychain(service: "example.com")
         
-        XCTAssertNil(keychain.get("JSONData").asData, "not stored JSON data")
+        XCTAssertNil(keychain.getData("JSONData"), "not stored JSON data")
         
         keychain.set(JSONData!, key: "JSONData")
-        XCTAssertEqual(keychain.get("JSONData").asData!, JSONData!, "stored JSONData")
+        XCTAssertEqual(keychain.getData("JSONData")!, JSONData!, "stored JSONData")
     }
     
     func testRemoveString() {
         let keychain = Keychain(service: "example.com")
         
-        XCTAssertNil(keychain.get("username").asString, "not stored username")
-        XCTAssertNil(keychain.get("password").asString, "not stored password")
+        XCTAssertNil(keychain.get("username"), "not stored username")
+        XCTAssertNil(keychain.get("password"), "not stored password")
         
         keychain.set("kishikawakatsumi", key: "username")
-        XCTAssertEqual(keychain.get("username").asString!, "kishikawakatsumi", "stored username")
+        XCTAssertEqual(keychain.get("username")!, "kishikawakatsumi", "stored username")
         
         keychain.set("password1234", key: "password")
-        XCTAssertEqual(keychain.get("password").asString!, "password1234", "stored password")
+        XCTAssertEqual(keychain.get("password")!, "password1234", "stored password")
         
         keychain.remove("username")
-        XCTAssertNil(keychain.get("username").asString, "removed username")
-        XCTAssertEqual(keychain.get("password").asString!, "password1234", "left password")
+        XCTAssertNil(keychain.get("username"), "removed username")
+        XCTAssertEqual(keychain.get("password")!, "password1234", "left password")
         
         keychain.remove("password")
-        XCTAssertNil(keychain.get("username").asString, "removed username")
-        XCTAssertNil(keychain.get("password").asString, "removed password")
+        XCTAssertNil(keychain.get("username"), "removed username")
+        XCTAssertNil(keychain.get("password"), "removed password")
     }
     
     func testRemoveData() {
@@ -282,13 +282,13 @@ class KeychainAccessTests: XCTestCase {
         
         let keychain = Keychain(service: "example.com")
         
-        XCTAssertNil(keychain.get("JSONData").asData, "not stored JSON data")
+        XCTAssertNil(keychain.getData("JSONData"), "not stored JSON data")
         
         keychain.set(JSONData!, key: "JSONData")
-        XCTAssertEqual(keychain.get("JSONData").asData!, JSONData!, "stored JSONData")
+        XCTAssertEqual(keychain.getData("JSONData")!, JSONData!, "stored JSONData")
         
         keychain.remove("JSONData")
-        XCTAssertNil(keychain.get("JSONData").asData, "removed JSONData")
+        XCTAssertNil(keychain.getData("JSONData"), "removed JSONData")
     }
     
     // MARK:
@@ -342,16 +342,45 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(error, "no error occurred")
             }
             
-            if let username = keychain.get("username", { XCTAssertNil($0, "no error occurred") }).asString {
-                XCTAssertEqual(username, "kishikawa_katsumi")
-            } else {
-                XCTFail()
+            let username = keychain.getStringOrError("username")
+    
+            switch username { // enum
+            case .Success:
+                XCTAssertEqual(username.value!, "kishikawa_katsumi")
+            case .Failure:
+                XCTFail("unknown error occurred")
             }
             
-            if let password = keychain.get("password", { XCTAssertNil($0, "no error occurred") }).asString {
-                XCTAssertEqual(password, "password_1234")
+            if let error = username.error { // error object
+                XCTFail("unknown error occurred")
             } else {
-                XCTFail()
+                XCTAssertEqual(username.value!, "kishikawa_katsumi")
+            }
+            
+            if username.failed { // failed property
+                XCTFail("unknown error occurred")
+            } else {
+                XCTAssertEqual(username.value!, "kishikawa_katsumi")
+            }
+    
+            let password = keychain.getStringOrError("password")
+            switch password { // enum
+            case .Success:
+                XCTAssertEqual(password.value!, "password_1234")
+            case .Failure:
+                XCTFail("unknown error occurred")
+            }
+            
+            if let error = username.error { // error object
+                XCTFail("unknown error occurred")
+            } else {
+                XCTAssertEqual(password.value!, "password_1234")
+            }
+            
+            if username.failed { // failed property
+                XCTFail("unknown error occurred")
+            } else {
+                XCTAssertEqual(password.value!, "password_1234")
             }
         }
         
@@ -366,16 +395,44 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(error, "no error occurred")
             }
             
-            if let username = keychain.get("username", { XCTAssertNil($0, "no error occurred") }).asString {
-                XCTAssertEqual(username, "katsumi_kishikawa")
-            } else {
-                XCTFail()
+            let username = keychain.getStringOrError("username")
+            switch username { // enum
+            case .Success:
+                XCTAssertEqual(username.value!, "katsumi_kishikawa")
+            case .Failure:
+                XCTFail("unknown error occurred")
             }
             
-            if let password = keychain.get("password", { XCTAssertNil($0, "no error occurred") }).asString {
-                XCTAssertEqual(password, "1234_password")
+            if let error = username.error { // error object
+                XCTFail("unknown error occurred")
             } else {
-                XCTFail()
+                XCTAssertEqual(username.value!, "katsumi_kishikawa")
+            }
+            
+            if username.failed { // failed property
+                XCTFail("unknown error occurred")
+            } else {
+                XCTAssertEqual(username.value!, "katsumi_kishikawa")
+            }
+            
+            let password = keychain.getStringOrError("password")
+            switch password { // enum
+            case .Success:
+                XCTAssertEqual(password.value!, "1234_password")
+            case .Failure:
+                XCTFail("unknown error occurred")
+            }
+            
+            if let error = username.error { // check error object
+                XCTFail("unknown error occurred")
+            } else {
+                XCTAssertEqual(password.value!, "1234_password")
+            }
+            
+            if username.failed { // check failed property
+                XCTFail("unknown error occurred")
+            } else {
+                XCTAssertEqual(password.value!, "1234_password")
             }
         }
         
@@ -390,8 +447,8 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(error, "no error occurred")
             }
             
-            XCTAssertNil(keychain.get("username").asString)
-            XCTAssertNil(keychain.get("password").asString)
+            XCTAssertNil(keychain.get("username"))
+            XCTAssertNil(keychain.get("password"))
         }
     }
     #endif
@@ -414,109 +471,109 @@ class KeychainAccessTests: XCTestCase {
         Keychain(service: service_2).removeAll()
         Keychain(service: service_3).removeAll()
         
-        XCTAssertNil(Keychain().get("username").asString, "not stored username")
-        XCTAssertNil(Keychain().get("password").asString, "not stored password")
-        XCTAssertNil(Keychain(service: service_1).get("username").asString, "not stored username")
-        XCTAssertNil(Keychain(service: service_1).get("password").asString, "not stored password")
-        XCTAssertNil(Keychain(service: service_2).get("username").asString, "not stored username")
-        XCTAssertNil(Keychain(service: service_2).get("password").asString, "not stored password")
-        XCTAssertNil(Keychain(service: service_3).get("username").asString, "not stored username")
-        XCTAssertNil(Keychain(service: service_3).get("password").asString, "not stored password")
+        XCTAssertNil(Keychain().get("username"), "not stored username")
+        XCTAssertNil(Keychain().get("password"), "not stored password")
+        XCTAssertNil(Keychain(service: service_1).get("username"), "not stored username")
+        XCTAssertNil(Keychain(service: service_1).get("password"), "not stored password")
+        XCTAssertNil(Keychain(service: service_2).get("username"), "not stored username")
+        XCTAssertNil(Keychain(service: service_2).get("password"), "not stored password")
+        XCTAssertNil(Keychain(service: service_3).get("username"), "not stored username")
+        XCTAssertNil(Keychain(service: service_3).get("password"), "not stored password")
         
         Keychain().set(username_1, key: "username")
-        XCTAssertEqual(Keychain().get("username").asString!, username_1, "stored username")
-        XCTAssertEqual(Keychain(service: service_1).get("username").asString!, username_1, "stored username")
-        XCTAssertNil(Keychain(service: service_2).get("username").asString, "not stored username")
-        XCTAssertNil(Keychain(service: service_3).get("username").asString, "not stored username")
+        XCTAssertEqual(Keychain().get("username")!, username_1, "stored username")
+        XCTAssertEqual(Keychain(service: service_1).get("username")!, username_1, "stored username")
+        XCTAssertNil(Keychain(service: service_2).get("username"), "not stored username")
+        XCTAssertNil(Keychain(service: service_3).get("username"), "not stored username")
         
         Keychain(service: service_1).set(username_1, key: "username")
-        XCTAssertEqual(Keychain(service: service_1).get("username").asString!, username_1, "stored username")
-        XCTAssertEqual(Keychain(service: service_1).get("username").asString!, username_1, "stored username")
-        XCTAssertNil(Keychain(service: service_2).get("username").asString, "not stored username")
-        XCTAssertNil(Keychain(service: service_3).get("username").asString, "not stored username")
+        XCTAssertEqual(Keychain(service: service_1).get("username")!, username_1, "stored username")
+        XCTAssertEqual(Keychain(service: service_1).get("username")!, username_1, "stored username")
+        XCTAssertNil(Keychain(service: service_2).get("username"), "not stored username")
+        XCTAssertNil(Keychain(service: service_3).get("username"), "not stored username")
         
         Keychain(service: service_2).set(username_2, key: "username")
-        XCTAssertEqual(Keychain().get("username").asString!, username_1, "stored username")
-        XCTAssertEqual(Keychain(service: service_1).get("username").asString!, username_1, "stored username")
-        XCTAssertEqual(Keychain(service: service_2).get("username").asString!, username_2, "stored username")
-        XCTAssertNil(Keychain(service: service_3).get("username").asString, "not stored username")
+        XCTAssertEqual(Keychain().get("username")!, username_1, "stored username")
+        XCTAssertEqual(Keychain(service: service_1).get("username")!, username_1, "stored username")
+        XCTAssertEqual(Keychain(service: service_2).get("username")!, username_2, "stored username")
+        XCTAssertNil(Keychain(service: service_3).get("username"), "not stored username")
         
         Keychain(service: service_3).set(username_3, key: "username")
-        XCTAssertEqual(Keychain().get("username").asString!, username_1, "stored username")
-        XCTAssertEqual(Keychain(service: service_1).get("username").asString!, username_1, "stored username")
-        XCTAssertEqual(Keychain(service: service_2).get("username").asString!, username_2, "stored username")
-        XCTAssertEqual(Keychain(service: service_3).get("username").asString!, username_3, "stored username")
+        XCTAssertEqual(Keychain().get("username")!, username_1, "stored username")
+        XCTAssertEqual(Keychain(service: service_1).get("username")!, username_1, "stored username")
+        XCTAssertEqual(Keychain(service: service_2).get("username")!, username_2, "stored username")
+        XCTAssertEqual(Keychain(service: service_3).get("username")!, username_3, "stored username")
         
         Keychain().set(password_1, key: "password")
-        XCTAssertEqual(Keychain().get("password").asString!, password_1, "stored password")
-        XCTAssertEqual(Keychain(service: service_1).get("password").asString!, password_1, "stored password")
-        XCTAssertNil(Keychain(service: service_2).get("password").asString, "not stored password")
-        XCTAssertNil(Keychain(service: service_3).get("password").asString, "not stored password")
+        XCTAssertEqual(Keychain().get("password")!, password_1, "stored password")
+        XCTAssertEqual(Keychain(service: service_1).get("password")!, password_1, "stored password")
+        XCTAssertNil(Keychain(service: service_2).get("password"), "not stored password")
+        XCTAssertNil(Keychain(service: service_3).get("password"), "not stored password")
         
         Keychain(service: service_1).set(password_1, key: "password")
-        XCTAssertEqual(Keychain().get("password").asString!, password_1, "stored password")
-        XCTAssertEqual(Keychain(service: service_1).get("password").asString!, password_1, "stored password")
-        XCTAssertNil(Keychain(service: service_2).get("password").asString, "not stored password")
-        XCTAssertNil(Keychain(service: service_3).get("password").asString, "not stored password")
+        XCTAssertEqual(Keychain().get("password")!, password_1, "stored password")
+        XCTAssertEqual(Keychain(service: service_1).get("password")!, password_1, "stored password")
+        XCTAssertNil(Keychain(service: service_2).get("password"), "not stored password")
+        XCTAssertNil(Keychain(service: service_3).get("password"), "not stored password")
         
         Keychain(service: service_2).set(password_2, key: "password")
-        XCTAssertEqual(Keychain().get("password").asString!, password_1, "stored password")
-        XCTAssertEqual(Keychain(service: service_1).get("password").asString!, password_1, "stored password")
-        XCTAssertEqual(Keychain(service: service_2).get("password").asString!, password_2, "stored password")
-        XCTAssertNil(Keychain(service: service_3).get("password").asString, "not stored password")
+        XCTAssertEqual(Keychain().get("password")!, password_1, "stored password")
+        XCTAssertEqual(Keychain(service: service_1).get("password")!, password_1, "stored password")
+        XCTAssertEqual(Keychain(service: service_2).get("password")!, password_2, "stored password")
+        XCTAssertNil(Keychain(service: service_3).get("password"), "not stored password")
         
         Keychain(service: service_3).set(password_3, key: "password")
-        XCTAssertEqual(Keychain().get("password").asString!, password_1, "stored password")
-        XCTAssertEqual(Keychain(service: service_1).get("password").asString!, password_1, "stored password")
-        XCTAssertEqual(Keychain(service: service_2).get("password").asString!, password_2, "stored password")
-        XCTAssertEqual(Keychain(service: service_3).get("password").asString!, password_3, "stored password")
+        XCTAssertEqual(Keychain().get("password")!, password_1, "stored password")
+        XCTAssertEqual(Keychain(service: service_1).get("password")!, password_1, "stored password")
+        XCTAssertEqual(Keychain(service: service_2).get("password")!, password_2, "stored password")
+        XCTAssertEqual(Keychain(service: service_3).get("password")!, password_3, "stored password")
         
         Keychain().remove("username")
-        XCTAssertNil(Keychain().get("username").asString, "removed username")
-        XCTAssertNil(Keychain(service: service_1).get("username").asString, "removed username")
-        XCTAssertEqual(Keychain(service: service_2).get("username").asString!, username_2, "left username")
-        XCTAssertEqual(Keychain(service: service_3).get("username").asString!, username_3, "left username")
+        XCTAssertNil(Keychain().get("username"), "removed username")
+        XCTAssertNil(Keychain(service: service_1).get("username"), "removed username")
+        XCTAssertEqual(Keychain(service: service_2).get("username")!, username_2, "left username")
+        XCTAssertEqual(Keychain(service: service_3).get("username")!, username_3, "left username")
         
         Keychain(service: service_1).remove("username")
-        XCTAssertNil(Keychain().get("username").asString, "removed username")
-        XCTAssertNil(Keychain(service: service_1).get("username").asString, "removed username")
-        XCTAssertEqual(Keychain(service: service_2).get("username").asString!, username_2, "left username")
-        XCTAssertEqual(Keychain(service: service_3).get("username").asString!, username_3, "left username")
+        XCTAssertNil(Keychain().get("username"), "removed username")
+        XCTAssertNil(Keychain(service: service_1).get("username"), "removed username")
+        XCTAssertEqual(Keychain(service: service_2).get("username")!, username_2, "left username")
+        XCTAssertEqual(Keychain(service: service_3).get("username")!, username_3, "left username")
         
         Keychain(service: service_2).remove("username")
-        XCTAssertNil(Keychain().get("username").asString, "removed username")
-        XCTAssertNil(Keychain(service: service_1).get("username").asString, "removed username")
-        XCTAssertNil(Keychain(service: service_2).get("username").asString, "removed username")
-        XCTAssertEqual(Keychain(service: service_3).get("username").asString!, username_3, "left username")
+        XCTAssertNil(Keychain().get("username"), "removed username")
+        XCTAssertNil(Keychain(service: service_1).get("username"), "removed username")
+        XCTAssertNil(Keychain(service: service_2).get("username"), "removed username")
+        XCTAssertEqual(Keychain(service: service_3).get("username")!, username_3, "left username")
         
         Keychain(service: service_3).remove("username")
-        XCTAssertNil(Keychain().get("username").asString, "removed username")
-        XCTAssertNil(Keychain(service: service_1).get("username").asString, "removed username")
-        XCTAssertNil(Keychain(service: service_2).get("username").asString, "removed username")
-        XCTAssertNil(Keychain(service: service_3).get("username").asString, "removed username")
+        XCTAssertNil(Keychain().get("username"), "removed username")
+        XCTAssertNil(Keychain(service: service_1).get("username"), "removed username")
+        XCTAssertNil(Keychain(service: service_2).get("username"), "removed username")
+        XCTAssertNil(Keychain(service: service_3).get("username"), "removed username")
         
         Keychain().remove("password")
-        XCTAssertNil(Keychain().get("password").asString, "removed password")
-        XCTAssertNil(Keychain(service: service_1).get("password").asString, "removed password")
-        XCTAssertEqual(Keychain(service: service_2).get("password").asString!, password_2, "left password")
-        XCTAssertEqual(Keychain(service: service_3).get("password").asString!, password_3, "left password")
+        XCTAssertNil(Keychain().get("password"), "removed password")
+        XCTAssertNil(Keychain(service: service_1).get("password"), "removed password")
+        XCTAssertEqual(Keychain(service: service_2).get("password")!, password_2, "left password")
+        XCTAssertEqual(Keychain(service: service_3).get("password")!, password_3, "left password")
         
         Keychain(service: service_1).remove("password")
-        XCTAssertNil(Keychain().get("password").asString, "removed password")
-        XCTAssertNil(Keychain(service: service_1).get("password").asString, "removed password")
-        XCTAssertEqual(Keychain(service: service_2).get("password").asString!, password_2, "left password")
-        XCTAssertEqual(Keychain(service: service_3).get("password").asString!, password_3, "left password")
+        XCTAssertNil(Keychain().get("password"), "removed password")
+        XCTAssertNil(Keychain(service: service_1).get("password"), "removed password")
+        XCTAssertEqual(Keychain(service: service_2).get("password")!, password_2, "left password")
+        XCTAssertEqual(Keychain(service: service_3).get("password")!, password_3, "left password")
         
         Keychain(service: service_2).remove("password")
-        XCTAssertNil(Keychain().get("password").asString, "removed password")
-        XCTAssertNil(Keychain(service: service_1).get("password").asString, "removed password")
-        XCTAssertNil(Keychain(service: service_2).get("password").asString, "removed password")
-        XCTAssertEqual(Keychain(service: service_3).get("password").asString!, password_3, "left password")
+        XCTAssertNil(Keychain().get("password"), "removed password")
+        XCTAssertNil(Keychain(service: service_1).get("password"), "removed password")
+        XCTAssertNil(Keychain(service: service_2).get("password"), "removed password")
+        XCTAssertEqual(Keychain(service: service_3).get("password")!, password_3, "left password")
         
         Keychain(service: service_3).remove("password")
-        XCTAssertNil(Keychain().get("password").asString, "removed password")
-        XCTAssertNil(Keychain(service: service_2).get("password").asString, "removed password")
-        XCTAssertNil(Keychain(service: service_2).get("password").asString, "removed password")
-        XCTAssertNil(Keychain(service: service_2).get("password").asString, "removed password")
+        XCTAssertNil(Keychain().get("password"), "removed password")
+        XCTAssertNil(Keychain(service: service_2).get("password"), "removed password")
+        XCTAssertNil(Keychain(service: service_2).get("password"), "removed password")
+        XCTAssertNil(Keychain(service: service_2).get("password"), "removed password")
     }
 }
