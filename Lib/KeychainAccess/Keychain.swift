@@ -85,7 +85,6 @@ public enum FailableOf<T> {
         switch self {
         case .Failure(let error):
             return true
-            
         default:
             return false
         }
@@ -95,7 +94,6 @@ public enum FailableOf<T> {
         switch self {
         case .Failure(let error):
             return error
-            
         default:
             return nil
         }
@@ -105,7 +103,6 @@ public enum FailableOf<T> {
         switch self {
         case .Success(let v):
             return v.value
-            
         default:
             return nil
         }
