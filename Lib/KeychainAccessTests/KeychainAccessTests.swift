@@ -16,10 +16,10 @@ class KeychainAccessTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared").removeAll()
-        Keychain(service: "example.com").removeAll()
+        Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared").removeAll()
+        Keychain(service: "Twitter").removeAll()
         
-        Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS).removeAll()
+        Keychain(server: NSURL(string: "https://example.com")!, protocolType: .HTTPS).removeAll()
         
         Keychain().removeAll()
     }
@@ -37,7 +37,7 @@ class KeychainAccessTests: XCTestCase {
     func testGenericPassword() {
         locally {
             // Add Keychain items
-            let keychain = Keychain(service: "example.com")
+            let keychain = Keychain(service: "Twitter")
             
             keychain.set("kishikawa_katsumi", key: "username")
             keychain.set("password_1234", key: "password")
@@ -51,7 +51,7 @@ class KeychainAccessTests: XCTestCase {
         
         locally {
             // Update Keychain items
-            let keychain = Keychain(service: "example.com")
+            let keychain = Keychain(service: "Twitter")
             
             keychain.set("katsumi_kishikawa", key: "username")
             keychain.set("1234_password", key: "password")
@@ -65,7 +65,7 @@ class KeychainAccessTests: XCTestCase {
         
         locally {
             // Remove Keychain items
-            let keychain = Keychain(service: "example.com")
+            let keychain = Keychain(service: "Twitter")
             
             keychain.remove("username")
             keychain.remove("password")
@@ -78,7 +78,7 @@ class KeychainAccessTests: XCTestCase {
     func testGenericPasswordSubscripting() {
         locally {
             // Add Keychain items
-            let keychain = Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared")
+            let keychain = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
             
             keychain["username"] = "kishikawa_katsumi"
             keychain["password"] = "password_1234"
@@ -92,7 +92,7 @@ class KeychainAccessTests: XCTestCase {
         
         locally {
             // Update Keychain items
-            let keychain = Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared")
+            let keychain = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
             
             keychain["username"] = "katsumi_kishikawa"
             keychain["password"] = "1234_password"
@@ -106,7 +106,7 @@ class KeychainAccessTests: XCTestCase {
         
         locally {
             // Remove Keychain items
-            let keychain = Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared")
+            let keychain = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
             
             keychain["username"] = nil
             keychain["password"] = nil
@@ -209,8 +209,8 @@ class KeychainAccessTests: XCTestCase {
     }
     
     func testInitializerWithService() {
-        let keychain = Keychain(service: "example.com")
-        XCTAssertEqual(keychain.service, "example.com")
+        let keychain = Keychain(service: "Twitter")
+        XCTAssertEqual(keychain.service, "Twitter")
         XCTAssertNil(keychain.accessGroup)
     }
     
@@ -221,15 +221,15 @@ class KeychainAccessTests: XCTestCase {
     }
     
     func testInitializerWithServiceAndAccessGroup() {
-        let keychain = Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared")
-        XCTAssertEqual(keychain.service, "example.com")
+        let keychain = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
+        XCTAssertEqual(keychain.service, "Twitter")
         XCTAssertEqual(keychain.accessGroup!, "12ABCD3E4F.shared")
     }
     
     // MARK:
     
     func testSetString() {
-        let keychain = Keychain(service: "example.com")
+        let keychain = Keychain(service: "Twitter")
         
         XCTAssertNil(keychain.get("username"), "not stored username")
         XCTAssertNil(keychain.get("password"), "not stored password")
@@ -247,7 +247,7 @@ class KeychainAccessTests: XCTestCase {
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
         let JSONData = NSJSONSerialization.dataWithJSONObject(JSONObject, options: nil, error: nil)
         
-        let keychain = Keychain(service: "example.com")
+        let keychain = Keychain(service: "Twitter")
         
         XCTAssertNil(keychain.getData("JSONData"), "not stored JSON data")
         
@@ -256,7 +256,7 @@ class KeychainAccessTests: XCTestCase {
     }
     
     func testRemoveString() {
-        let keychain = Keychain(service: "example.com")
+        let keychain = Keychain(service: "Twitter")
         
         XCTAssertNil(keychain.get("username"), "not stored username")
         XCTAssertNil(keychain.get("password"), "not stored password")
@@ -280,7 +280,7 @@ class KeychainAccessTests: XCTestCase {
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
         let JSONData = NSJSONSerialization.dataWithJSONObject(JSONObject, options: nil, error: nil)
         
-        let keychain = Keychain(service: "example.com")
+        let keychain = Keychain(service: "Twitter")
         
         XCTAssertNil(keychain.getData("JSONData"), "not stored JSON data")
         
@@ -294,7 +294,7 @@ class KeychainAccessTests: XCTestCase {
     // MARK:
     
     func testSubscripting() {
-        let keychain = Keychain(service: "example.com")
+        let keychain = Keychain(service: "Twitter")
         
         XCTAssertNil(keychain["username"], "not stored username")
         XCTAssertNil(keychain["password"], "not stored password")
@@ -318,10 +318,10 @@ class KeychainAccessTests: XCTestCase {
     
     #if os(iOS)
     func testErrorHandling() {
-        if let error = Keychain(service: "example.com", accessGroup: "12ABCD3E4F.shared").removeAll() {
+        if let error = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared").removeAll() {
             XCTAssertNil(error, "no error occurred")
         }
-        if let error = Keychain(service: "example.com").removeAll() {
+        if let error = Keychain(service: "Twitter").removeAll() {
             XCTAssertNil(error, "no error occurred")
         }
         if let error = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS).removeAll() {
@@ -333,7 +333,7 @@ class KeychainAccessTests: XCTestCase {
         
         locally {
             // Add Keychain items
-            let keychain = Keychain(service: "example.com")
+            let keychain = Keychain(service: "Twitter")
             
             if let error = keychain.set("kishikawa_katsumi", key: "username") {
                 XCTAssertNil(error, "no error occurred")
@@ -386,7 +386,7 @@ class KeychainAccessTests: XCTestCase {
         
         locally {
             // Update Keychain items
-            let keychain = Keychain(service: "example.com")
+            let keychain = Keychain(service: "Twitter")
             
             if let error = keychain.set("katsumi_kishikawa", key: "username") {
                 XCTAssertNil(error, "no error occurred")
@@ -438,7 +438,7 @@ class KeychainAccessTests: XCTestCase {
         
         locally {
             // Remove Keychain items
-            let keychain = Keychain(service: "example.com")
+            let keychain = Keychain(service: "Twitter")
             
             if let error = keychain.remove("username") {
                 XCTAssertNil(error, "no error occurred")
