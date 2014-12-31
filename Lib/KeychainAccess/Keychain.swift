@@ -115,12 +115,6 @@ public class Value<T> {
 }
 
 public class Keychain {
-    private class var errorDomain: String {
-        return "KeychainAccess"
-    }
-    
-    private let options: Options
-    
     public var service: String {
         return options.service
     }
@@ -149,38 +143,70 @@ public class Keychain {
         return options.synchronizable
     }
     
+    public var label: String? {
+        return options.label
+    }
+    
+    public var comment: String? {
+        return options.comment
+    }
+    
     public var itemClass: ItemClass {
         return options.itemClass
     }
     
+    private class var errorDomain: String {
+        return "KeychainAccess"
+    }
+    
+    private let options: Options
+    
+    // MARK:
+    
     public convenience init() {
-        self.init(service: "")
+        var options = Options()
+        if let bundleIdentifier = NSBundle.mainBundle().bundleIdentifier {
+            options.service = bundleIdentifier
+        }
+        self.init(options)
     }
     
-    public init(service: String) {
-        options = Options()
+    public convenience init(service: String) {
+        var options = Options()
         options.service = service
+        self.init(options)
     }
     
-    public init(service: String = "", accessGroup: String) {
-        options = Options()
+    public convenience init(accessGroup: String) {
+        var options = Options()
+        if let bundleIdentifier = NSBundle.mainBundle().bundleIdentifier {
+            options.service = bundleIdentifier
+        }
+        options.accessGroup = accessGroup
+        self.init(options)
+    }
+    
+    public convenience init(service: String, accessGroup: String) {
+        var options = Options()
         options.service = service
         options.accessGroup = accessGroup
+        self.init(options)
     }
     
     public convenience init(server: NSURL, protocolType: ProtocolType) {
         self.init(server: server, protocolType: protocolType, authenticationType: .Default)
     }
     
-    public init(server: NSURL, protocolType: ProtocolType, authenticationType: AuthenticationType) {
-        options = Options()
+    public convenience init(server: NSURL, protocolType: ProtocolType, authenticationType: AuthenticationType) {
+        var options = Options()
         options.itemClass = .InternetPassword
         options.server = server
         options.protocolType = protocolType
         options.authenticationType = authenticationType
+        self.init(options)
     }
     
-    private init(options opts: Options) {
+    private init(_ opts: Options) {
         options = opts
     }
     
@@ -189,13 +215,25 @@ public class Keychain {
     public func accessibility(accessibility: Accessibility) -> Keychain {
         var options = self.options
         options.accessibility = accessibility
-        return Keychain(options: options)
+        return Keychain(options)
     }
     
     public func synchronizable(synchronizable: Bool) -> Keychain {
         var options = self.options
         options.synchronizable = synchronizable
-        return Keychain(options: options)
+        return Keychain(options)
+    }
+    
+    public func label(label: String) -> Keychain {
+        var options = self.options
+        options.label = label
+        return Keychain(options)
+    }
+    
+    public func comment(comment: String) -> Keychain {
+        var options = self.options
+        options.comment = comment
+        return Keychain(options)
     }
     
     // MARK:
@@ -547,6 +585,9 @@ struct Options {
     var accessibility: Accessibility = .AfterFirstUnlock
     var synchronizable: Bool = false
     
+    var label: String?
+    var comment: String?
+    
     init() {}
 }
 
@@ -593,6 +634,13 @@ extension Options {
         
         attributes[kSecAttrAccessible] = accessibility.rawValue
         attributes[kSecAttrSynchronizable] = synchronizable
+        
+        if label != nil {
+            attributes[kSecAttrLabel] = label
+        }
+        if comment != nil {
+            attributes[kSecAttrComment] = comment
+        }
         
         return attributes
     }

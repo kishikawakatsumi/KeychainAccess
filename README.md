@@ -11,48 +11,64 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 
 See also [Playground](https://github.com/kishikawakatsumi/KeychainAccess/blob/master/Examples/Playground-iOS.playground/section-1.swift).
 
-#### Instantiation
+### Basics
 
-##### Create Keychain for Generic Password
+#### Saving Application Password
 
 ```swift
-let keychain = Keychain(service: "Twitter")
+let keychain = Keychain(service: "com.example.github-token")
+keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
+```
+
+#### Saving Internet Password
+
+```swift
+let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+    .label("github.com (kishikawakatsumi)")
+
+keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
+```
+
+### Instantiation
+
+#### Create Keychain for Generic Password
+
+```swift
+let keychain = Keychain(service: "com.example.github-token")
 ```
 
 ```swift
-let keychain = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
+let keychain = Keychain(service: "com.example.github-token", accessGroup: "12ABCD3E4F.shared")
 ```
 
-##### Create Keychain for Internet Password
+#### Create Keychain for Internet Password
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://example.com")!, protocolType: .HTTPS)
+let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
 ```
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://example.com")!, protocolType: .HTTPS, authenticationType: .HTMLForm)
+let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS, authenticationType: .HTMLForm)
 ```
 
-#### Adding an item
+### Adding an item
 
-##### subscripting
+#### subscripting
 
 ```swift
-keychain["username"] = "kishikawakatsumi"
-keychain["password"] = "abcd1234"
+keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
 
-##### set method
+#### set method
 
 ```swift
-keychain.set("kishikawakatsumi", key: "username")
-keychain.set("abcd1234", key: "password")
+keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
-##### error handling
+#### error handling
 
 ```swift
-if let error = keychain.set("kishikawakatsumi", key: "username") {
+if let error = keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi") {
     println("error: \(error)")
 }
 ```
@@ -62,8 +78,7 @@ if let error = keychain.set("kishikawakatsumi", key: "username") {
 ##### subscripting (automatically converts to string)
 
 ```swift
-let username = keychain["username"]
-let password = keychain["password"]
+let token = keychain["kishikawakatsumi"]
 ```
 
 ##### get methods
@@ -71,20 +86,25 @@ let password = keychain["password"]
 ###### as String
 
 ```swift
-username = keychain.get("username")
-password = keychain.getString("password")
+let token = keychain.get("kishikawakatsumi")
+```
+
+```swift
+let token = keychain.getString("kishikawakatsumi")
 ```
 
 ###### as NSData
 
 ```swift
-let data = keychain.getData("username")
+let data = keychain.getData("kishikawakatsumi")
 ```
 
 ##### error handling
 
+**First, get the `failable` (value or error) object**
+
 ```swift
-let failable = keychain.getStringOrError("username")
+let failable = keychain.getStringOrError("kishikawakatsumi")
 ```
 
 **1. check `enum` state**
@@ -92,7 +112,7 @@ let failable = keychain.getStringOrError("username")
 ```swift
 switch failable {
 case .Success:
-  println("username: \(failable.value)")
+  println("token: \(failable.value)")
 case .Failure:
   println("error: \(failable.error)")
 }
@@ -104,7 +124,7 @@ case .Failure:
 if let error = failable.error {
     println("error: \(failable.error)")
 } else {
-    println("username: \(failable.value)")
+    println("token: \(failable.value)")
 }
 ```
 
@@ -114,7 +134,7 @@ if let error = failable.error {
 if failable.failed {
     println("error: \(failable.error)")
 } else {
-    println("username: \(failable.value)")
+    println("token: \(failable.value)")
 }
 ```
 
@@ -123,44 +143,48 @@ if failable.failed {
 ##### subscripting
 
 ```swift
-keychain["username"] = nil
-keychain["password"] = nil
+keychain["token"] = nil
 ```
 
 ##### remove method
 
 ```swift
-keychain.remove("username")
-keychain.remove("password")
+keychain.remove("token")
 ```
 
 ##### error handling
 
 ```swift
-if let error = keychain.remove("username") {
-    println("error: \(error)")
-}
-if let error = keychain.remove("password") {
+if let error = keychain.remove("token") {
     println("error: \(error)")
 }
 ```
 
-### Configuration
-
-###### *Provides fluent interfaces*
+### Label and Comment
 
 ```swift
-let keychain = Keychain(service: "Twitter")
+let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+    .label("github.com (kishikawakatsumi)")
+    .comment("github access token")
+```
+
+### Configuration
+
+**Provides fluent interfaces**
+
+```swift
+let keychain = Keychain(service: "com.example.github-token")
+    .label("github.com (kishikawakatsumi)")
     .synchronizable(true)
     .accessibility(.AfterFirstUnlock)
 ```
 
 #### Accessibility
 
-##### Default (=kSecAttrAccessibleAfterFirstUnlock)
+##### Default accessibility matches background application (=kSecAttrAccessibleAfterFirstUnlock)
 
 ```swift
-let keychain = Keychain(service: "Twitter")
+let keychain = Keychain(service: "com.example.github-token")
 ```
 
 ##### For background application
@@ -168,7 +192,7 @@ let keychain = Keychain(service: "Twitter")
 ###### Creating instance
 
 ```swift
-let keychain = Keychain(service: "Twitter")
+let keychain = Keychain(service: "com.example.github-token")
     .accessibility(.AfterFirstUnlock)
 
 keychain["password"] = password
@@ -177,11 +201,11 @@ keychain["password"] = password
 ###### One-shot
 
 ```swift
-let keychain = Keychain(service: "Twitter")
+let keychain = Keychain(service: "com.example.github-token")
 
 keychain
     .accessibility(.AfterFirstUnlock)
-    .set(password, key: "password")
+    .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
 ##### For foreground application
@@ -189,10 +213,10 @@ keychain
 ###### Creating instance
 
 ```swift
-let keychain = Keychain(service: "Twitter")
+let keychain = Keychain(service: "com.example.github-token")
     .accessibility(.WhenUnlocked)
 
-keychain["password"] = password
+keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
 
 ###### One-shot
@@ -202,35 +226,36 @@ let keychain = Keychain(service: "Twitter")
 
 keychain
     .accessibility(.WhenUnlocked)
-    .set(password, key: "password")
+    .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
-##### Sharing Keychain items
+#### Sharing Keychain items
 
 ```swift
-let keychain = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
+let keychain = Keychain(service: "com.example.github-token", accessGroup: "12ABCD3E4F.shared")
 ```
 
-##### Synchronizing Keychain items with iCloud
+#### Synchronizing Keychain items with iCloud
 
 ###### Creating instance
 
 ```swift
-let keychain = Keychain(service: "Twitter")
+let keychain = Keychain(service: "com.example.github-token")
     .synchronizable(true)
 
-keychain["password"] = password
+keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
 
 ###### One-shot
 
 ```swift
-let keychain = Keychain(service: "Twitter")
+let keychain = Keychain(service: "com.example.github-token")
 
 keychain
     .synchronizable(true)
-    .set(password, key: "password")
+    .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
+
 
 ## Requirements
 
