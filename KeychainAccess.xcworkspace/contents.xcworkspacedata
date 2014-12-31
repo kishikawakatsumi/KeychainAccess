@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:Lib/KeychainAccess.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Examples/Example-iOS/Example-iOS.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Examples/Playground-iOS.playground">
+   </FileRef>
+</Workspace>

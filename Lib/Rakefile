@@ -1,0 +1,61 @@
+require 'xcjobs'
+
+def destinations
+  [ 'name=iPhone 5s,OS=8.1' ]
+end
+
+XCJobs::Build.new('build:simulator') do |t|
+  t.project = 'KeychainAccess'
+  t.scheme = 'KeychainAccess-iOS'
+  t.sdk = 'iphonesimulator'
+  t.configuration = 'Release'
+  t.build_dir = 'build'
+  t.formatter = 'xcpretty -c'
+  t.add_build_setting('CODE_SIGN_IDENTITY', '')
+  t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
+end
+
+XCJobs::Build.new('build:device') do |t|
+  t.project = 'KeychainAccess'
+  t.scheme = 'KeychainAccess-iOS'
+  t.sdk = 'iphoneos'
+  t.configuration = 'Release'
+  t.build_dir = 'build'
+  t.formatter = 'xcpretty -c'
+  t.add_build_setting('CODE_SIGN_IDENTITY', '')
+  t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
+end
+
+XCJobs::Build.new('build:osx') do |t|
+  t.project = 'KeychainAccess'
+  t.scheme = 'KeychainAccess-Mac'
+  t.configuration = 'Release'
+  t.build_dir = 'build'
+  t.formatter = 'xcpretty -c'
+  t.add_build_setting('CODE_SIGN_IDENTITY', '')
+  t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
+end
+
+XCJobs::Test.new('test:ios') do |t|
+  t.project = 'KeychainAccess'
+  t.scheme = 'KeychainAccess-iOS'
+  t.configuration = 'Release'
+  t.build_dir = 'build'
+  destinations.each do |destination|
+    t.add_destination(destination)
+  end
+  t.formatter = 'xcpretty -c'
+  t.add_build_setting('GCC_INSTRUMENT_PROGRAM_FLOW_ARCS', 'YES')
+  t.add_build_setting('GCC_GENERATE_TEST_COVERAGE_FILES', 'YES')
+end
+
+XCJobs::Test.new('test:osx') do |t|
+  t.project = 'KeychainAccess'
+  t.scheme = 'KeychainAccess-Mac'
+  t.sdk = 'macosx'
+  t.configuration = 'Release'
+  t.build_dir = 'build'
+  t.formatter = 'xcpretty -c'
+  t.add_build_setting('GCC_INSTRUMENT_PROGRAM_FLOW_ARCS', 'YES')
+  t.add_build_setting('GCC_GENERATE_TEST_COVERAGE_FILES', 'YES')
+end
