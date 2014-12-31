@@ -339,9 +339,9 @@ it, simply add the following line to your Cartfile:
 2. Link `KeychainAccess.framework` with your target
 3. Add `Copy Files Build Phase` to include the framework to your application bundle
 
-<img src="https://raw.githubusercontent.com/kishikawakatsumi/KeychainAccess/master/Screenshots/Installation.png" width="800px" />
+_See [iOS Example Project](https://github.com/kishikawakatsumi/KeychainAccess/tree/master/Examples/Example-iOS) as reference._
 
-Note: Currently SSKeychain does not support Mac OS 10.6.
+<img src="https://raw.githubusercontent.com/kishikawakatsumi/KeychainAccess/master/Screenshots/Installation.png" width="800px" />
 
 ## Author
 
