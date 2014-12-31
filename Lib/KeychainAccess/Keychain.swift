@@ -439,7 +439,7 @@ public class Keychain {
         
         switch status {
         case errSecSuccess:
-            if let items = result as [[String: AnyObject]]? {
+            if let items = result as? [[String: AnyObject]] {
                 return prettify(itemClass: itemClass, items: items)
             }
         case errSecItemNotFound:
@@ -470,7 +470,7 @@ public class Keychain {
         
         switch status {
         case errSecSuccess:
-            if let items = result as [[String: AnyObject]]? {
+            if let items = result as? [[String: AnyObject]] {
                 return items
             }
         case errSecItemNotFound:
