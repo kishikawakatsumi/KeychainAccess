@@ -11,7 +11,7 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 
 ## Usage
 
-See also [Playground](https://github.com/kishikawakatsumi/KeychainAccess/blob/master/Examples/Playground-iOS.playground/section-1.swift).
+See also [Playground](https://github.com/kishikawakatsumi/KeychainAccess/blob/master/Examples/Playground-iOS.playground/section-1.swift) and [iOS Example Project](https://github.com/kishikawakatsumi/KeychainAccess/tree/master/Examples/Example-iOS).
 
 ### Basics
 
