@@ -333,6 +333,16 @@ it, simply add the following line to your Cartfile:
 
 `github "kishikawakatsumi/KeychainAccess"`
 
+### To manually add to your project
+
+1. Add `Lib/KeychainAccess.xcodeproj` to your project
+2. Link `KeychainAccess.framework` with your target
+3. Add `Copy Files Build Phase` to include the framework to your application bundle
+
+<img src="https://raw.githubusercontent.com/kishikawakatsumi/KeychainAccess/master/Screenshots/Installation.png" width="800px" />
+
+Note: Currently SSKeychain does not support Mac OS 10.6.
+
 ## Author
 
 kishikawa katsumi, kishikawakatsumi@mac.com
