@@ -284,7 +284,7 @@ public class Keychain {
             if let data = result as NSData? {
                 return FailableOf(data)
             }
-            return FailableOf(securityError(status: Status.UnknownError.rawValue))
+            return FailableOf(securityError(status: Status.UnexpectedError.rawValue))
         case errSecItemNotFound:
             return FailableOf(nil)
         default: ()
@@ -670,14 +670,14 @@ extension Options {
 // MARK:
 
 extension ItemClass : RawRepresentable, Printable {
-    public static let allValues: [ItemClass] = [GenericPassword, InternetPassword]
     
     public init?(rawValue: String) {
-        if rawValue == kSecClassGenericPassword {
+        switch rawValue {
+        case kSecClassGenericPassword:
             self = GenericPassword
-        } else if rawValue == kSecClassInternetPassword {
+        case kSecClassInternetPassword:
             self = InternetPassword
-        } else {
+        default:
             return nil
         }
     }
@@ -702,32 +702,24 @@ extension ItemClass : RawRepresentable, Printable {
 }
 
 extension Accessibility : RawRepresentable, Printable {
-    public static let allValues: [Accessibility] = [
-        WhenUnlocked,
-        AfterFirstUnlock,
-        Always,
-        WhenPasscodeSetThisDeviceOnly,
-        WhenUnlockedThisDeviceOnly,
-        AfterFirstUnlockThisDeviceOnly,
-        AlwaysThisDeviceOnly,
-    ]
     
     public init?(rawValue: String) {
-        if rawValue == kSecAttrAccessibleWhenUnlocked {
+        switch rawValue {
+        case kSecAttrAccessibleWhenUnlocked:
             self = WhenUnlocked
-        } else if rawValue == kSecAttrAccessibleAfterFirstUnlock {
+        case kSecAttrAccessibleAfterFirstUnlock:
             self = AfterFirstUnlock
-        } else if rawValue == kSecAttrAccessibleAlways {
+        case kSecAttrAccessibleAlways:
             self = Always
-        } else if rawValue == kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly {
+        case kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly:
             self = WhenPasscodeSetThisDeviceOnly
-        } else if rawValue == kSecAttrAccessibleWhenUnlockedThisDeviceOnly {
+        case kSecAttrAccessibleWhenUnlockedThisDeviceOnly:
             self = WhenUnlockedThisDeviceOnly
-        }  else if rawValue == kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly {
+        case kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly:
             self = AfterFirstUnlockThisDeviceOnly
-        } else if rawValue == kSecAttrAccessibleAlwaysThisDeviceOnly {
+        case kSecAttrAccessibleAlwaysThisDeviceOnly:
             self = AlwaysThisDeviceOnly
-        } else {
+        default:
             return nil
         }
     }
@@ -772,106 +764,72 @@ extension Accessibility : RawRepresentable, Printable {
 }
 
 extension ProtocolType : RawRepresentable, Printable {
-    public static let allValues: [ProtocolType] = [
-        FTP,
-        FTPAccount,
-        HTTP,
-        IRC,
-        NNTP,
-        POP3,
-        SMTP,
-        SOCKS,
-        IMAP,
-        LDAP,
-        AppleTalk,
-        AFP,
-        Telnet,
-        SSH,
-        FTPS,
-        HTTPS,
-        HTTPProxy,
-        HTTPSProxy,
-        FTPProxy,
-        SMB,
-        RTSP,
-        RTSPProxy,
-        DAAP,
-        EPPC,
-        IPP,
-        NNTPS,
-        LDAPS,
-        TelnetS,
-        IMAPS,
-        IRCS,
-        POP3S,
-    ]
     
     public init?(rawValue: String) {
-        if rawValue == kSecAttrProtocolFTP {
+        switch rawValue {
+        case kSecAttrProtocolFTP:
             self = FTP
-        } else if rawValue == kSecAttrProtocolFTPAccount {
+        case kSecAttrProtocolFTPAccount:
             self = FTPAccount
-        } else if rawValue == kSecAttrProtocolHTTP {
+        case kSecAttrProtocolHTTP:
             self = HTTP
-        } else if rawValue == kSecAttrProtocolIRC {
+        case kSecAttrProtocolIRC:
             self = IRC
-        }  else if rawValue == kSecAttrProtocolNNTP {
+        case kSecAttrProtocolNNTP:
             self = NNTP
-        } else if rawValue == kSecAttrProtocolPOP3 {
+        case kSecAttrProtocolPOP3:
             self = POP3
-        } else if rawValue == kSecAttrProtocolSMTP {
+        case kSecAttrProtocolSMTP:
             self = SMTP
-        } else if rawValue == kSecAttrProtocolPOP3 {
-            self = POP3
-        } else if rawValue == kSecAttrProtocolSOCKS {
+        case kSecAttrProtocolSOCKS:
             self = SOCKS
-        } else if rawValue == kSecAttrProtocolIMAP {
+        case kSecAttrProtocolIMAP:
             self = IMAP
-        } else if rawValue == kSecAttrProtocolLDAP {
+        case kSecAttrProtocolLDAP:
             self = LDAP
-        } else if rawValue == kSecAttrProtocolAppleTalk {
+        case kSecAttrProtocolAppleTalk:
             self = AppleTalk
-        } else if rawValue == kSecAttrProtocolAFP {
+        case kSecAttrProtocolAFP:
             self = AFP
-        } else if rawValue == kSecAttrProtocolTelnet {
+        case kSecAttrProtocolTelnet:
             self = Telnet
-        } else if rawValue == kSecAttrProtocolSSH {
+        case kSecAttrProtocolSSH:
             self = SSH
-        } else if rawValue == kSecAttrProtocolFTPS {
+        case kSecAttrProtocolFTPS:
             self = FTPS
-        } else if rawValue == kSecAttrProtocolHTTPS {
+        case kSecAttrProtocolHTTPS:
             self = HTTPS
-        } else if rawValue == kSecAttrProtocolHTTPProxy {
+        case kSecAttrProtocolHTTPProxy:
             self = HTTPProxy
-        } else if rawValue == kSecAttrProtocolHTTPSProxy {
+        case kSecAttrProtocolHTTPSProxy:
             self = HTTPSProxy
-        } else if rawValue == kSecAttrProtocolFTPProxy {
+        case kSecAttrProtocolFTPProxy:
             self = FTPProxy
-        } else if rawValue == kSecAttrProtocolSMB {
+        case kSecAttrProtocolSMB:
             self = SMB
-        } else if rawValue == kSecAttrProtocolRTSP {
+        case kSecAttrProtocolRTSP:
             self = RTSP
-        } else if rawValue == kSecAttrProtocolRTSPProxy {
+        case kSecAttrProtocolRTSPProxy:
             self = RTSPProxy
-        } else if rawValue == kSecAttrProtocolDAAP {
+        case kSecAttrProtocolDAAP:
             self = DAAP
-        } else if rawValue == kSecAttrProtocolEPPC {
+        case kSecAttrProtocolEPPC:
             self = EPPC
-        } else if rawValue == kSecAttrProtocolIPP {
+        case kSecAttrProtocolIPP:
             self = IPP
-        } else if rawValue == kSecAttrProtocolNNTPS {
+        case kSecAttrProtocolNNTPS:
             self = NNTPS
-        } else if rawValue == kSecAttrProtocolLDAPS {
+        case kSecAttrProtocolLDAPS:
             self = LDAPS
-        } else if rawValue == kSecAttrProtocolTelnetS {
+        case kSecAttrProtocolTelnetS:
             self = TelnetS
-        } else if rawValue == kSecAttrProtocolIMAPS {
+        case kSecAttrProtocolIMAPS:
             self = IMAPS
-        } else if rawValue == kSecAttrProtocolIRCS {
+        case kSecAttrProtocolIRCS:
             self = IRCS
-        } else if rawValue == kSecAttrProtocolPOP3S {
+        case kSecAttrProtocolPOP3S:
             self = POP3S
-        } else {
+        default:
             return nil
         }
     }
@@ -1012,35 +970,26 @@ extension ProtocolType : RawRepresentable, Printable {
 }
 
 extension AuthenticationType : RawRepresentable, Printable {
-    public static let allValues: [AuthenticationType] = [
-        NTLM,
-        MSN,
-        DPA,
-        RPA,
-        HTTPBasic,
-        HTTPDigest,
-        HTMLForm,
-        Default,
-    ]
     
     public init?(rawValue: String) {
-        if rawValue == kSecAttrAuthenticationTypeNTLM {
+        switch rawValue {
+        case kSecAttrAuthenticationTypeNTLM:
             self = NTLM
-        } else if rawValue == kSecAttrAuthenticationTypeMSN {
+        case kSecAttrAuthenticationTypeMSN:
             self = MSN
-        } else if rawValue == kSecAttrAuthenticationTypeDPA {
+        case kSecAttrAuthenticationTypeDPA:
             self = DPA
-        } else if rawValue == kSecAttrAuthenticationTypeRPA {
+        case kSecAttrAuthenticationTypeRPA:
             self = RPA
-        } else if rawValue == kSecAttrAuthenticationTypeHTTPBasic {
+        case kSecAttrAuthenticationTypeHTTPBasic:
             self = HTTPBasic
-        }  else if rawValue == kSecAttrAuthenticationTypeHTTPDigest {
+        case kSecAttrAuthenticationTypeHTTPDigest:
             self = HTTPDigest
-        } else if rawValue == kSecAttrAuthenticationTypeHTMLForm {
+        case kSecAttrAuthenticationTypeHTMLForm:
             self = HTMLForm
-        } else if rawValue == kSecAttrAuthenticationTypeDefault {
+        case kSecAttrAuthenticationTypeDefault:
             self = Default
-        } else {
+        default:
             return nil
         }
     }
@@ -1088,7 +1037,7 @@ extension AuthenticationType : RawRepresentable, Printable {
     }
 }
 
-public enum Status {
+public enum Status : OSStatus {
     case Success
     case Unimplemented
     case Param
@@ -1465,1149 +1414,771 @@ public enum Status {
     case InvalidIndexInfo
     case InvalidNewOwner
     case InvalidModifyMode
-    case UnknownError
+    case UnexpectedError
 }
 
 extension Status : RawRepresentable, Printable {
-    public static let allValues: [Status] = [
-        Success,
-        Unimplemented,
-        Param,
-        Allocate,
-        NotAvailable,
-        ReadOnly,
-        AuthFailed,
-        NoSuchKeychain,
-        InvalidKeychain,
-        DuplicateKeychain,
-        DuplicateCallback,
-        InvalidCallback,
-        DuplicateItem,
-        ItemNotFound,
-        BufferTooSmall,
-        DataTooLarge,
-        NoSuchAttr,
-        InvalidItemRef,
-        InvalidSearchRef,
-        NoSuchClass,
-        NoDefaultKeychain,
-        InteractionNotAllowed,
-        ReadOnlyAttr,
-        WrongSecVersion,
-        KeySizeNotAllowed,
-        NoStorageModule,
-        NoCertificateModule,
-        NoPolicyModule,
-        InteractionRequired,
-        DataNotAvailable,
-        DataNotModifiable,
-        CreateChainFailed,
-        InvalidPrefsDomain,
-        ACLNotSimple,
-        PolicyNotFound,
-        InvalidTrustSetting,
-        NoAccessForItem,
-        InvalidOwnerEdit,
-        TrustNotAvailable,
-        UnsupportedFormat,
-        UnknownFormat,
-        KeyIsSensitive,
-        MultiplePrivKeys,
-        PassphraseRequired,
-        InvalidPasswordRef,
-        InvalidTrustSettings,
-        NoTrustSettings,
-        Pkcs12VerifyFailure,
-        InvalidCertificate,
-        NotSigner,
-        PolicyDenied,
-        InvalidKey,
-        Decode,
-        Internal,
-        UnsupportedAlgorithm,
-        UnsupportedOperation,
-        UnsupportedPadding,
-        ItemInvalidKey,
-        ItemInvalidKeyType,
-        ItemInvalidValue,
-        ItemClassMissing,
-        ItemMatchUnsupported,
-        UseItemListUnsupported,
-        UseKeychainUnsupported,
-        UseKeychainListUnsupported,
-        ReturnDataUnsupported,
-        ReturnAttributesUnsupported,
-        ReturnRefUnsupported,
-        ReturnPersitentRefUnsupported,
-        ValueRefUnsupported,
-        ValuePersistentRefUnsupported,
-        ReturnMissingPointer,
-        MatchLimitUnsupported,
-        ItemIllegalQuery,
-        WaitForCallback,
-        MissingEntitlement,
-        UpgradePending,
-        MPSignatureInvalid,
-        OTRTooOld,
-        OTRIDTooNew,
-        ServiceNotAvailable,
-        InsufficientClientID,
-        DeviceReset,
-        DeviceFailed,
-        AppleAddAppACLSubject,
-        ApplePublicKeyIncomplete,
-        AppleSignatureMismatch,
-        AppleInvalidKeyStartDate,
-        AppleInvalidKeyEndDate,
-        ConversionError,
-        AppleSSLv2Rollback,
-        DiskFull,
-        QuotaExceeded,
-        FileTooBig,
-        InvalidDatabaseBlob,
-        InvalidKeyBlob,
-        IncompatibleDatabaseBlob,
-        IncompatibleKeyBlob,
-        HostNameMismatch,
-        UnknownCriticalExtensionFlag,
-        NoBasicConstraints,
-        NoBasicConstraintsCA,
-        InvalidAuthorityKeyID,
-        InvalidSubjectKeyID,
-        InvalidKeyUsageForPolicy,
-        InvalidExtendedKeyUsage,
-        InvalidIDLinkage,
-        PathLengthConstraintExceeded,
-        InvalidRoot,
-        CRLExpired,
-        CRLNotValidYet,
-        CRLNotFound,
-        CRLServerDown,
-        CRLBadURI,
-        UnknownCertExtension,
-        UnknownCRLExtension,
-        CRLNotTrusted,
-        CRLPolicyFailed,
-        IDPFailure,
-        SMIMEEmailAddressesNotFound,
-        SMIMEBadExtendedKeyUsage,
-        SMIMEBadKeyUsage,
-        SMIMEKeyUsageNotCritical,
-        SMIMENoEmailAddress,
-        SMIMESubjAltNameNotCritical,
-        SSLBadExtendedKeyUsage,
-        OCSPBadResponse,
-        OCSPBadRequest,
-        OCSPUnavailable,
-        OCSPStatusUnrecognized,
-        EndOfData,
-        IncompleteCertRevocationCheck,
-        NetworkFailure,
-        OCSPNotTrustedToAnchor,
-        RecordModified,
-        OCSPSignatureError,
-        OCSPNoSigner,
-        OCSPResponderMalformedReq,
-        OCSPResponderInternalError,
-        OCSPResponderTryLater,
-        OCSPResponderSignatureRequired,
-        OCSPResponderUnauthorized,
-        OCSPResponseNonceMismatch,
-        CodeSigningBadCertChainLength,
-        CodeSigningNoBasicConstraints,
-        CodeSigningBadPathLengthConstraint,
-        CodeSigningNoExtendedKeyUsage,
-        CodeSigningDevelopment,
-        ResourceSignBadCertChainLength,
-        ResourceSignBadExtKeyUsage,
-        TrustSettingDeny,
-        InvalidSubjectName,
-        UnknownQualifiedCertStatement,
-        MobileMeRequestQueued,
-        MobileMeRequestRedirected,
-        MobileMeServerError,
-        MobileMeServerNotAvailable,
-        MobileMeServerAlreadyExists,
-        MobileMeServerServiceErr,
-        MobileMeRequestAlreadyPending,
-        MobileMeNoRequestPending,
-        MobileMeCSRVerifyFailure,
-        MobileMeFailedConsistencyCheck,
-        NotInitialized,
-        InvalidHandleUsage,
-        PVCReferentNotFound,
-        FunctionIntegrityFail,
-        InternalError,
-        MemoryError,
-        InvalidData,
-        MDSError,
-        InvalidPointer,
-        SelfCheckFailed,
-        FunctionFailed,
-        ModuleManifestVerifyFailed,
-        InvalidGUID,
-        InvalidHandle,
-        InvalidDBList,
-        InvalidPassthroughID,
-        InvalidNetworkAddress,
-        CRLAlreadySigned,
-        InvalidNumberOfFields,
-        VerificationFailure,
-        UnknownTag,
-        InvalidSignature,
-        InvalidName,
-        InvalidCertificateRef,
-        InvalidCertificateGroup,
-        TagNotFound,
-        InvalidQuery,
-        InvalidValue,
-        CallbackFailed,
-        ACLDeleteFailed,
-        ACLReplaceFailed,
-        ACLAddFailed,
-        ACLChangeFailed,
-        InvalidAccessCredentials,
-        InvalidRecord,
-        InvalidACL,
-        InvalidSampleValue,
-        IncompatibleVersion,
-        PrivilegeNotGranted,
-        InvalidScope,
-        PVCAlreadyConfigured,
-        InvalidPVC,
-        EMMLoadFailed,
-        EMMUnloadFailed,
-        AddinLoadFailed,
-        InvalidKeyRef,
-        InvalidKeyHierarchy,
-        AddinUnloadFailed,
-        LibraryReferenceNotFound,
-        InvalidAddinFunctionTable,
-        InvalidServiceMask,
-        ModuleNotLoaded,
-        InvalidSubServiceID,
-        AttributeNotInContext,
-        ModuleManagerInitializeFailed,
-        ModuleManagerNotFound,
-        EventNotificationCallbackNotFound,
-        InputLengthError,
-        OutputLengthError,
-        PrivilegeNotSupported,
-        DeviceError,
-        AttachHandleBusy,
-        NotLoggedIn,
-        AlgorithmMismatch,
-        KeyUsageIncorrect,
-        KeyBlobTypeIncorrect,
-        KeyHeaderInconsistent,
-        UnsupportedKeyFormat,
-        UnsupportedKeySize,
-        InvalidKeyUsageMask,
-        UnsupportedKeyUsageMask,
-        InvalidKeyAttributeMask,
-        UnsupportedKeyAttributeMask,
-        InvalidKeyLabel,
-        UnsupportedKeyLabel,
-        InvalidKeyFormat,
-        UnsupportedVectorOfBuffers,
-        InvalidInputVector,
-        InvalidOutputVector,
-        InvalidContext,
-        InvalidAlgorithm,
-        InvalidAttributeKey,
-        MissingAttributeKey,
-        InvalidAttributeInitVector,
-        MissingAttributeInitVector,
-        InvalidAttributeSalt,
-        MissingAttributeSalt,
-        InvalidAttributePadding,
-        MissingAttributePadding,
-        InvalidAttributeRandom,
-        MissingAttributeRandom,
-        InvalidAttributeSeed,
-        MissingAttributeSeed,
-        InvalidAttributePassphrase,
-        MissingAttributePassphrase,
-        InvalidAttributeKeyLength,
-        MissingAttributeKeyLength,
-        InvalidAttributeBlockSize,
-        MissingAttributeBlockSize,
-        InvalidAttributeOutputSize,
-        MissingAttributeOutputSize,
-        InvalidAttributeRounds,
-        MissingAttributeRounds,
-        InvalidAlgorithmParms,
-        MissingAlgorithmParms,
-        InvalidAttributeLabel,
-        MissingAttributeLabel,
-        InvalidAttributeKeyType,
-        MissingAttributeKeyType,
-        InvalidAttributeMode,
-        MissingAttributeMode,
-        InvalidAttributeEffectiveBits,
-        MissingAttributeEffectiveBits,
-        InvalidAttributeStartDate,
-        MissingAttributeStartDate,
-        InvalidAttributeEndDate,
-        MissingAttributeEndDate,
-        InvalidAttributeVersion,
-        MissingAttributeVersion,
-        InvalidAttributePrime,
-        MissingAttributePrime,
-        InvalidAttributeBase,
-        MissingAttributeBase,
-        InvalidAttributeSubprime,
-        MissingAttributeSubprime,
-        InvalidAttributeIterationCount,
-        MissingAttributeIterationCount,
-        InvalidAttributeDLDBHandle,
-        MissingAttributeDLDBHandle,
-        InvalidAttributeAccessCredentials,
-        MissingAttributeAccessCredentials,
-        InvalidAttributePublicKeyFormat,
-        MissingAttributePublicKeyFormat,
-        InvalidAttributePrivateKeyFormat,
-        MissingAttributePrivateKeyFormat,
-        InvalidAttributeSymmetricKeyFormat,
-        MissingAttributeSymmetricKeyFormat,
-        InvalidAttributeWrappedKeyFormat,
-        MissingAttributeWrappedKeyFormat,
-        StagedOperationInProgress,
-        StagedOperationNotStarted,
-        VerifyFailed,
-        QuerySizeUnknown,
-        BlockSizeMismatch,
-        PublicKeyInconsistent,
-        DeviceVerifyFailed,
-        InvalidLoginName,
-        AlreadyLoggedIn,
-        InvalidDigestAlgorithm,
-        InvalidCRLGroup,
-        CertificateCannotOperate,
-        CertificateExpired,
-        CertificateNotValidYet,
-        CertificateRevoked,
-        CertificateSuspended,
-        InsufficientCredentials,
-        InvalidAction,
-        InvalidAuthority,
-        VerifyActionFailed,
-        InvalidCertAuthority,
-        InvaldCRLAuthority,
-        InvalidCRLEncoding,
-        InvalidCRLType,
-        InvalidCRL,
-        InvalidFormType,
-        InvalidID,
-        InvalidIdentifier,
-        InvalidIndex,
-        InvalidPolicyIdentifiers,
-        InvalidTimeString,
-        InvalidReason,
-        InvalidRequestInputs,
-        InvalidResponseVector,
-        InvalidStopOnPolicy,
-        InvalidTuple,
-        MultipleValuesUnsupported,
-        NotTrusted,
-        NoDefaultAuthority,
-        RejectedForm,
-        RequestLost,
-        RequestRejected,
-        UnsupportedAddressType,
-        UnsupportedService,
-        InvalidTupleGroup,
-        InvalidBaseACLs,
-        InvalidTupleCredendtials,
-        InvalidEncoding,
-        InvalidValidityPeriod,
-        InvalidRequestor,
-        RequestDescriptor,
-        InvalidBundleInfo,
-        InvalidCRLIndex,
-        NoFieldValues,
-        UnsupportedFieldFormat,
-        UnsupportedIndexInfo,
-        UnsupportedLocality,
-        UnsupportedNumAttributes,
-        UnsupportedNumIndexes,
-        UnsupportedNumRecordTypes,
-        FieldSpecifiedMultiple,
-        IncompatibleFieldFormat,
-        InvalidParsingModule,
-        DatabaseLocked,
-        DatastoreIsOpen,
-        MissingValue,
-        UnsupportedQueryLimits,
-        UnsupportedNumSelectionPreds,
-        UnsupportedOperator,
-        InvalidDBLocation,
-        InvalidAccessRequest,
-        InvalidIndexInfo,
-        InvalidNewOwner,
-        InvalidModifyMode,
-        UnknownError,
-    ]
     
-    public init(rawValue: Int32) {
-        if rawValue == 0 {
+    public init(rawValue: OSStatus) {
+        switch rawValue {
+        case 0:
             self = Success
-        } else if rawValue == -4 {
+        case -4:
             self = Unimplemented
-        } else if rawValue == -50 {
+        case -50:
             self = Param
-        } else if rawValue == -108 {
+        case -108:
             self = Allocate
-        } else if rawValue == -25291 {
+        case -25291:
             self = NotAvailable
-        } else if rawValue == -25292 {
+        case -25292:
             self = ReadOnly
-        } else if rawValue == -25293 {
+        case -25293:
             self = AuthFailed
-        } else if rawValue == -25294 {
+        case -25294:
             self = NoSuchKeychain
-        } else if rawValue == -25295 {
+        case -25295:
             self = InvalidKeychain
-        } else if rawValue == -25296 {
+        case -25296:
             self = DuplicateKeychain
-        } else if rawValue == -25297 {
+        case -25297:
             self = DuplicateCallback
-        } else if rawValue == -25298 {
+        case -25298:
             self = InvalidCallback
-        } else if rawValue == -25299 {
+        case -25299:
             self = DuplicateItem
-        } else if rawValue == -25300 {
+        case -25300:
             self = ItemNotFound
-        } else if rawValue == -25301 {
+        case -25301:
             self = BufferTooSmall
-        } else if rawValue == -25302 {
+        case -25302:
             self = DataTooLarge
-        } else if rawValue == -25303 {
+        case -25303:
             self = NoSuchAttr
-        } else if rawValue == -25304 {
+        case -25304:
             self = InvalidItemRef
-        } else if rawValue == -25305 {
+        case -25305:
             self = InvalidSearchRef
-        } else if rawValue == -25306 {
+        case -25306:
             self = NoSuchClass
-        } else if rawValue == -25307 {
+        case -25307:
             self = NoDefaultKeychain
-        } else if rawValue == -25308 {
+        case -25308:
             self = InteractionNotAllowed
-        } else if rawValue == -25309 {
+        case -25309:
             self = ReadOnlyAttr
-        } else if rawValue == -25310 {
+        case -25310:
             self = WrongSecVersion
-        } else if rawValue == -25311 {
+        case -25311:
             self = KeySizeNotAllowed
-        } else if rawValue == -25312 {
+        case -25312:
             self = NoStorageModule
-        } else if rawValue == -25313 {
+        case -25313:
             self = NoCertificateModule
-        } else if rawValue == -25314 {
+        case -25314:
             self = NoPolicyModule
-        } else if rawValue == -25315 {
+        case -25315:
             self = InteractionRequired
-        } else if rawValue == -25316 {
+        case -25316:
             self = DataNotAvailable
-        } else if rawValue == -25317 {
+        case -25317:
             self = DataNotModifiable
-        } else if rawValue == -25318 {
+        case -25318:
             self = CreateChainFailed
-        } else if rawValue == -25319 {
+        case -25319:
             self = InvalidPrefsDomain
-        } else if rawValue == -25240 {
+        case -25240:
             self = ACLNotSimple
-        } else if rawValue == -25241 {
+        case -25241:
             self = PolicyNotFound
-        } else if rawValue == -25242 {
+        case -25242:
             self = InvalidTrustSetting
-        } else if rawValue == -25243 {
+        case -25243:
             self = NoAccessForItem
-        } else if rawValue == -25244 {
+        case -25244:
             self = InvalidOwnerEdit
-        } else if rawValue == -25245 {
+        case -25245:
             self = TrustNotAvailable
-        } else if rawValue == -25256 {
+        case -25256:
             self = UnsupportedFormat
-        } else if rawValue == -25257 {
+        case -25257:
             self = UnknownFormat
-        } else if rawValue == -25258 {
+        case -25258:
             self = KeyIsSensitive
-        } else if rawValue == -25259 {
+        case -25259:
             self = MultiplePrivKeys
-        } else if rawValue == -25260 {
+        case -25260:
             self = PassphraseRequired
-        } else if rawValue == -25261 {
+        case -25261:
             self = InvalidPasswordRef
-        } else if rawValue == -25262 {
+        case -25262:
             self = InvalidTrustSettings
-        } else if rawValue == -25263 {
+        case -25263:
             self = NoTrustSettings
-        } else if rawValue == -25264 {
+        case -25264:
             self = Pkcs12VerifyFailure
-        } else if rawValue == -26265 {
+        case -26265:
             self = InvalidCertificate
-        } else if rawValue == -26267 {
+        case -26267:
             self = NotSigner
-        } else if rawValue == -26270 {
+        case -26270:
             self = PolicyDenied
-        } else if rawValue == -26274 {
+        case -26274:
             self = InvalidKey
-        } else if rawValue == -26275 {
+        case -26275:
             self = Decode
-        } else if rawValue == -26276 {
+        case -26276:
             self = Internal
-        } else if rawValue == -26268 {
+        case -26268:
             self = UnsupportedAlgorithm
-        } else if rawValue == -26271 {
+        case -26271:
             self = UnsupportedOperation
-        } else if rawValue == -26273 {
+        case -26273:
             self = UnsupportedPadding
-        } else if rawValue == -34000 {
+        case -34000:
             self = ItemInvalidKey
-        } else if rawValue == -34001 {
+        case -34001:
             self = ItemInvalidKeyType
-        } else if rawValue == -34002 {
+        case -34002:
             self = ItemInvalidValue
-        } else if rawValue == -34003 {
+        case -34003:
             self = ItemClassMissing
-        } else if rawValue == -34004 {
+        case -34004:
             self = ItemMatchUnsupported
-        } else if rawValue == -34005 {
+        case -34005:
             self = UseItemListUnsupported
-        } else if rawValue == -34006 {
+        case -34006:
             self = UseKeychainUnsupported
-        } else if rawValue == -34007 {
+        case -34007:
             self = UseKeychainListUnsupported
-        } else if rawValue == -34008 {
+        case -34008:
             self = ReturnDataUnsupported
-        } else if rawValue == -34009 {
+        case -34009:
             self = ReturnAttributesUnsupported
-        } else if rawValue == -34010 {
+        case -34010:
             self = ReturnRefUnsupported
-        } else if rawValue == -34010 {
+        case -34010:
             self = ReturnPersitentRefUnsupported
-        } else if rawValue == -34012 {
+        case -34012:
             self = ValueRefUnsupported
-        } else if rawValue == -34013 {
+        case -34013:
             self = ValuePersistentRefUnsupported
-        } else if rawValue == -34014 {
+        case -34014:
             self = ReturnMissingPointer
-        } else if rawValue == -34015 {
+        case -34015:
             self = MatchLimitUnsupported
-        } else if rawValue == -34016 {
+        case -34016:
             self = ItemIllegalQuery
-        } else if rawValue == -34017 {
+        case -34017:
             self = WaitForCallback
-        } else if rawValue == -34018 {
+        case -34018:
             self = MissingEntitlement
-        } else if rawValue == -34019 {
+        case -34019:
             self = UpgradePending
-        } else if rawValue == -25327 {
+        case -25327:
             self = MPSignatureInvalid
-        } else if rawValue == -25328 {
+        case -25328:
             self = OTRTooOld
-        } else if rawValue == -25329 {
+        case -25329:
             self = OTRIDTooNew
-        } else if rawValue == -67585 {
+        case -67585:
             self = ServiceNotAvailable
-        } else if rawValue == -67586 {
+        case -67586:
             self = InsufficientClientID
-        } else if rawValue == -67587 {
+        case -67587:
             self = DeviceReset
-        } else if rawValue == -67588 {
+        case -67588:
             self = DeviceFailed
-        } else if rawValue == -67589 {
+        case -67589:
             self = AppleAddAppACLSubject
-        } else if rawValue == -67590 {
+        case -67590:
             self = ApplePublicKeyIncomplete
-        } else if rawValue == -67591 {
+        case -67591:
             self = AppleSignatureMismatch
-        } else if rawValue == -67592 {
+        case -67592:
             self = AppleInvalidKeyStartDate
-        } else if rawValue == -67593 {
+        case -67593:
             self = AppleInvalidKeyEndDate
-        } else if rawValue == -67594 {
+        case -67594:
             self = ConversionError
-        } else if rawValue == -67595 {
+        case -67595:
             self = AppleSSLv2Rollback
-        } else if rawValue == -34 {
+        case -34:
             self = DiskFull
-        } else if rawValue == -67596 {
+        case -67596:
             self = QuotaExceeded
-        } else if rawValue == -67597 {
+        case -67597:
             self = FileTooBig
-        } else if rawValue == -67598 {
+        case -67598:
             self = InvalidDatabaseBlob
-        } else if rawValue == -67599 {
+        case -67599:
             self = InvalidKeyBlob
-        } else if rawValue == -67600 {
+        case -67600:
             self = IncompatibleDatabaseBlob
-        } else if rawValue == -67601 {
+        case -67601:
             self = IncompatibleKeyBlob
-        } else if rawValue == -67602 {
+        case -67602:
             self = HostNameMismatch
-        } else if rawValue == -67603 {
+        case -67603:
             self = UnknownCriticalExtensionFlag
-        } else if rawValue == -67604 {
+        case -67604:
             self = NoBasicConstraints
-        } else if rawValue == -67605 {
+        case -67605:
             self = NoBasicConstraintsCA
-        } else if rawValue == -67606 {
+        case -67606:
             self = InvalidAuthorityKeyID
-        } else if rawValue == -67607 {
+        case -67607:
             self = InvalidSubjectKeyID
-        } else if rawValue == -67608 {
+        case -67608:
             self = InvalidKeyUsageForPolicy
-        } else if rawValue == -67609 {
+        case -67609:
             self = InvalidExtendedKeyUsage
-        } else if rawValue == -67610 {
+        case -67610:
             self = InvalidIDLinkage
-        } else if rawValue == -67611 {
+        case -67611:
             self = PathLengthConstraintExceeded
-        } else if rawValue == -67612 {
+        case -67612:
             self = InvalidRoot
-        } else if rawValue == -67613 {
+        case -67613:
             self = CRLExpired
-        } else if rawValue == -67614 {
+        case -67614:
             self = CRLNotValidYet
-        } else if rawValue == -67615 {
+        case -67615:
             self = CRLNotFound
-        } else if rawValue == -67616 {
+        case -67616:
             self = CRLServerDown
-        } else if rawValue == -67617 {
+        case -67617:
             self = CRLBadURI
-        } else if rawValue == -67618 {
+        case -67618:
             self = UnknownCertExtension
-        } else if rawValue == -67619 {
+        case -67619:
             self = UnknownCRLExtension
-        } else if rawValue == -67620 {
+        case -67620:
             self = CRLNotTrusted
-        } else if rawValue == -67621 {
+        case -67621:
             self = CRLPolicyFailed
-        } else if rawValue == -67622 {
+        case -67622:
             self = IDPFailure
-        } else if rawValue == -67623 {
+        case -67623:
             self = SMIMEEmailAddressesNotFound
-        } else if rawValue == -67624 {
+        case -67624:
             self = SMIMEBadExtendedKeyUsage
-        } else if rawValue == -67625 {
+        case -67625:
             self = SMIMEBadKeyUsage
-        } else if rawValue == -67626 {
+        case -67626:
             self = SMIMEKeyUsageNotCritical
-        } else if rawValue == -67627 {
+        case -67627:
             self = SMIMENoEmailAddress
-        } else if rawValue == -67628 {
+        case -67628:
             self = SMIMESubjAltNameNotCritical
-        } else if rawValue == -67629 {
+        case -67629:
             self = SSLBadExtendedKeyUsage
-        } else if rawValue == -67630 {
+        case -67630:
             self = OCSPBadResponse
-        } else if rawValue == -67631 {
+        case -67631:
             self = OCSPBadRequest
-        } else if rawValue == -67632 {
+        case -67632:
             self = OCSPUnavailable
-        } else if rawValue == -67633 {
+        case -67633:
             self = OCSPStatusUnrecognized
-        } else if rawValue == -67634 {
+        case -67634:
             self = EndOfData
-        } else if rawValue == -67635 {
+        case -67635:
             self = IncompleteCertRevocationCheck
-        } else if rawValue == -67636 {
+        case -67636:
             self = NetworkFailure
-        } else if rawValue == -67637 {
+        case -67637:
             self = OCSPNotTrustedToAnchor
-        } else if rawValue == -67638 {
+        case -67638:
             self = RecordModified
-        } else if rawValue == -67639 {
+        case -67639:
             self = OCSPSignatureError
-        } else if rawValue == -67640 {
+        case -67640:
             self = OCSPNoSigner
-        } else if rawValue == -67641 {
+        case -67641:
             self = OCSPResponderMalformedReq
-        } else if rawValue == -67642 {
+        case -67642:
             self = OCSPResponderInternalError
-        } else if rawValue == -67643 {
+        case -67643:
             self = OCSPResponderTryLater
-        } else if rawValue == -67644 {
+        case -67644:
             self = OCSPResponderSignatureRequired
-        } else if rawValue == -67645 {
+        case -67645:
             self = OCSPResponderUnauthorized
-        } else if rawValue == -67646 {
+        case -67646:
             self = OCSPResponseNonceMismatch
-        } else if rawValue == -67647 {
+        case -67647:
             self = CodeSigningBadCertChainLength
-        } else if rawValue == -67648 {
+        case -67648:
             self = CodeSigningNoBasicConstraints
-        } else if rawValue == -67649 {
+        case -67649:
             self = CodeSigningBadPathLengthConstraint
-        } else if rawValue == -67650 {
+        case -67650:
             self = CodeSigningNoExtendedKeyUsage
-        } else if rawValue == -67651 {
+        case -67651:
             self = CodeSigningDevelopment
-        } else if rawValue == -67652 {
+        case -67652:
             self = ResourceSignBadCertChainLength
-        } else if rawValue == -67653 {
+        case -67653:
             self = ResourceSignBadExtKeyUsage
-        } else if rawValue == -67654 {
+        case -67654:
             self = TrustSettingDeny
-        } else if rawValue == -67655 {
+        case -67655:
             self = InvalidSubjectName
-        } else if rawValue == -67656 {
+        case -67656:
             self = UnknownQualifiedCertStatement
-        } else if rawValue == -67657 {
+        case -67657:
             self = MobileMeRequestQueued
-        } else if rawValue == -67658 {
+        case -67658:
             self = MobileMeRequestRedirected
-        } else if rawValue == -67659 {
+        case -67659:
             self = MobileMeServerError
-        } else if rawValue == -67660 {
+        case -67660:
             self = MobileMeServerNotAvailable
-        } else if rawValue == -67661 {
+        case -67661:
             self = MobileMeServerAlreadyExists
-        } else if rawValue == -67662 {
+        case -67662:
             self = MobileMeServerServiceErr
-        } else if rawValue == -67663 {
+        case -67663:
             self = MobileMeRequestAlreadyPending
-        } else if rawValue == -67664 {
+        case -67664:
             self = MobileMeNoRequestPending
-        } else if rawValue == -67665 {
+        case -67665:
             self = MobileMeCSRVerifyFailure
-        } else if rawValue == -67666 {
+        case -67666:
             self = MobileMeFailedConsistencyCheck
-        } else if rawValue == -67667 {
+        case -67667:
             self = NotInitialized
-        } else if rawValue == -67668 {
+        case -67668:
             self = InvalidHandleUsage
-        } else if rawValue == -67669 {
+        case -67669:
             self = PVCReferentNotFound
-        } else if rawValue == -67670 {
+        case -67670:
             self = FunctionIntegrityFail
-        } else if rawValue == -67671 {
+        case -67671:
             self = InternalError
-        } else if rawValue == -67672 {
+        case -67672:
             self = MemoryError
-        } else if rawValue == -67673 {
+        case -67673:
             self = InvalidData
-        } else if rawValue == -67674 {
+        case -67674:
             self = MDSError
-        } else if rawValue == -67675 {
+        case -67675:
             self = InvalidPointer
-        } else if rawValue == -67676 {
+        case -67676:
             self = SelfCheckFailed
-        } else if rawValue == -67677 {
+        case -67677:
             self = FunctionFailed
-        } else if rawValue == -67678 {
+        case -67678:
             self = ModuleManifestVerifyFailed
-        } else if rawValue == -67679 {
+        case -67679:
             self = InvalidGUID
-        } else if rawValue == -67680 {
+        case -67680:
             self = InvalidHandle
-        } else if rawValue == -67681 {
+        case -67681:
             self = InvalidDBList
-        } else if rawValue == -67682 {
+        case -67682:
             self = InvalidPassthroughID
-        } else if rawValue == -67683 {
+        case -67683:
             self = InvalidNetworkAddress
-        } else if rawValue == -67684 {
+        case -67684:
             self = CRLAlreadySigned
-        } else if rawValue == -67685 {
+        case -67685:
             self = InvalidNumberOfFields
-        } else if rawValue == -67686 {
+        case -67686:
             self = VerificationFailure
-        } else if rawValue == -67687 {
+        case -67687:
             self = UnknownTag
-        } else if rawValue == -67688 {
+        case -67688:
             self = InvalidSignature
-        } else if rawValue == -67689 {
+        case -67689:
             self = InvalidName
-        } else if rawValue == -67690 {
+        case -67690:
             self = InvalidCertificateRef
-        } else if rawValue == -67691 {
+        case -67691:
             self = InvalidCertificateGroup
-        } else if rawValue == -67692 {
+        case -67692:
             self = TagNotFound
-        } else if rawValue == -67693 {
+        case -67693:
             self = InvalidQuery
-        } else if rawValue == -67694 {
+        case -67694:
             self = InvalidValue
-        } else if rawValue == -67695 {
+        case -67695:
             self = CallbackFailed
-        } else if rawValue == -67696 {
+        case -67696:
             self = ACLDeleteFailed
-        } else if rawValue == -67697 {
+        case -67697:
             self = ACLReplaceFailed
-        } else if rawValue == -67698 {
+        case -67698:
             self = ACLAddFailed
-        } else if rawValue == -67699 {
+        case -67699:
             self = ACLChangeFailed
-        } else if rawValue == -67700 {
+        case -67700:
             self = InvalidAccessCredentials
-        } else if rawValue == -67701 {
+        case -67701:
             self = InvalidRecord
-        } else if rawValue == -67702 {
+        case -67702:
             self = InvalidACL
-        } else if rawValue == -67703 {
+        case -67703:
             self = InvalidSampleValue
-        } else if rawValue == -67704 {
+        case -67704:
             self = IncompatibleVersion
-        } else if rawValue == -67705 {
+        case -67705:
             self = PrivilegeNotGranted
-        } else if rawValue == -67706 {
+        case -67706:
             self = InvalidScope
-        } else if rawValue == -67707 {
+        case -67707:
             self = PVCAlreadyConfigured
-        } else if rawValue == -67708 {
+        case -67708:
             self = InvalidPVC
-        } else if rawValue == -67709 {
+        case -67709:
             self = EMMLoadFailed
-        } else if rawValue == -67710 {
+        case -67710:
             self = EMMUnloadFailed
-        } else if rawValue == -67711 {
+        case -67711:
             self = AddinLoadFailed
-        } else if rawValue == -67712 {
+        case -67712:
             self = InvalidKeyRef
-        } else if rawValue == -67713 {
+        case -67713:
             self = InvalidKeyHierarchy
-        } else if rawValue == -67714 {
+        case -67714:
             self = AddinUnloadFailed
-        } else if rawValue == -67715 {
+        case -67715:
             self = LibraryReferenceNotFound
-        } else if rawValue == -67716 {
+        case -67716:
             self = InvalidAddinFunctionTable
-        } else if rawValue == -67717 {
+        case -67717:
             self = InvalidServiceMask
-        } else if rawValue == -67718 {
+        case -67718:
             self = ModuleNotLoaded
-        } else if rawValue == -67719 {
+        case -67719:
             self = InvalidSubServiceID
-        } else if rawValue == -67720 {
+        case -67720:
             self = AttributeNotInContext
-        } else if rawValue == -67721 {
+        case -67721:
             self = ModuleManagerInitializeFailed
-        } else if rawValue == -67722 {
+        case -67722:
             self = ModuleManagerNotFound
-        } else if rawValue == -67723 {
+        case -67723:
             self = EventNotificationCallbackNotFound
-        } else if rawValue == -67724 {
+        case -67724:
             self = InputLengthError
-        } else if rawValue == -67725 {
+        case -67725:
             self = OutputLengthError
-        } else if rawValue == -67726 {
+        case -67726:
             self = PrivilegeNotSupported
-        } else if rawValue == -67727 {
+        case -67727:
             self = DeviceError
-        } else if rawValue == -67728 {
+        case -67728:
             self = AttachHandleBusy
-        } else if rawValue == -67729 {
+        case -67729:
             self = NotLoggedIn
-        } else if rawValue == -67730 {
+        case -67730:
             self = AlgorithmMismatch
-        } else if rawValue == -67731 {
+        case -67731:
             self = KeyUsageIncorrect
-        } else if rawValue == -67732 {
+        case -67732:
             self = KeyBlobTypeIncorrect
-        } else if rawValue == -67733 {
+        case -67733:
             self = KeyHeaderInconsistent
-        } else if rawValue == -67734 {
+        case -67734:
             self = UnsupportedKeyFormat
-        } else if rawValue == -67735 {
+        case -67735:
             self = UnsupportedKeySize
-        } else if rawValue == -67736 {
+        case -67736:
             self = InvalidKeyUsageMask
-        } else if rawValue == -67737 {
+        case -67737:
             self = UnsupportedKeyUsageMask
-        } else if rawValue == -67738 {
+        case -67738:
             self = InvalidKeyAttributeMask
-        } else if rawValue == -67739 {
+        case -67739:
             self = UnsupportedKeyAttributeMask
-        } else if rawValue == -67740 {
+        case -67740:
             self = InvalidKeyLabel
-        } else if rawValue == -67741 {
+        case -67741:
             self = UnsupportedKeyLabel
-        } else if rawValue == -67742 {
+        case -67742:
             self = InvalidKeyFormat
-        } else if rawValue == -67743 {
+        case -67743:
             self = UnsupportedVectorOfBuffers
-        } else if rawValue == -67744 {
+        case -67744:
             self = InvalidInputVector
-        } else if rawValue == -67745 {
+        case -67745:
             self = InvalidOutputVector
-        } else if rawValue == -67746 {
+        case -67746:
             self = InvalidContext
-        } else if rawValue == -67747 {
+        case -67747:
             self = InvalidAlgorithm
-        } else if rawValue == -67748 {
+        case -67748:
             self = InvalidAttributeKey
-        } else if rawValue == -67749 {
+        case -67749:
             self = MissingAttributeKey
-        } else if rawValue == -67750 {
+        case -67750:
             self = InvalidAttributeInitVector
-        } else if rawValue == -67751 {
+        case -67751:
             self = MissingAttributeInitVector
-        } else if rawValue == -67752 {
+        case -67752:
             self = InvalidAttributeSalt
-        } else if rawValue == -67753 {
+        case -67753:
             self = MissingAttributeSalt
-        } else if rawValue == -67754 {
+        case -67754:
             self = InvalidAttributePadding
-        } else if rawValue == -67755 {
+        case -67755:
             self = MissingAttributePadding
-        } else if rawValue == -67756 {
+        case -67756:
             self = InvalidAttributeRandom
-        } else if rawValue == -67757 {
+        case -67757:
             self = MissingAttributeRandom
-        } else if rawValue == -67758 {
+        case -67758:
             self = InvalidAttributeSeed
-        } else if rawValue == -67759 {
+        case -67759:
             self = MissingAttributeSeed
-        } else if rawValue == -67760 {
+        case -67760:
             self = InvalidAttributePassphrase
-        } else if rawValue == -67761 {
+        case -67761:
             self = MissingAttributePassphrase
-        } else if rawValue == -67762 {
+        case -67762:
             self = InvalidAttributeKeyLength
-        } else if rawValue == -67763 {
+        case -67763:
             self = MissingAttributeKeyLength
-        } else if rawValue == -67764 {
+        case -67764:
             self = InvalidAttributeBlockSize
-        } else if rawValue == -67765 {
+        case -67765:
             self = MissingAttributeBlockSize
-        } else if rawValue == -67766 {
+        case -67766:
             self = InvalidAttributeOutputSize
-        } else if rawValue == -67767 {
+        case -67767:
             self = MissingAttributeOutputSize
-        } else if rawValue == -67768 {
+        case -67768:
             self = InvalidAttributeRounds
-        } else if rawValue == -67769 {
+        case -67769:
             self = MissingAttributeRounds
-        } else if rawValue == -67770 {
+        case -67770:
             self = InvalidAlgorithmParms
-        } else if rawValue == -67771 {
+        case -67771:
             self = MissingAlgorithmParms
-        } else if rawValue == -67772 {
+        case -67772:
             self = InvalidAttributeLabel
-        } else if rawValue == -67773 {
+        case -67773:
             self = MissingAttributeLabel
-        } else if rawValue == -67774 {
+        case -67774:
             self = InvalidAttributeKeyType
-        } else if rawValue == -67775 {
+        case -67775:
             self = MissingAttributeKeyType
-        } else if rawValue == -67776 {
+        case -67776:
             self = InvalidAttributeMode
-        } else if rawValue == -67777 {
+        case -67777:
             self = MissingAttributeMode
-        } else if rawValue == -67778 {
+        case -67778:
             self = InvalidAttributeEffectiveBits
-        } else if rawValue == -67779 {
+        case -67779:
             self = MissingAttributeEffectiveBits
-        } else if rawValue == -67780 {
+        case -67780:
             self = InvalidAttributeStartDate
-        } else if rawValue == -67781 {
+        case -67781:
             self = MissingAttributeStartDate
-        } else if rawValue == -67782 {
+        case -67782:
             self = InvalidAttributeEndDate
-        } else if rawValue == -67783 {
+        case -67783:
             self = MissingAttributeEndDate
-        } else if rawValue == -67784 {
+        case -67784:
             self = InvalidAttributeVersion
-        } else if rawValue == -67785 {
+        case -67785:
             self = MissingAttributeVersion
-        } else if rawValue == -67786 {
+        case -67786:
             self = InvalidAttributePrime
-        } else if rawValue == -67787 {
+        case -67787:
             self = MissingAttributePrime
-        } else if rawValue == -67788 {
+        case -67788:
             self = InvalidAttributeBase
-        } else if rawValue == -67789 {
+        case -67789:
             self = MissingAttributeBase
-        } else if rawValue == -67790 {
+        case -67790:
             self = InvalidAttributeSubprime
-        } else if rawValue == -67791 {
+        case -67791:
             self = MissingAttributeSubprime
-        } else if rawValue == -67792 {
+        case -67792:
             self = InvalidAttributeIterationCount
-        } else if rawValue == -67793 {
+        case -67793:
             self = MissingAttributeIterationCount
-        } else if rawValue == -67794 {
+        case -67794:
             self = InvalidAttributeDLDBHandle
-        } else if rawValue == -67795 {
+        case -67795:
             self = MissingAttributeDLDBHandle
-        } else if rawValue == -67796 {
+        case -67796:
             self = InvalidAttributeAccessCredentials
-        } else if rawValue == -67797 {
+        case -67797:
             self = MissingAttributeAccessCredentials
-        } else if rawValue == -67798 {
+        case -67798:
             self = InvalidAttributePublicKeyFormat
-        } else if rawValue == -67799 {
+        case -67799:
             self = MissingAttributePublicKeyFormat
-        } else if rawValue == -67800 {
+        case -67800:
             self = InvalidAttributePrivateKeyFormat
-        } else if rawValue == -67801 {
+        case -67801:
             self = MissingAttributePrivateKeyFormat
-        } else if rawValue == -67802 {
+        case -67802:
             self = InvalidAttributeSymmetricKeyFormat
-        } else if rawValue == -67803 {
+        case -67803:
             self = MissingAttributeSymmetricKeyFormat
-        } else if rawValue == -67804 {
+        case -67804:
             self = InvalidAttributeWrappedKeyFormat
-        } else if rawValue == -67805 {
+        case -67805:
             self = MissingAttributeWrappedKeyFormat
-        } else if rawValue == -67806 {
+        case -67806:
             self = StagedOperationInProgress
-        } else if rawValue == -67807 {
+        case -67807:
             self = StagedOperationNotStarted
-        } else if rawValue == -67808 {
+        case -67808:
             self = VerifyFailed
-        } else if rawValue == -67809 {
+        case -67809:
             self = QuerySizeUnknown
-        } else if rawValue == -67810 {
+        case -67810:
             self = BlockSizeMismatch
-        } else if rawValue == -67811 {
+        case -67811:
             self = PublicKeyInconsistent
-        } else if rawValue == -67812 {
+        case -67812:
             self = DeviceVerifyFailed
-        } else if rawValue == -67813 {
+        case -67813:
             self = InvalidLoginName
-        } else if rawValue == -67814 {
+        case -67814:
             self = AlreadyLoggedIn
-        } else if rawValue == -67815 {
+        case -67815:
             self = InvalidDigestAlgorithm
-        } else if rawValue == -67816 {
+        case -67816:
             self = InvalidCRLGroup
-        } else if rawValue == -67817 {
+        case -67817:
             self = CertificateCannotOperate
-        } else if rawValue == -67818 {
+        case -67818:
             self = CertificateExpired
-        } else if rawValue == -67819 {
+        case -67819:
             self = CertificateNotValidYet
-        } else if rawValue == -67820 {
+        case -67820:
             self = CertificateRevoked
-        } else if rawValue == -67821 {
+        case -67821:
             self = CertificateSuspended
-        } else if rawValue == -67822 {
+        case -67822:
             self = InsufficientCredentials
-        } else if rawValue == -67823 {
+        case -67823:
             self = InvalidAction
-        } else if rawValue == -67824 {
+        case -67824:
             self = InvalidAuthority
-        } else if rawValue == -67825 {
+        case -67825:
             self = VerifyActionFailed
-        } else if rawValue == -67826 {
+        case -67826:
             self = InvalidCertAuthority
-        } else if rawValue == -67827 {
+        case -67827:
             self = InvaldCRLAuthority
-        } else if rawValue == -67828 {
+        case -67828:
             self = InvalidCRLEncoding
-        } else if rawValue == -67829 {
+        case -67829:
             self = InvalidCRLType
-        } else if rawValue == -67830 {
+        case -67830:
             self = InvalidCRL
-        } else if rawValue == -67831 {
+        case -67831:
             self = InvalidFormType
-        } else if rawValue == -67832 {
+        case -67832:
             self = InvalidID
-        } else if rawValue == -67833 {
+        case -67833:
             self = InvalidIdentifier
-        } else if rawValue == -67834 {
+        case -67834:
             self = InvalidIndex
-        } else if rawValue == -67835 {
+        case -67835:
             self = InvalidPolicyIdentifiers
-        } else if rawValue == -67836 {
+        case -67836:
             self = InvalidTimeString
-        } else if rawValue == -67837 {
+        case -67837:
             self = InvalidReason
-        } else if rawValue == -67838 {
+        case -67838:
             self = InvalidRequestInputs
-        } else if rawValue == -67839 {
+        case -67839:
             self = InvalidResponseVector
-        } else if rawValue == -67840 {
+        case -67840:
             self = InvalidStopOnPolicy
-        } else if rawValue == -67841 {
+        case -67841:
             self = InvalidTuple
-        } else if rawValue == -67842 {
+        case -67842:
             self = MultipleValuesUnsupported
-        } else if rawValue == -67843 {
+        case -67843:
             self = NotTrusted
-        } else if rawValue == -67844 {
+        case -67844:
             self = NoDefaultAuthority
-        } else if rawValue == -67845 {
+        case -67845:
             self = RejectedForm
-        } else if rawValue == -67846 {
+        case -67846:
             self = RequestLost
-        } else if rawValue == -67847 {
+        case -67847:
             self = RequestRejected
-        } else if rawValue == -67848 {
+        case -67848:
             self = UnsupportedAddressType
-        } else if rawValue == -67849 {
+        case -67849:
             self = UnsupportedService
-        } else if rawValue == -67850 {
+        case -67850:
             self = InvalidTupleGroup
-        } else if rawValue == -67851 {
+        case -67851:
             self = InvalidBaseACLs
-        } else if rawValue == -67852 {
+        case -67852:
             self = InvalidTupleCredendtials
-        } else if rawValue == -67853 {
+        case -67853:
             self = InvalidEncoding
-        } else if rawValue == -67854 {
+        case -67854:
             self = InvalidValidityPeriod
-        } else if rawValue == -67855 {
+        case -67855:
             self = InvalidRequestor
-        } else if rawValue == -67856 {
+        case -67856:
             self = RequestDescriptor
-        } else if rawValue == -67857 {
+        case -67857:
             self = InvalidBundleInfo
-        } else if rawValue == -67858 {
+        case -67858:
             self = InvalidCRLIndex
-        } else if rawValue == -67859 {
+        case -67859:
             self = NoFieldValues
-        } else if rawValue == -67860 {
+        case -67860:
             self = UnsupportedFieldFormat
-        } else if rawValue == -67861 {
+        case -67861:
             self = UnsupportedIndexInfo
-        } else if rawValue == -67862 {
+        case -67862:
             self = UnsupportedLocality
-        } else if rawValue == -67863 {
+        case -67863:
             self = UnsupportedNumAttributes
-        } else if rawValue == -67864 {
+        case -67864:
             self = UnsupportedNumIndexes
-        } else if rawValue == -67865 {
+        case -67865:
             self = UnsupportedNumRecordTypes
-        } else if rawValue == -67866 {
+        case -67866:
             self = FieldSpecifiedMultiple
-        } else if rawValue == -67867 {
+        case -67867:
             self = IncompatibleFieldFormat
-        } else if rawValue == -67868 {
+        case -67868:
             self = InvalidParsingModule
-        } else if rawValue == -67869 {
+        case -67869:
             self = DatabaseLocked
-        } else if rawValue == -67870 {
+        case -67870:
             self = DatastoreIsOpen
-        } else if rawValue == -67871 {
+        case -67871:
             self = MissingValue
-        } else if rawValue == -67872 {
+        case -67872:
             self = UnsupportedQueryLimits
-        } else if rawValue == -67873 {
+        case -67873:
             self = UnsupportedNumSelectionPreds
-        } else if rawValue == -67874 {
+        case -67874:
             self = UnsupportedOperator
-        } else if rawValue == -67875 {
+        case -67875:
             self = InvalidDBLocation
-        } else if rawValue == -67876 {
+        case -67876:
             self = InvalidAccessRequest
-        } else if rawValue == -67877 {
+        case -67877:
             self = InvalidIndexInfo
-        } else if rawValue == -67878 {
+        case -67878:
             self = InvalidNewOwner
-        } else if rawValue == -67879 {
+        case -67879:
             self = InvalidModifyMode
-        } else {
-            self = UnknownError
+        default:
+            self = UnexpectedError
         }
     }
     
-    public var rawValue: Int32 {
+    public var rawValue: OSStatus {
         switch self {
         case Success:
             return 0
@@ -3361,7 +2932,7 @@ extension Status : RawRepresentable, Printable {
             return -67878
         case InvalidModifyMode:
             return -67879
-        case UnknownError:
+        default:
             return -99999
         }
     }
@@ -4120,8 +3691,8 @@ extension Status : RawRepresentable, Printable {
             return "The new owner is not valid."
         case InvalidModifyMode:
             return "The modify mode is not valid. }"
-        case UnknownError:
-            return "Unknown error has occurred."
+        default:
+            return "Unexpected error has occurred."
         }
     }
 }
