@@ -14,6 +14,7 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 See also [Playground](https://github.com/kishikawakatsumi/KeychainAccess/blob/master/Examples/Playground-iOS.playground/section-1.swift) and [iOS Example Project](https://github.com/kishikawakatsumi/KeychainAccess/tree/master/Examples/Example-iOS).
 
 ### Basics
+===
 
 #### Saving Application Password
 
@@ -32,6 +33,7 @@ keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
 
 ### Instantiation
+===
 
 #### Create Keychain for Application Password
 
@@ -54,6 +56,7 @@ let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolTy
 ```
 
 ### Adding an item
+===
 
 #### subscripting
 
@@ -75,17 +78,18 @@ if let error = keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishik
 }
 ```
 
-#### Obtaining an item
+### Obtaining an item
+===
 
-##### subscripting (automatically converts to string)
+#### subscripting (automatically converts to string)
 
 ```swift
 let token = keychain["kishikawakatsumi"]
 ```
 
-##### get methods
+#### get methods
 
-###### as String
+##### as String
 
 ```swift
 let token = keychain.get("kishikawakatsumi")
@@ -95,13 +99,13 @@ let token = keychain.get("kishikawakatsumi")
 let token = keychain.getString("kishikawakatsumi")
 ```
 
-###### as NSData
+##### as NSData
 
 ```swift
 let data = keychain.getData("kishikawakatsumi")
 ```
 
-##### error handling
+#### error handling
 
 **First, get the `failable` (value or error) object**
 
@@ -140,21 +144,22 @@ if failable.failed {
 }
 ```
 
-#### Removing an item
+### Removing an item
+===
 
-##### subscripting
+#### subscripting
 
 ```swift
 keychain["kishikawakatsumi"] = nil
 ```
 
-##### remove method
+#### remove method
 
 ```swift
 keychain.remove("kishikawakatsumi")
 ```
 
-##### error handling
+#### error handling
 
 ```swift
 if let error = keychain.remove("kishikawakatsumi") {
@@ -163,6 +168,7 @@ if let error = keychain.remove("kishikawakatsumi") {
 ```
 
 ### Label and Comment
+===
 
 ```swift
 let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
@@ -171,6 +177,7 @@ let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolTy
 ```
 
 ### Configuration
+===
 
 **Provides fluent interfaces**
 
@@ -182,6 +189,7 @@ let keychain = Keychain(service: "com.example.github-token")
 ```
 
 #### Accessibility
+===
 
 ##### Default accessibility matches background application (=kSecAttrAccessibleAfterFirstUnlock)
 
@@ -232,12 +240,14 @@ keychain
 ```
 
 #### Sharing Keychain items
+===
 
 ```swift
 let keychain = Keychain(service: "com.example.github-token", accessGroup: "12ABCD3E4F.shared")
 ```
 
 #### Synchronizing Keychain items with iCloud
+===
 
 ###### Creating instance
 
@@ -259,6 +269,7 @@ keychain
 ```
 
 ### Debugging
+===
 
 #### Display all stored items if print keychain object
 
