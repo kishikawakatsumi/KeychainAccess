@@ -28,8 +28,6 @@ keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 
 ```swift
 let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
-    .label("github.com (kishikawakatsumi)")
-
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
 
@@ -168,10 +166,10 @@ if let error = keychain.remove("kishikawakatsumi") {
 
 ```swift
 let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+keychain
     .label("github.com (kishikawakatsumi)")
     .comment("github access token")
-
-keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
+    .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
 ### :game_die: Configuration
