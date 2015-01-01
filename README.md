@@ -11,10 +11,11 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 
 ## Usage
 
-See also [Playground](https://github.com/kishikawakatsumi/KeychainAccess/blob/master/Examples/Playground-iOS.playground/section-1.swift) and [iOS Example Project](https://github.com/kishikawakatsumi/KeychainAccess/tree/master/Examples/Example-iOS).
+##### :eyes: See also:  
+- [:link: Playground](https://github.com/kishikawakatsumi/KeychainAccess/blob/master/Examples/Playground-iOS.playground/section-1.swift)  
+- [:link: iOS Example Project](https://github.com/kishikawakatsumi/KeychainAccess/tree/master/Examples/Example-iOS)
 
-### Basics
-===
+### :game_die: Basics
 
 #### Saving Application Password
 
@@ -32,8 +33,7 @@ let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolTy
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
 
-### Instantiation
-===
+### :game_die: Instantiation
 
 #### Create Keychain for Application Password
 
@@ -55,8 +55,7 @@ let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolTy
 let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS, authenticationType: .HTMLForm)
 ```
 
-### Adding an item
-===
+### :game_die: Adding an item
 
 #### subscripting
 
@@ -78,8 +77,7 @@ if let error = keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishik
 }
 ```
 
-### Obtaining an item
-===
+### :game_die: Obtaining an item
 
 #### subscripting (automatically converts to string)
 
@@ -144,8 +142,7 @@ if failable.failed {
 }
 ```
 
-### Removing an item
-===
+### :game_die: Removing an item
 
 #### subscripting
 
@@ -167,8 +164,7 @@ if let error = keychain.remove("kishikawakatsumi") {
 }
 ```
 
-### Label and Comment
-===
+### :game_die: Label and Comment
 
 ```swift
 let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
@@ -176,8 +172,7 @@ let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolTy
     .comment("github access token")
 ```
 
-### Configuration
-===
+### :game_die: Configuration
 
 **Provides fluent interfaces**
 
@@ -188,8 +183,7 @@ let keychain = Keychain(service: "com.example.github-token")
     .accessibility(.AfterFirstUnlock)
 ```
 
-#### Accessibility
-===
+#### :game_die: Accessibility
 
 ##### Default accessibility matches background application (=kSecAttrAccessibleAfterFirstUnlock)
 
@@ -239,15 +233,13 @@ keychain
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
-#### Sharing Keychain items
-===
+#### :game_die: Sharing Keychain items
 
 ```swift
 let keychain = Keychain(service: "com.example.github-token", accessGroup: "12ABCD3E4F.shared")
 ```
 
-#### Synchronizing Keychain items with iCloud
-===
+#### :game_die: Synchronizing Keychain items with iCloud
 
 ###### Creating instance
 
@@ -268,8 +260,7 @@ keychain
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
-### Debugging
-===
+### :game_die: Debugging
 
 #### Display all stored items if print keychain object
 
