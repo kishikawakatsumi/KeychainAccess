@@ -9,7 +9,7 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 
 <img src="https://raw.githubusercontent.com/kishikawakatsumi/KeychainAccess/master/Screenshots/01.png" width="320px" />
 
-## Features
+## :bulb: Features
 
 - Simple interface
 - Support access group
@@ -18,7 +18,7 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 - **[Support TouchID and Keychain integration (iOS 8+)](#touch_id_integration)**
 - Works on both iOS & OS X
 
-## Usage
+## :book: Usage
 
 ##### :eyes: See also:  
 - [:link: Playground](https://github.com/kishikawakatsumi/KeychainAccess/blob/master/Examples/Playground-iOS.playground/section-1.swift)  
@@ -242,13 +242,13 @@ keychain
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
-#### Sharing Keychain items
+#### :couple: Sharing Keychain items
 
 ```swift
 let keychain = Keychain(service: "com.example.github-token", accessGroup: "12ABCD3E4F.shared")
 ```
 
-#### <a name="icloud_sharing"> Synchronizing Keychain items with iCloud
+#### <a name="icloud_sharing"> :arrows_counterclockwise: Synchronizing Keychain items with iCloud
 
 ###### Creating instance
 
