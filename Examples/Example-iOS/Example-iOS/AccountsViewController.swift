@@ -18,6 +18,7 @@ class AccountsViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
         reloadData()
         tableView.reloadData()
     }
