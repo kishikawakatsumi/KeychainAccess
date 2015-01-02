@@ -1,10 +1,19 @@
 Pod::Spec.new do |s|
   s.name             = "KeychainAccess"
-  s.version          = "1.0.2"
+  s.version          = "1.0.3"
   s.summary          = "KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X."
   s.description      = <<-DESC
-  KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X. Makes using Keychain APIs exremely easy and much more palatable to use in Swift.
-  DESC
+                         KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X.
+                         Makes using Keychain APIs exremely easy and much more palatable to use in Swift.
+
+                         Features
+                           - Simple interface
+                           - Support access group
+                           - [Support accessibility](#accessibility)
+                           - [Support iCloud sharing](#icloud_sharing)
+                           - **[Support TouchID and Keychain integration (iOS 8+)](#touch_id_integration)**
+                           - Works on both iOS & OS X
+                       DESC
   s.homepage         = "https://github.com/kishikawakatsumi/KeychainAccess"
   s.screenshots      = "https://raw.githubusercontent.com/kishikawakatsumi/KeychainAccess/master/Screenshots/01.png"
   s.license          = 'MIT'
