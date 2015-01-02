@@ -2,8 +2,6 @@ language: objective-c
 cache:
   directories:
     - Lib/vendor/bundle
-before_install:
-  - sudo easy_install cpp-coveralls
 install:
   - (cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)
 script:
