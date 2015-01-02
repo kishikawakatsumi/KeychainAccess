@@ -9,6 +9,8 @@
 import Foundation
 import Security
 
+public let KeychainAccessErrorDomain = "com.kishikawakatsumi.KeychainAccess.error"
+
 public enum ItemClass {
     case GenericPassword
     case InternetPassword
@@ -69,6 +71,10 @@ public enum Accessibility {
     case AlwaysThisDeviceOnly
 }
 
+public enum AuthenticationPolicy : Int {
+    case UserPresence
+}
+
 public enum FailableOf<T> {
     case Success(Value<T?>)
     case Failure(NSError)
@@ -81,9 +87,18 @@ public enum FailableOf<T> {
         self = .Failure(error)
     }
     
+    public var successed: Bool {
+        switch self {
+        case .Success:
+            return true
+        default:
+            return false
+        }
+    }
+    
     public var failed: Bool {
         switch self {
-        case .Failure(let error):
+        case .Failure:
             return true
         default:
             return false
@@ -155,10 +170,6 @@ public class Keychain {
         return options.itemClass
     }
     
-    private class var errorDomain: String {
-        return "KeychainAccess"
-    }
-    
     private let options: Options
     
     // MARK:
@@ -218,6 +229,13 @@ public class Keychain {
         return Keychain(options)
     }
     
+    public func accessibility(accessibility: Accessibility, authenticationPolicy: AuthenticationPolicy) -> Keychain {
+        var options = self.options
+        options.accessibility = accessibility
+        options.authenticationPolicy = authenticationPolicy
+        return Keychain(options)
+    }
+    
     public func synchronizable(synchronizable: Bool) -> Keychain {
         var options = self.options
         options.synchronizable = synchronizable
@@ -235,6 +253,14 @@ public class Keychain {
         options.comment = comment
         return Keychain(options)
     }
+    
+    #if os(iOS)
+    public func authenticationPrompt(authenticationPrompt: String) -> Keychain {
+        var options = self.options
+        options.authenticationPrompt = authenticationPrompt
+        return Keychain(options)
+    }
+    #endif
     
     // MARK:
     
@@ -271,6 +297,7 @@ public class Keychain {
     
     public func getDataOrError(key: String) -> FailableOf<NSData> {
         var query = options.query()
+        
         query[kSecMatchLimit] = kSecMatchLimitOne
         query[kSecReturnData] = kCFBooleanTrue
         
@@ -304,23 +331,38 @@ public class Keychain {
     
     public func set(value: NSData, key: String) -> NSError? {
         var query = options.query()
+        
         query[kSecAttrAccount] = key
+        #if os(iOS)
+        query[kSecUseNoAuthenticationUI] = kCFBooleanTrue
+        #endif
         
         var status = SecItemCopyMatching(query, nil)
         switch status {
-        case errSecSuccess:
-            var attributes = options.attributes(value: value)
+        case errSecSuccess, errSecInteractionNotAllowed:
+            var query = options.query()
+            query[kSecAttrAccount] = key
             
-            status = SecItemUpdate(query, attributes)
-            if status != errSecSuccess {
-                return securityError(status: status)
+            var (attributes, error) = options.attributes(key: nil, value: value)
+            if var error = error {
+                println("error:[\(error.code)] \(error.localizedDescription)")
+                return error
+            } else {
+                status = SecItemUpdate(query, attributes)
+                if status != errSecSuccess {
+                    return securityError(status: status)
+                }
             }
         case errSecItemNotFound:
-            var attributes = options.attributes(key: key, value: value)
-            
-            status = SecItemAdd(attributes, nil)
-            if status != errSecSuccess {
-                return securityError(status: status)
+            var (attributes, error) = options.attributes(key: key, value: value)
+            if var error = error {
+                println("error:[\(error.code)] \(error.localizedDescription)")
+                return error
+            } else {
+                status = SecItemAdd(attributes, nil)
+                if status != errSecSuccess {
+                    return securityError(status: status)
+                }
             }
         default:
             return securityError(status: status)
@@ -540,8 +582,8 @@ public class Keychain {
     // MARK:
     
     private class func conversionError(#message: String) -> NSError {
-        let error = NSError(domain: errorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: message])
-        log(error)
+        let error = NSError(domain: KeychainAccessErrorDomain, code: Int(Status.ConversionError.rawValue), userInfo: [NSLocalizedDescriptionKey: message])
+        println("error:[\(error.code)] \(error.localizedDescription)")
         
         return error
     }
@@ -553,22 +595,14 @@ public class Keychain {
     private class func securityError(#status: OSStatus) -> NSError {
         let message = Status(rawValue: status).description
         
-        let error = NSError(domain: errorDomain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
-        log(error)
+        let error = NSError(domain: KeychainAccessErrorDomain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
+        println("OSStatus error:[\(error.code)] \(error.localizedDescription)")
         
         return error
     }
     
     private func securityError(#status: OSStatus) -> NSError {
         return self.dynamicType.securityError(status: status)
-    }
-    
-    private class func log(error: NSError) {
-        println("OSStatus error:[\(error.code)] \(error.localizedDescription)")
-    }
-    
-    private func log(error: NSError) {
-        self.dynamicType.log(error)
     }
 }
 
@@ -583,10 +617,14 @@ struct Options {
     var authenticationType: AuthenticationType = .Default
     
     var accessibility: Accessibility = .AfterFirstUnlock
+    var authenticationPolicy: AuthenticationPolicy?
+    
     var synchronizable: Bool = false
     
     var label: String?
     var comment: String?
+    
+    var authenticationPrompt: String?
     
     init() {}
 }
@@ -615,6 +653,7 @@ extension Options {
     
     func query() -> [String: AnyObject] {
         var query = [String: AnyObject]()
+        
         query[kSecClass] = itemClass.rawValue
         query[kSecAttrSynchronizable] = kSecAttrSynchronizableAny
         
@@ -633,17 +672,26 @@ extension Options {
             query[kSecAttrAuthenticationType] = authenticationType.rawValue
         }
         
+        #if os(iOS)
+        if authenticationPrompt != nil {
+            query[kSecUseOperationPrompt] = authenticationPrompt
+        }
+        #endif
+        
         return query
     }
     
-    func attributes(#key: String, value: NSData) -> [String: AnyObject] {
-        var attributes = query()
+    func attributes(#key: String?, value: NSData) -> ([String: AnyObject], NSError?) {
+        var attributes: [String: AnyObject]
         
-        attributes[kSecAttrAccount] = key
+        if key != nil {
+            attributes = query()
+            attributes[kSecAttrAccount] = key
+        } else {
+            attributes = [String: AnyObject]()
+        }
+        
         attributes[kSecValueData] = value
-        
-        attributes[kSecAttrAccessible] = accessibility.rawValue
-        attributes[kSecAttrSynchronizable] = synchronizable
         
         if label != nil {
             attributes[kSecAttrLabel] = label
@@ -652,18 +700,33 @@ extension Options {
             attributes[kSecAttrComment] = comment
         }
         
-        return attributes
-    }
-    
-    func attributes(#value: NSData) -> [String: AnyObject] {
-        var attributes = [String: AnyObject]()
+        if let policy = authenticationPolicy {
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(
+                kCFAllocatorDefault,
+                accessibility.rawValue,
+                SecAccessControlCreateFlags(policy.rawValue),
+                &error
+            )
+            if let error = error?.takeUnretainedValue() {
+                var code = CFErrorGetCode(error)
+                var domain = CFErrorGetDomain(error)
+                var userInfo = CFErrorCopyUserInfo(error)
+                
+                return (attributes, NSError(domain: domain, code: code, userInfo: userInfo))
+            }
+            if accessControl == nil {
+                let message = Status.UnexpectedError.description
+                return (attributes, NSError(domain: KeychainAccessErrorDomain, code: Int(Status.UnexpectedError.rawValue), userInfo: [NSLocalizedDescriptionKey: message]))
+            }
+            attributes[kSecAttrAccessControl] = accessControl.takeUnretainedValue()
+        } else {
+            attributes[kSecAttrAccessible] = accessibility.rawValue
+        }
         
-        attributes[kSecValueData] = value
-        
-        attributes[kSecAttrAccessible] = accessibility.rawValue
         attributes[kSecAttrSynchronizable] = synchronizable
         
-        return attributes
+        return (attributes, nil)
     }
 }
 
@@ -697,68 +760,6 @@ extension ItemClass : RawRepresentable, Printable {
             return "GenericPassword"
         case InternetPassword:
             return "InternetPassword"
-        }
-    }
-}
-
-extension Accessibility : RawRepresentable, Printable {
-    
-    public init?(rawValue: String) {
-        switch rawValue {
-        case kSecAttrAccessibleWhenUnlocked:
-            self = WhenUnlocked
-        case kSecAttrAccessibleAfterFirstUnlock:
-            self = AfterFirstUnlock
-        case kSecAttrAccessibleAlways:
-            self = Always
-        case kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly:
-            self = WhenPasscodeSetThisDeviceOnly
-        case kSecAttrAccessibleWhenUnlockedThisDeviceOnly:
-            self = WhenUnlockedThisDeviceOnly
-        case kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly:
-            self = AfterFirstUnlockThisDeviceOnly
-        case kSecAttrAccessibleAlwaysThisDeviceOnly:
-            self = AlwaysThisDeviceOnly
-        default:
-            return nil
-        }
-    }
-    
-    public var rawValue: String {
-        switch self {
-        case WhenUnlocked:
-            return kSecAttrAccessibleWhenUnlocked
-        case AfterFirstUnlock:
-            return kSecAttrAccessibleAfterFirstUnlock
-        case Always:
-            return kSecAttrAccessibleAlways
-        case WhenPasscodeSetThisDeviceOnly:
-            return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
-        case WhenUnlockedThisDeviceOnly:
-            return kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-        case AfterFirstUnlockThisDeviceOnly:
-            return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-        case AlwaysThisDeviceOnly:
-            return kSecAttrAccessibleAlwaysThisDeviceOnly
-        }
-    }
-    
-    public var description : String {
-        switch self {
-        case WhenUnlocked:
-            return "WhenUnlocked"
-        case AfterFirstUnlock:
-            return "AfterFirstUnlock"
-        case Always:
-            return "Always"
-        case WhenPasscodeSetThisDeviceOnly:
-            return "WhenPasscodeSetThisDeviceOnly"
-        case WhenUnlockedThisDeviceOnly:
-            return "WhenUnlockedThisDeviceOnly"
-        case AfterFirstUnlockThisDeviceOnly:
-            return "AfterFirstUnlockThisDeviceOnly"
-        case AlwaysThisDeviceOnly:
-            return "AlwaysThisDeviceOnly"
         }
     }
 }
@@ -1033,6 +1034,94 @@ extension AuthenticationType : RawRepresentable, Printable {
             return "HTMLForm"
         case Default:
             return "Default"
+        }
+    }
+}
+
+extension Accessibility : RawRepresentable, Printable {
+    
+    public init?(rawValue: String) {
+        switch rawValue {
+        case kSecAttrAccessibleWhenUnlocked:
+            self = WhenUnlocked
+        case kSecAttrAccessibleAfterFirstUnlock:
+            self = AfterFirstUnlock
+        case kSecAttrAccessibleAlways:
+            self = Always
+        case kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly:
+            self = WhenPasscodeSetThisDeviceOnly
+        case kSecAttrAccessibleWhenUnlockedThisDeviceOnly:
+            self = WhenUnlockedThisDeviceOnly
+        case kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly:
+            self = AfterFirstUnlockThisDeviceOnly
+        case kSecAttrAccessibleAlwaysThisDeviceOnly:
+            self = AlwaysThisDeviceOnly
+        default:
+            return nil
+        }
+    }
+    
+    public var rawValue: String {
+        switch self {
+        case WhenUnlocked:
+            return kSecAttrAccessibleWhenUnlocked
+        case AfterFirstUnlock:
+            return kSecAttrAccessibleAfterFirstUnlock
+        case Always:
+            return kSecAttrAccessibleAlways
+        case WhenPasscodeSetThisDeviceOnly:
+            return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
+        case WhenUnlockedThisDeviceOnly:
+            return kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+        case AfterFirstUnlockThisDeviceOnly:
+            return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        case AlwaysThisDeviceOnly:
+            return kSecAttrAccessibleAlwaysThisDeviceOnly
+        }
+    }
+    
+    public var description : String {
+        switch self {
+        case WhenUnlocked:
+            return "WhenUnlocked"
+        case AfterFirstUnlock:
+            return "AfterFirstUnlock"
+        case Always:
+            return "Always"
+        case WhenPasscodeSetThisDeviceOnly:
+            return "WhenPasscodeSetThisDeviceOnly"
+        case WhenUnlockedThisDeviceOnly:
+            return "WhenUnlockedThisDeviceOnly"
+        case AfterFirstUnlockThisDeviceOnly:
+            return "AfterFirstUnlockThisDeviceOnly"
+        case AlwaysThisDeviceOnly:
+            return "AlwaysThisDeviceOnly"
+        }
+    }
+}
+
+extension AuthenticationPolicy : RawRepresentable, Printable {
+    
+    public init?(rawValue: Int) {
+        switch rawValue {
+        case SecAccessControlCreateFlags.UserPresence.rawValue:
+            self = UserPresence
+        default:
+            return nil
+        }
+    }
+    
+    public var rawValue: Int {
+        switch self {
+        case UserPresence:
+            return SecAccessControlCreateFlags.UserPresence.rawValue
+        }
+    }
+    
+    public var description : String {
+        switch self {
+        case UserPresence:
+            return "UserPresence"
         }
     }
 }
