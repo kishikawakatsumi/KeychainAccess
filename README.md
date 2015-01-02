@@ -15,7 +15,7 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 - [:link: Playground](https://github.com/kishikawakatsumi/KeychainAccess/blob/master/Examples/Playground-iOS.playground/section-1.swift)  
 - [:link: iOS Example Project](https://github.com/kishikawakatsumi/KeychainAccess/tree/master/Examples/Example-iOS)
 
-### :game_die: Basics
+### :key: Basics
 
 #### Saving Application Password
 
@@ -31,7 +31,7 @@ let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolTy
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
 
-### :game_die: Instantiation
+### :key: Instantiation
 
 #### Create Keychain for Application Password
 
@@ -53,7 +53,7 @@ let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolTy
 let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS, authenticationType: .HTMLForm)
 ```
 
-### :game_die: Adding an item
+### :key: Adding an item
 
 #### subscripting
 
@@ -75,7 +75,7 @@ if let error = keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishik
 }
 ```
 
-### :game_die: Obtaining an item
+### :key: Obtaining an item
 
 #### subscripting (automatically converts to string)
 
@@ -140,7 +140,7 @@ if failable.failed {
 }
 ```
 
-### :game_die: Removing an item
+### :key: Removing an item
 
 #### subscripting
 
@@ -162,7 +162,7 @@ if let error = keychain.remove("kishikawakatsumi") {
 }
 ```
 
-### :game_die: Label and Comment
+### :key: Label and Comment
 
 ```swift
 let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
@@ -172,7 +172,7 @@ keychain
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
-### :game_die: Configuration
+### :key: Configuration
 
 **Provides fluent interfaces**
 
@@ -183,7 +183,7 @@ let keychain = Keychain(service: "com.example.github-token")
     .accessibility(.AfterFirstUnlock)
 ```
 
-#### :game_die: Accessibility
+#### :closed_lock_with_key: Accessibility
 
 ##### Default accessibility matches background application (=kSecAttrAccessibleAfterFirstUnlock)
 
@@ -233,13 +233,13 @@ keychain
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
-#### :game_die: Sharing Keychain items
+#### :closed_lock_with_key: Sharing Keychain items
 
 ```swift
 let keychain = Keychain(service: "com.example.github-token", accessGroup: "12ABCD3E4F.shared")
 ```
 
-#### :game_die: Synchronizing Keychain items with iCloud
+#### :closed_lock_with_key: Synchronizing Keychain items with iCloud
 
 ###### Creating instance
 
@@ -260,7 +260,7 @@ keychain
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
-### :game_die: Debugging
+### :key: Debugging
 
 #### Display all stored items if print keychain object
 
