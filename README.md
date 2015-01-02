@@ -271,8 +271,8 @@ keychain
 
 ### <a name="touch_id_integration"> :fu: Touch ID integration
 
-** Any Operation that require authentication must be run in the background thread.
-If you run in the main thread, UI thread will lock for the system to try to display the authentication dialog.**
+**Any Operation that require authentication must be run in the background thread.**  
+**If you run in the main thread, UI thread will lock for the system to try to display the authentication dialog.**
 
 #### :closed_lock_with_key: Adding a Touch ID protected item
 
@@ -296,8 +296,8 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
 
 The same way as when adding.  
 
-**Do not run in the main thread If there is a possibility that the item you are trying to add already exists, and protected.
-Because updating protected items requires authentication.**
+**Do not run in the main thread if there is a possibility that the item you are trying to add already exists, and protected.**
+**Because updating protected items requires authentication.**
 
 Additionally, you want to show custom authentication prompt message when updating, specify an `authenticationPrompt` attribute.
 If the item not protected, the `authenticationPrompt` parameter just be ignored.
