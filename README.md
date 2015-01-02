@@ -9,6 +9,15 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 
 <img src="https://raw.githubusercontent.com/kishikawakatsumi/KeychainAccess/master/Screenshots/01.png" width="320px" />
 
+## Features
+
+- Simple interface
+- Support access group
+- [Support accessibility](#accessibility)
+- [Support iCloud sharing](#icloud_sharing)
+- **[Support TouchID and Keychain integration (iOS 8+)](#touch_id_integration)**
+- Works on both iOS & OS X
+
 ## Usage
 
 ##### :eyes: See also:  
@@ -183,7 +192,7 @@ let keychain = Keychain(service: "com.example.github-token")
     .accessibility(.AfterFirstUnlock)
 ```
 
-#### :closed_lock_with_key: Accessibility
+#### <a name="accessibility"> Accessibility
 
 ##### Default accessibility matches background application (=kSecAttrAccessibleAfterFirstUnlock)
 
@@ -226,20 +235,20 @@ keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ###### One-shot
 
 ```swift
-let keychain = Keychain(service: "Twitter")
+let keychain = Keychain(service: "com.example.github-token")
 
 keychain
     .accessibility(.WhenUnlocked)
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 ```
 
-#### :closed_lock_with_key: Sharing Keychain items
+#### Sharing Keychain items
 
 ```swift
 let keychain = Keychain(service: "com.example.github-token", accessGroup: "12ABCD3E4F.shared")
 ```
 
-#### :closed_lock_with_key: Synchronizing Keychain items with iCloud
+#### <a name="icloud_sharing"> Synchronizing Keychain items with iCloud
 
 ###### Creating instance
 
@@ -258,6 +267,93 @@ let keychain = Keychain(service: "com.example.github-token")
 keychain
     .synchronizable(true)
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
+```
+
+### <a name="touch_id_integration"> :fu: Touch ID integration
+
+** Any Operation that require authentication must be run in the background thread.
+If you run in the main thread, UI thread will lock for the system to try to display the authentication dialog.**
+
+#### :closed_lock_with_key: Adding a Touch ID protected item
+
+If you want to store the Touch ID protected Keychain item, specify `accessibility` and `authenticationPolicy` attributes.  
+
+```swift
+let keychain = Keychain(service: "com.example.github-token")
+
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+    let error = keychain
+        .accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence)
+        .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
+
+    if error != nil {
+        // Error handling if needed...
+    }
+}
+```
+
+#### :closed_lock_with_key: Updating a Touch ID protected item
+
+The same way as when adding.  
+
+**Do not run in the main thread If there is a possibility that the item you are trying to add already exists, and protected.
+Because updating protected items requires authentication.**
+
+Additionally, you want to show custom authentication prompt message when updating, specify an `authenticationPrompt` attribute.
+If the item not protected, the `authenticationPrompt` parameter just be ignored.
+
+```swift
+let keychain = Keychain(service: "com.example.github-token")
+
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+    let error = keychain
+        .accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence)
+        .authenticationPrompt("Authenticate to update your access token")
+        .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
+
+    if error != nil {
+        // Error handling if needed...
+    }
+}
+```
+
+#### :closed_lock_with_key: Obtaining a Touch ID protected item
+
+The same way as when you get a normal item. It will be displayed automatically Touch ID or passcode authentication If the item you try to get is protected.  
+If you want to show custom authentication prompt message, specify an `authenticationPrompt` attribute.
+If the item not protected, the `authenticationPrompt` parameter just be ignored.
+
+```swift
+let keychain = Keychain(service: "com.example.github-token")
+
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+    let failable = keychain
+        .authenticationPrompt("Authenticate to login to server")
+        .getStringOrError("kishikawakatsumi")
+
+    if failable.successed {
+        println("value: \(failable.value)")
+    } else {
+        println("error: \(failable.error?.localizedDescription)")
+        // Error handling if needed...
+    }
+}
+```
+
+#### :closed_lock_with_key: Removing a Touch ID protected item
+
+The same way as when you remove a normal item.
+There is no way to show Touch ID or passcode authentication when removing Keychain items.
+
+```swift
+let keychain = Keychain(service: "com.example.github-token")
+
+let error = keychain.remove("kishikawakatsumi")
+
+if error != nil {
+    println("error: \(error?.localizedDescription)")
+    // Error handling if needed...
+}
 ```
 
 ### :key: Debugging
