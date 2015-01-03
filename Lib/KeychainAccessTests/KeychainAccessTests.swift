@@ -209,8 +209,8 @@ class KeychainAccessTests: XCTestCase {
     }
     
     func testInitializerWithService() {
-        let keychain = Keychain(service: "Twitter")
-        XCTAssertEqual(keychain.service, "Twitter")
+        let keychain = Keychain(service: "com.example.github-token")
+        XCTAssertEqual(keychain.service, "com.example.github-token")
         XCTAssertNil(keychain.accessGroup)
     }
     
@@ -221,9 +221,27 @@ class KeychainAccessTests: XCTestCase {
     }
     
     func testInitializerWithServiceAndAccessGroup() {
-        let keychain = Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared")
-        XCTAssertEqual(keychain.service, "Twitter")
+        let keychain = Keychain(service: "com.example.github-token", accessGroup: "12ABCD3E4F.shared")
+        XCTAssertEqual(keychain.service, "com.example.github-token")
         XCTAssertEqual(keychain.accessGroup!, "12ABCD3E4F.shared")
+    }
+    
+    func testInitializerWithServer() {
+        let URL = NSURL(string: "https://kishikawakatsumi.com")!
+        
+        let keychain = Keychain(server: URL, protocolType: .HTTPS)
+        XCTAssertEqual(keychain.server, URL)
+        XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
+        XCTAssertEqual(keychain.authenticationType, AuthenticationType.Default)
+    }
+    
+    func testInitializerWithServerAndAuthenticationType() {
+        let URL = NSURL(string: "https://kishikawakatsumi.com")!
+        
+        let keychain = Keychain(server: URL, protocolType: .HTTPS, authenticationType: .HTMLForm)
+        XCTAssertEqual(keychain.server, URL)
+        XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
+        XCTAssertEqual(keychain.authenticationType, AuthenticationType.HTMLForm)
     }
     
     // MARK:
