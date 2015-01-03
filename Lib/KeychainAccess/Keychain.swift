@@ -116,8 +116,8 @@ public enum FailableOf<T> {
     
     public var value: T? {
         switch self {
-        case .Success(let v):
-            return v.value
+        case .Success(let success):
+            return success.value
         default:
             return nil
         }
@@ -1122,6 +1122,29 @@ extension AuthenticationPolicy : RawRepresentable, Printable {
         switch self {
         case UserPresence:
             return "UserPresence"
+        }
+    }
+}
+
+extension FailableOf: Printable, DebugPrintable {
+    public var description: String {
+        switch self {
+        case .Success(let success):
+            if let value = success.value {
+                return "\(value)"
+            }
+            return "nil"
+        case .Failure(let error):
+            return "\(error.localizedDescription)"
+        }
+    }
+    
+    public var debugDescription: String {
+        switch self {
+        case .Success(let success):
+            return "\(success.value)"
+        case .Failure(let error):
+            return "\(error)"
         }
     }
 }
