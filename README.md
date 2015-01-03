@@ -424,6 +424,9 @@ it, simply add the following line to your Podfile:
 
 `pod 'KeychainAccess'`
 
+*Currently, to install the framework via CocoaPods you need to use pre-release version.*  
+See ["Pod Authors Guide to CocoaPods Frameworks"](http://blog.cocoapods.org/Pod-Authors-Guide-to-CocoaPods-Frameworks/)
+
 ### Carthage
 
 KeychainAccess is available through [Carthage](https://github.com/Carthage/Carthage). To install
