@@ -130,6 +130,10 @@ public class Value<T> {
 }
 
 public class Keychain {
+    public var itemClass: ItemClass {
+        return options.itemClass
+    }
+    
     public var service: String {
         return options.service
     }
@@ -170,8 +174,8 @@ public class Keychain {
         return options.comment
     }
     
-    public var itemClass: ItemClass {
-        return options.itemClass
+    public var authenticationPrompt: String? {
+        return options.authenticationPrompt
     }
     
     private let options: Options
