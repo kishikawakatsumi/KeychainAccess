@@ -153,6 +153,10 @@ public class Keychain {
     public var accessibility: Accessibility {
         return options.accessibility
     }
+
+    public var authenticationPolicy: AuthenticationPolicy? {
+        return options.authenticationPolicy
+    }
     
     public var synchronizable: Bool {
         return options.synchronizable
