@@ -406,7 +406,7 @@ public class Keychain {
     
     // MARK:
     
-    public func contains(key: String) -> Bool? {
+    public func contains(key: String) -> Bool {
         var query = options.query()
         query[kSecAttrAccount] = key
         
