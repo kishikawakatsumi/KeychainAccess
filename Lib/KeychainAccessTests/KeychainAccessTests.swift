@@ -246,6 +246,23 @@ class KeychainAccessTests: XCTestCase {
     
     // MARK:
     
+    func testContains() {
+        let keychain = Keychain(service: "Twitter")
+        
+        XCTAssertFalse(keychain.contains("username"), "not stored username")
+        XCTAssertFalse(keychain.contains("password"), "not stored password")
+        
+        keychain.set("kishikawakatsumi", key: "username")
+        XCTAssertTrue(keychain.contains("username"), "stored username")
+        XCTAssertFalse(keychain.contains("password"), "not stored password")
+        
+        keychain.set("password1234", key: "password")
+        XCTAssertTrue(keychain.contains("username"), "stored username")
+        XCTAssertTrue(keychain.contains("password"), "stored password")
+    }
+    
+    // MARK:
+    
     func testSetString() {
         let keychain = Keychain(service: "Twitter")
         
