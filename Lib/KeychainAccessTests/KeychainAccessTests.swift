@@ -320,10 +320,10 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(keychain.getData("JSONData"), "not stored JSON data")
         
         keychain.set(JSONData!, key: "JSONData")
-        XCTAssertEqual(keychain.getData("JSONData")!, JSONData!, "stored JSONData")
+        XCTAssertEqual(keychain.getData("JSONData")!, JSONData!, "stored JSON data")
         
         keychain.remove("JSONData")
-        XCTAssertNil(keychain.getData("JSONData"), "removed JSONData")
+        XCTAssertNil(keychain.getData("JSONData"), "removed JSON data")
     }
     
     // MARK:
