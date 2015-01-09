@@ -157,7 +157,9 @@ public class Keychain {
     public var accessibility: Accessibility {
         return options.accessibility
     }
-
+    
+    @availability(iOS, introduced=8.0)
+    @availability(OSX, introduced=10.10)
     public var authenticationPolicy: AuthenticationPolicy? {
         return options.authenticationPolicy
     }
@@ -174,11 +176,16 @@ public class Keychain {
         return options.comment
     }
     
+    @availability(iOS, introduced=8.0)
+    @availability(OSX, unavailable)
     public var authenticationPrompt: String? {
         return options.authenticationPrompt
     }
     
     private let options: Options
+    
+    private let NSFoundationVersionNumber_iOS_7_1 = 1047.25
+    private let NSFoundationVersionNumber10_9_2 = 1056.13
     
     // MARK:
     
@@ -237,6 +244,8 @@ public class Keychain {
         return Keychain(options)
     }
     
+    @availability(iOS, introduced=8.0)
+    @availability(OSX, introduced=10.10)
     public func accessibility(accessibility: Accessibility, authenticationPolicy: AuthenticationPolicy) -> Keychain {
         var options = self.options
         options.accessibility = accessibility
@@ -262,13 +271,13 @@ public class Keychain {
         return Keychain(options)
     }
     
-    #if os(iOS)
+    @availability(iOS, introduced=8.0)
+    @availability(OSX, unavailable)
     public func authenticationPrompt(authenticationPrompt: String) -> Keychain {
         var options = self.options
         options.authenticationPrompt = authenticationPrompt
         return Keychain(options)
     }
-    #endif
     
     // MARK:
     
@@ -342,7 +351,9 @@ public class Keychain {
         
         query[kSecAttrAccount] = key
         #if os(iOS)
-        query[kSecUseNoAuthenticationUI] = kCFBooleanTrue
+        if floor(NSFoundationVersionNumber) > floor(NSFoundationVersionNumber_iOS_7_1) {
+            query[kSecUseNoAuthenticationUI] = kCFBooleanTrue
+        }
         #endif
         
         var status = SecItemCopyMatching(query, nil)
@@ -682,7 +693,11 @@ extension Options {
         
         #if os(iOS)
         if authenticationPrompt != nil {
-            query[kSecUseOperationPrompt] = authenticationPrompt
+            if floor(NSFoundationVersionNumber) > floor(NSFoundationVersionNumber_iOS_7_1) {
+                query[kSecUseOperationPrompt] = authenticationPrompt
+            } else {
+                println("Unavailable 'authenticationPrompt' attribute on iOS versions prior to 8.0.")
+            }
         }
         #endif
         
@@ -708,28 +723,49 @@ extension Options {
             attributes[kSecAttrComment] = comment
         }
         
+        #if os(iOS)
+        let iOS_7_1_or_10_9_2 = NSFoundationVersionNumber_iOS_7_1
+        #else
+        let iOS_7_1_or_10_9_2 = NSFoundationVersionNumber10_9_2
+        #endif
         if let policy = authenticationPolicy {
-            var error: Unmanaged<CFError>?
-            let accessControl = SecAccessControlCreateWithFlags(
-                kCFAllocatorDefault,
-                accessibility.rawValue,
-                SecAccessControlCreateFlags(policy.rawValue),
-                &error
-            )
-            if let error = error?.takeUnretainedValue() {
-                var code = CFErrorGetCode(error)
-                var domain = CFErrorGetDomain(error)
-                var userInfo = CFErrorCopyUserInfo(error)
-                
-                return (attributes, NSError(domain: domain, code: code, userInfo: userInfo))
+            if floor(NSFoundationVersionNumber) > floor(iOS_7_1_or_10_9_2) {
+                var error: Unmanaged<CFError>?
+                let accessControl = SecAccessControlCreateWithFlags(
+                    kCFAllocatorDefault,
+                    accessibility.rawValue,
+                    SecAccessControlCreateFlags(policy.rawValue),
+                    &error
+                )
+                if let error = error?.takeUnretainedValue() {
+                    var code = CFErrorGetCode(error)
+                    var domain = CFErrorGetDomain(error)
+                    var userInfo = CFErrorCopyUserInfo(error)
+                    
+                    return (attributes, NSError(domain: domain, code: code, userInfo: userInfo))
+                }
+                if accessControl == nil {
+                    let message = Status.UnexpectedError.description
+                    return (attributes, NSError(domain: KeychainAccessErrorDomain, code: Int(Status.UnexpectedError.rawValue), userInfo: [NSLocalizedDescriptionKey: message]))
+                }
+                attributes[kSecAttrAccessControl] = accessControl.takeUnretainedValue()
+            } else {
+                #if os(iOS)
+                println("Unavailable 'Touch ID integration' on iOS versions prior to 8.0.")
+                #else
+                println("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
+                #endif
             }
-            if accessControl == nil {
-                let message = Status.UnexpectedError.description
-                return (attributes, NSError(domain: KeychainAccessErrorDomain, code: Int(Status.UnexpectedError.rawValue), userInfo: [NSLocalizedDescriptionKey: message]))
-            }
-            attributes[kSecAttrAccessControl] = accessControl.takeUnretainedValue()
         } else {
-            attributes[kSecAttrAccessible] = accessibility.rawValue
+            if floor(NSFoundationVersionNumber) <= floor(iOS_7_1_or_10_9_2) && accessibility == .WhenPasscodeSetThisDeviceOnly {
+                #if os(iOS)
+                println("Unavailable 'Accessibility.WhenPasscodeSetThisDeviceOnly' attribute on iOS versions prior to 8.0.")
+                #else
+                println("Unavailable 'Accessibility.WhenPasscodeSetThisDeviceOnly' attribute on OS X versions prior to 10.10.")
+                #endif
+            } else {
+                attributes[kSecAttrAccessible] = accessibility.rawValue
+            }
         }
         
         attributes[kSecAttrSynchronizable] = synchronizable
