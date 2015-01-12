@@ -139,7 +139,17 @@ if let error = failable.error {
 }
 ```
 
-**3. check `failed` property**
+**3. check `succeeded` property**
+
+```swift
+if failable.succeeded {
+    println("token: \(failable.value)")
+} else {
+    println("error: \(failable.error)")
+}
+```
+
+**4. check `failed` property**
 
 ```swift
 if failable.failed {

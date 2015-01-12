@@ -287,7 +287,7 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(keychain.getData("JSONData"), "not stored JSON data")
         
         keychain.set(JSONData!, key: "JSONData")
-        XCTAssertEqual(keychain.getData("JSONData")!, JSONData!, "stored JSONData")
+        XCTAssertEqual(keychain.getData("JSONData")!, JSONData!, "stored JSON data")
     }
     
     func testRemoveString() {
@@ -392,6 +392,12 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertEqual(username.value!, "kishikawa_katsumi")
             }
             
+            if username.succeeded { // check succeeded property
+                XCTAssertEqual(username.value!, "kishikawa_katsumi")
+            } else {
+                XCTFail("unknown error occurred")
+            }
+            
             if username.failed { // failed property
                 XCTFail("unknown error occurred")
             } else {
@@ -406,13 +412,19 @@ class KeychainAccessTests: XCTestCase {
                 XCTFail("unknown error occurred")
             }
             
-            if let error = username.error { // error object
+            if let error = password.error { // error object
                 XCTFail("unknown error occurred")
             } else {
                 XCTAssertEqual(password.value!, "password_1234")
             }
             
-            if username.failed { // failed property
+            if password.succeeded { // check succeeded property
+                XCTAssertEqual(password.value!, "password_1234")
+            } else {
+                XCTFail("unknown error occurred")
+            }
+            
+            if password.failed { // failed property
                 XCTFail("unknown error occurred")
             } else {
                 XCTAssertEqual(password.value!, "password_1234")
@@ -444,6 +456,12 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertEqual(username.value!, "katsumi_kishikawa")
             }
             
+            if username.succeeded { // check succeeded property
+                XCTAssertEqual(username.value!, "katsumi_kishikawa")
+            } else {
+                XCTFail("unknown error occurred")
+            }
+            
             if username.failed { // failed property
                 XCTFail("unknown error occurred")
             } else {
@@ -458,13 +476,19 @@ class KeychainAccessTests: XCTestCase {
                 XCTFail("unknown error occurred")
             }
             
-            if let error = username.error { // check error object
+            if let error = password.error { // check error object
                 XCTFail("unknown error occurred")
             } else {
                 XCTAssertEqual(password.value!, "1234_password")
             }
             
-            if username.failed { // check failed property
+            if password.succeeded { // check succeeded property
+                XCTAssertEqual(password.value!, "1234_password")
+            } else {
+                XCTFail("unknown error occurred")
+            }
+            
+            if password.failed { // check failed property
                 XCTFail("unknown error occurred")
             } else {
                 XCTAssertEqual(password.value!, "1234_password")
@@ -502,6 +526,7 @@ class KeychainAccessTests: XCTestCase {
         let service_2 = "com.kishikawakatsumi.KeychainAccess"
         let service_3 = "example.com"
         
+        Keychain().removeAll()
         Keychain(service: service_1).removeAll()
         Keychain(service: service_2).removeAll()
         Keychain(service: service_3).removeAll()
@@ -522,7 +547,7 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(Keychain(service: service_3).get("username"), "not stored username")
         
         Keychain(service: service_1).set(username_1, key: "username")
-        XCTAssertEqual(Keychain(service: service_1).get("username")!, username_1, "stored username")
+        XCTAssertEqual(Keychain().get("username")!, username_1, "stored username")
         XCTAssertEqual(Keychain(service: service_1).get("username")!, username_1, "stored username")
         XCTAssertNil(Keychain(service: service_2).get("username"), "not stored username")
         XCTAssertNil(Keychain(service: service_3).get("username"), "not stored username")

@@ -87,7 +87,7 @@ public enum FailableOf<T> {
         self = .Failure(error)
     }
     
-    public var successed: Bool {
+    public var succeeded: Bool {
         switch self {
         case .Success:
             return true

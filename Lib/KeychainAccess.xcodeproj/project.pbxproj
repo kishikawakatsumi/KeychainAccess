@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		140C8F0F1A4EBE3100F85556 /* KeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 140C8F0E1A4EBE3100F85556 /* KeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		140C8F151A4EBE3100F85556 /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140C8F0A1A4EBE3100F85556 /* KeychainAccess.framework */; };
 		140C8F231A4EBEEA00F85556 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F197A1A49D89200B0016A /* Keychain.swift */; };
 		140C8F241A4EBF9A00F85556 /* KeychainAccessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F196E1A49D79500B0016A /* KeychainAccessTests.swift */; };
@@ -36,8 +35,6 @@
 
 /* Begin PBXFileReference section */
 		140C8F0A1A4EBE3100F85556 /* KeychainAccess.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeychainAccess.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		140C8F0D1A4EBE3100F85556 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		140C8F0E1A4EBE3100F85556 /* KeychainAccess.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeychainAccess.h; sourceTree = "<group>"; };
 		140C8F141A4EBE3100F85556 /* KeychainAccess-MacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KeychainAccess-MacTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		140F195C1A49D79400B0016A /* KeychainAccess.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeychainAccess.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		140F19601A49D79400B0016A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -82,29 +79,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		140C8F0B1A4EBE3100F85556 /* KeychainAccess */ = {
-			isa = PBXGroup;
-			children = (
-				140C8F0E1A4EBE3100F85556 /* KeychainAccess.h */,
-				140C8F0C1A4EBE3100F85556 /* Supporting Files */,
-			);
-			path = KeychainAccess;
-			sourceTree = "<group>";
-		};
-		140C8F0C1A4EBE3100F85556 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				140C8F0D1A4EBE3100F85556 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		140F19521A49D79400B0016A = {
 			isa = PBXGroup;
 			children = (
 				140F195E1A49D79400B0016A /* KeychainAccess */,
 				140F196B1A49D79500B0016A /* KeychainAccessTests */,
-				140C8F0B1A4EBE3100F85556 /* KeychainAccess */,
 				140F195D1A49D79400B0016A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -162,7 +141,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				140C8F0F1A4EBE3100F85556 /* KeychainAccess.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
