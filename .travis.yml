@@ -6,6 +6,9 @@ install:
   - (cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)
 script:
   - (cd Lib && bundle exec rake test:ios test:osx)
+branches:
+  only:
+    - master
 env:
   global:
     - LANG=en_US.UTF-8

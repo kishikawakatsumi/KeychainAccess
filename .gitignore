@@ -20,10 +20,6 @@ DerivedData
 *.ipa
 *.xcuserstate
 
-#Carthage
-*/Carthage/Checkouts/
-Cartfile.resolved
-
 # Bundler
 .bundle
 vendor/
