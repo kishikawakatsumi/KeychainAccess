@@ -185,6 +185,8 @@ public class Keychain {
     private let options: Options
     
     private let NSFoundationVersionNumber_iOS_7_1 = 1047.25
+    private let NSFoundationVersionNumber_iOS_8_0 = 1140.11
+    private let NSFoundationVersionNumber_iOS_8_1 = 1141.1
     private let NSFoundationVersionNumber10_9_2 = 1056.13
     
     // MARK:
@@ -367,7 +369,16 @@ public class Keychain {
                 println("error:[\(error.code)] \(error.localizedDescription)")
                 return error
             } else {
-                status = SecItemUpdate(query, attributes)
+                if status == errSecInteractionNotAllowed && floor(NSFoundationVersionNumber) <= floor(NSFoundationVersionNumber_iOS_8_0) {
+                    var error = remove(key)
+                    if error != nil {
+                        return error
+                    } else {
+                        return set(value, key: key)
+                    }
+                } else {
+                    status = SecItemUpdate(query, attributes)
+                }
                 if status != errSecSuccess {
                     return securityError(status: status)
                 }
