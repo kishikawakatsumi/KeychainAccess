@@ -36,7 +36,7 @@ keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 #### Saving Internet Password
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
 
@@ -55,11 +55,11 @@ let keychain = Keychain(service: "com.example.github-token", accessGroup: "12ABC
 #### Create Keychain for Internet Password
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
 ```
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS, authenticationType: .HTMLForm)
+let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS, authenticationType: .HTMLForm)
 ```
 
 ### :key: Adding an item
@@ -184,7 +184,7 @@ if let error = keychain.remove("kishikawakatsumi") {
 ### :key: Label and Comment
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
 keychain
     .label("github.com (kishikawakatsumi)")
     .comment("github access token")
@@ -371,7 +371,7 @@ if error != nil {
 #### Display all stored items if print keychain object
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
 println("\(keychain)")
 ```
 
@@ -387,7 +387,7 @@ println("\(keychain)")
 #### Obtaining all stored keys
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
 
 let keys = keychain.allKeys()
 for key in keys {
@@ -405,7 +405,7 @@ key: honeylemon
 #### Obtaining all stored items
 
 ```swift
-let keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
 
 let items = keychain.allItems()
 for item in items {

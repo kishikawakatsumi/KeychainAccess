@@ -221,6 +221,14 @@ public class Keychain {
         self.init(options)
     }
     
+    public convenience init(server: String, protocolType: ProtocolType) {
+        self.init(server: NSURL(string: server)!, protocolType: protocolType)
+    }
+    
+    public convenience init(server: String, protocolType: ProtocolType, authenticationType: AuthenticationType) {
+        self.init(server: NSURL(string: server)!, protocolType: protocolType, authenticationType: .Default)
+    }
+    
     public convenience init(server: NSURL, protocolType: ProtocolType) {
         self.init(server: server, protocolType: protocolType, authenticationType: .Default)
     }
