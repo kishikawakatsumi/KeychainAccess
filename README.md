@@ -8,6 +8,8 @@
 KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X. Makes using Keychain APIs exremely easy and much more palatable to use in Swift.
 
 <img src="https://raw.githubusercontent.com/kishikawakatsumi/KeychainAccess/master/Screenshots/01.png" width="320px" />
+<img src="https://raw.githubusercontent.com/kishikawakatsumi/KeychainAccess/master/Screenshots/02.png" width="320px" />
+<img src="https://raw.githubusercontent.com/kishikawakatsumi/KeychainAccess/master/Screenshots/03.png" width="320px" />
 
 ## :bulb: Features
 
@@ -342,7 +344,7 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
         .authenticationPrompt("Authenticate to login to server")
         .getStringOrError("kishikawakatsumi")
 
-    if failable.successed {
+    if failable.succeeded {
         println("value: \(failable.value)")
     } else {
         println("error: \(failable.error?.localizedDescription)")
@@ -404,6 +406,20 @@ if let password = keychain.get(username) {
         }
     }
 }
+```
+
+#### Request all associated domain's credentials
+
+```swift
+Keychain.requestSharedWebCredential { (credentials, error) -> () in
+
+}
+```
+
+#### Generate strong random password
+
+```swift
+let password = Keychain.generatePassword()
 ```
 
 #### How to set up Shared Web Credentials
