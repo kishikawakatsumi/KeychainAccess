@@ -347,6 +347,112 @@ public class Keychain {
         return FailableOf(securityError(status: status))
     }
     
+    #if os(iOS)
+    @availability(iOS, introduced=8.0)
+    public func getSharedPassword(completion: (account: String?, password: String?, error: NSError?) -> () = { account, password, error -> () in }) {
+        if let domain = server.host {
+            requestSharedWebCredential(domain: domain, account: nil) { (credentials, error) -> () in
+                if let credential = credentials.first {
+                    let account = credential["account"]
+                    let password = credential["password"]
+                    completion(account: account, password: password, error: error)
+                } else {
+                    completion(account: nil, password: nil, error: error)
+                }
+            }
+        } else {
+            let error = securityError(status: Status.Param.rawValue)
+            completion(account: nil, password: nil, error: error)
+        }
+    }
+    
+    @availability(iOS, introduced=8.0)
+    public func getSharedPassword(account: String, completion: (password: String?, error: NSError?) -> () = { password, error -> () in }) {
+        if let domain = server.host {
+            requestSharedWebCredential(domain: domain, account: account) { (credentials, error) -> () in
+                if let credential = credentials.first {
+                    if let password = credential["password"] {
+                        completion(password: password, error: error)
+                    } else {
+                        completion(password: nil, error: error)
+                    }
+                } else {
+                    completion(password: nil, error: error)
+                }
+            }
+        } else {
+            let error = securityError(status: Status.Param.rawValue)
+            completion(password: nil, error: error)
+        }
+    }
+    
+    @availability(iOS, introduced=8.0)
+    public func setSharedPassword(password: String, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
+        if let domain = server.host {
+            SecAddSharedWebCredential(domain, account, password) { error -> () in
+                if let error = error {
+                    completion(error: error.error)
+                } else {
+                    completion(error: nil)
+                }
+            }
+        } else {
+            let error = securityError(status: Status.Param.rawValue)
+            completion(error: error)
+        }
+    }
+    
+    @availability(iOS, introduced=8.0)
+    public func requestSharedWebCredential(completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
+        requestSharedWebCredential(domain: nil, account: nil, completion: completion)
+    }
+    
+    @availability(iOS, introduced=8.0)
+    public func requestSharedWebCredential(#domain: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
+        requestSharedWebCredential(domain: domain, account: nil, completion: completion)
+    }
+    
+    @availability(iOS, introduced=8.0)
+    public func requestSharedWebCredential(#domain: String, account: String, completion: (credentials: [[String: String]], error: NSError?) -> ()) {
+        requestSharedWebCredential(domain: domain as String?, account: account as String?, completion: completion)
+    }
+    
+    private func requestSharedWebCredential(#domain: String?, account: String?, completion: (credentials: [[String: String]], error: NSError?) -> ()) {
+        SecRequestSharedWebCredential(domain, account) { (credentials, error) -> () in
+            var remoteError: NSError?
+            if let error = error {
+                remoteError = error.error
+                if remoteError?.code != Int(errSecItemNotFound) {
+                    println("error:[\(remoteError!.code)] \(remoteError!.localizedDescription)")
+                }
+            }
+            if let credentials = credentials as? [[String: AnyObject]] {
+                let credentials = credentials.map { credentials -> [String: String] in
+                    var credential = [String: String]()
+                    if let server = credentials[kSecAttrServer] as? String {
+                        credential["server"] = server
+                    }
+                    if let account = credentials[kSecAttrAccount] as? String {
+                        credential["account"] = account
+                    }
+                    if let password = credentials[kSecSharedPassword.takeUnretainedValue() as String] as? String {
+                        credential["password"] = password
+                    }
+                    return credential
+                }
+                completion(credentials: credentials, error: remoteError)
+            } else {
+                completion(credentials: [], error: remoteError)
+            }
+        }
+    }
+    
+    @availability(iOS, introduced=8.0)
+    public func generatePassword() -> String {
+        return SecCreateSharedWebCredentialPassword().takeUnretainedValue()
+    }
+    #endif
+    
     // MARK:
     
     public func set(value: String, key: String) -> NSError? {
@@ -757,11 +863,7 @@ extension Options {
                     &error
                 )
                 if let error = error?.takeUnretainedValue() {
-                    var code = CFErrorGetCode(error)
-                    var domain = CFErrorGetDomain(error)
-                    var userInfo = CFErrorCopyUserInfo(error)
-                    
-                    return (attributes, NSError(domain: domain, code: code, userInfo: userInfo))
+                    return (attributes, error.error)
                 }
                 if accessControl == nil {
                     let message = Status.UnexpectedError.description
@@ -1209,6 +1311,16 @@ extension FailableOf: Printable, DebugPrintable {
         case .Failure(let error):
             return "\(error)"
         }
+    }
+}
+
+extension CFError {
+    var error: NSError {
+        var domain = CFErrorGetDomain(self)
+        var code = CFErrorGetCode(self)
+        var userInfo = CFErrorCopyUserInfo(self)
+        
+        return NSError(domain: domain, code: code, userInfo: userInfo)
     }
 }
 
