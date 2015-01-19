@@ -136,7 +136,7 @@ case .Failure:
 
 ```swift
 if let error = failable.error {
-    println("error: \(failable.error)")
+    println("error: \(error)")
 } else {
     println("token: \(failable.value)")
 }
