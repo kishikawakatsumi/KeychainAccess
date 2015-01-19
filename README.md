@@ -418,6 +418,8 @@ Keychain.requestSharedWebCredential { (credentials, error) -> () in
 
 #### Generate strong random password
 
+Generate strong random password that is in the same format used by Safari autofill.
+
 ```swift
 let password = Keychain.generatePassword()
 ```
