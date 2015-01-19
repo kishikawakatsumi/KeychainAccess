@@ -576,6 +576,10 @@ public class Keychain {
     
     @availability(iOS, introduced=8.0)
     public func setSharedPassword(password: String, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
+        setSharedPassword(password as String?, account: account, completion: completion)
+    }
+    
+    private func setSharedPassword(password: String?, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         if let domain = server.host {
             SecAddSharedWebCredential(domain, account, password) { error -> () in
                 if let error = error {
@@ -588,6 +592,11 @@ public class Keychain {
             let error = securityError(status: Status.Param.rawValue)
             completion(error: error)
         }
+    }
+    
+    @availability(iOS, introduced=8.0)
+    public func removeSharedPassword(account: String, completion: (error: NSError?) -> () = { e -> () in }) {
+        setSharedPassword(nil, account: account, completion: completion)
     }
     
     @availability(iOS, introduced=8.0)
