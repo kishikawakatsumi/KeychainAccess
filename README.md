@@ -403,8 +403,8 @@ if let password = keychain.get(username) {
             // If the login is successful,
             // save the credentials to both the Keychain and the Shared Web Credentials.
 
-            keychain[username] = password
-            keychain.setSharedPassword(password, account: username)
+            keychain[username] = inputPassword
+            keychain.setSharedPassword(inputPassword, account: username)
         }
     }
 }
