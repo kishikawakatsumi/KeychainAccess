@@ -374,11 +374,13 @@ if error != nil {
 > Shared web credentials is a programming interface that enables native iOS apps to share credentials with their website counterparts. For example, a user may log in to a website in Safari, entering a user name and password, and save those credentials using the iCloud Keychain. Later, the user may run a native app from the same developer, and instead of the app requiring the user to reenter a user name and password, shared web credentials gives it access to the credentials that were entered earlier in Safari. The user can also create new accounts, update passwords, or delete her account from within the app. These changes are then saved and used by Safari.  
 <https://developer.apple.com/library/ios/documentation/Security/Reference/SharedWebCredentialsRef/>
 
+
 ```swift
 let keychain = Keychain(server: "https://www.kishikawakatsumi.com", protocolType: .HTTPS)
 
 let username = "kishikawakatsumi@mac.com"
 
+// First, check the credential in the app's Keychain
 if let password = keychain.get(username) {
     // If found password in the Keychain,
     // then log into the server
