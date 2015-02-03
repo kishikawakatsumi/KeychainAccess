@@ -47,13 +47,11 @@ XCJobs::Test.new('test:ios') do |t|
   t.project = 'KeychainAccess'
   t.scheme = 'KeychainAccess-iOS'
   t.configuration = 'Release'
-  t.build_dir = 'build'
   destinations.each do |destination|
     t.add_destination(destination)
   end
+  t.build_dir = 'build'
   t.formatter = 'xcpretty -c'
-  t.add_build_setting('GCC_INSTRUMENT_PROGRAM_FLOW_ARCS', 'YES')
-  t.add_build_setting('GCC_GENERATE_TEST_COVERAGE_FILES', 'YES')
 end
 
 XCJobs::Test.new('test:osx') do |t|
@@ -63,6 +61,4 @@ XCJobs::Test.new('test:osx') do |t|
   t.configuration = 'Release'
   t.build_dir = 'build'
   t.formatter = 'xcpretty -c'
-  t.add_build_setting('GCC_INSTRUMENT_PROGRAM_FLOW_ARCS', 'YES')
-  t.add_build_setting('GCC_GENERATE_TEST_COVERAGE_FILES', 'YES')
 end
