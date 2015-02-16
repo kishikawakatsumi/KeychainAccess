@@ -3986,7 +3986,7 @@ extension Status : RawRepresentable, Printable {
         case InvalidNewOwner:
             return "The new owner is not valid."
         case InvalidModifyMode:
-            return "The modify mode is not valid. }"
+            return "The modify mode is not valid."
         default:
             return "Unexpected error has occurred."
         }
