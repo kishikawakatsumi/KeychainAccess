@@ -610,7 +610,7 @@ public class Keychain {
     }
     
     @availability(iOS, introduced=8.0)
-    public class func requestSharedWebCredential(#domain: String, account: String, completion: (credentials: [[String: String]], error: NSError?) -> ()) {
+    public class func requestSharedWebCredential(#domain: String, account: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain as String?, account: account as String?, completion: completion)
     }
     
