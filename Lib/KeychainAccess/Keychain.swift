@@ -553,7 +553,9 @@ public class Keychain {
             completion(account: nil, password: nil, error: error)
         }
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public func getSharedPassword(account: String, completion: (password: String?, error: NSError?) -> () = { password, error -> () in }) {
         if let domain = server.host {
@@ -573,12 +575,16 @@ public class Keychain {
             completion(password: nil, error: error)
         }
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public func setSharedPassword(password: String, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         setSharedPassword(password as String?, account: account, completion: completion)
     }
-    
+    #endif
+
+    #if os(iOS)
     private func setSharedPassword(password: String?, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         if let domain = server.host {
             SecAddSharedWebCredential(domain, account, password) { error -> () in
@@ -593,27 +599,37 @@ public class Keychain {
             completion(error: error)
         }
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public func removeSharedPassword(account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         setSharedPassword(nil, account: account, completion: completion)
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public class func requestSharedWebCredential(completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: nil, account: nil, completion: completion)
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public class func requestSharedWebCredential(#domain: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain, account: nil, completion: completion)
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public class func requestSharedWebCredential(#domain: String, account: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain as String?, account: account as String?, completion: completion)
     }
-    
+    #endif
+
+    #if os(iOS)
     private class func requestSharedWebCredential(#domain: String?, account: String?, completion: (credentials: [[String: String]], error: NSError?) -> ()) {
         SecRequestSharedWebCredential(domain, account) { (credentials, error) -> () in
             var remoteError: NSError?
@@ -643,7 +659,9 @@ public class Keychain {
             }
         }
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public class func generatePassword() -> String {
         return SecCreateSharedWebCredentialPassword().takeUnretainedValue() as! String
