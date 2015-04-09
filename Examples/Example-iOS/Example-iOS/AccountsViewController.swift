@@ -51,7 +51,7 @@ class AccountsViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
         
         let services = Array(itemsGroupedByService!.keys)
         let service = services[indexPath.section]
@@ -73,7 +73,7 @@ class AccountsViewController: UITableViewController {
         let items = keychain.allItems()
         
         let item = items[indexPath.row]
-        let key = item["key"] as String
+        let key = item["key"] as! String
         
         keychain[key] = nil
         
