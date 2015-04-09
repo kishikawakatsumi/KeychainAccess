@@ -310,7 +310,7 @@ public class Keychain {
         switch failable {
         case .Success:
             if let data = failable.value {
-                if let string = NSString(data: data, encoding: NSUTF8StringEncoding) {
+                if let string = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
                     return FailableOf(string)
                 }
                 return FailableOf(conversionError(message: "failed to convert data to string"))
@@ -325,17 +325,17 @@ public class Keychain {
     public func getDataOrError(key: String) -> FailableOf<NSData> {
         var query = options.query()
         
-        query[kSecMatchLimit] = kSecMatchLimitOne
-        query[kSecReturnData] = kCFBooleanTrue
+        query[kSecMatchLimit as! String] = kSecMatchLimitOne
+        query[kSecReturnData as! String] = kCFBooleanTrue
         
-        query[kSecAttrAccount] = key
+        query[kSecAttrAccount as! String] = key
         
         var result: AnyObject?
         var status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
         
         switch status {
         case errSecSuccess:
-            if let data = result as NSData? {
+            if let data = result as? NSData {
                 return FailableOf(data)
             }
             return FailableOf(securityError(status: Status.UnexpectedError.rawValue))
@@ -359,10 +359,10 @@ public class Keychain {
     public func set(value: NSData, key: String) -> NSError? {
         var query = options.query()
         
-        query[kSecAttrAccount] = key
+        query[kSecAttrAccount as! String] = key
         #if os(iOS)
         if floor(NSFoundationVersionNumber) > floor(NSFoundationVersionNumber_iOS_7_1) {
-            query[kSecUseNoAuthenticationUI] = kCFBooleanTrue
+            query[kSecUseNoAuthenticationUI as! String] = kCFBooleanTrue
         }
         #endif
         
@@ -370,7 +370,7 @@ public class Keychain {
         switch status {
         case errSecSuccess, errSecInteractionNotAllowed:
             var query = options.query()
-            query[kSecAttrAccount] = key
+            query[kSecAttrAccount as! String] = key
             
             var (attributes, error) = options.attributes(key: nil, value: value)
             if var error = error {
@@ -412,7 +412,7 @@ public class Keychain {
     
     public func remove(key: String) -> NSError? {
         var query = options.query()
-        query[kSecAttrAccount] = key
+        query[kSecAttrAccount as! String] = key
         
         let status = SecItemDelete(query)
         if status != errSecSuccess && status != errSecItemNotFound {
@@ -424,7 +424,7 @@ public class Keychain {
     public func removeAll() -> NSError? {
         var query = options.query()
         #if !os(iOS)
-        query[kSecMatchLimit] = kSecMatchLimitAll
+        query[kSecMatchLimit as! String] = kSecMatchLimitAll
         #endif
         
         let status = SecItemDelete(query)
@@ -438,7 +438,7 @@ public class Keychain {
     
     public func contains(key: String) -> Bool {
         var query = options.query()
-        query[kSecAttrAccount] = key
+        query[kSecAttrAccount as! String] = key
         
         var status = SecItemCopyMatching(query, nil)
         
@@ -473,22 +473,22 @@ public class Keychain {
     
     public class func allKeys(itemClass: ItemClass) -> [(String, String)] {
         var query = [String: AnyObject]()
-        query[kSecClass] = itemClass.rawValue
-        query[kSecMatchLimit] = kSecMatchLimitAll
-        query[kSecReturnAttributes] = kCFBooleanTrue
+        query[kSecClass as! String] = itemClass.rawValue
+        query[kSecMatchLimit as! String] = kSecMatchLimitAll
+        query[kSecReturnAttributes as! String] = kCFBooleanTrue
         
         var result: AnyObject?
         var status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
         
         switch status {
         case errSecSuccess:
-            if let items = result as [[String: AnyObject]]? {
+            if let items = result as? [[String: AnyObject]] {
                 return prettify(itemClass: itemClass, items: items).map {
                     switch itemClass {
                     case .GenericPassword:
-                        return (($0["service"] ?? "") as String, ($0["key"] ?? "") as String)
+                        return (($0["service"] ?? "") as! String, ($0["key"] ?? "") as! String)
                     case .InternetPassword:
-                        return (($0["server"] ?? "") as String, ($0["key"] ?? "") as String)
+                        return (($0["server"] ?? "") as! String, ($0["key"] ?? "") as! String)
                     }
                 }
             }
@@ -502,16 +502,16 @@ public class Keychain {
     }
     
     public func allKeys() -> [String] {
-        return self.dynamicType.prettify(itemClass: itemClass, items: items()).map { $0["key"] as String }
+        return self.dynamicType.prettify(itemClass: itemClass, items: items()).map { $0["key"] as! String }
     }
     
     public class func allItems(itemClass: ItemClass) -> [[String: AnyObject]] {
         var query = [String: AnyObject]()
-        query[kSecClass] = itemClass.rawValue
-        query[kSecMatchLimit] = kSecMatchLimitAll
-        query[kSecReturnAttributes] = kCFBooleanTrue
+        query[kSecClass as! String] = itemClass.rawValue
+        query[kSecMatchLimit as! String] = kSecMatchLimitAll
+        query[kSecReturnAttributes as! String] = kCFBooleanTrue
         #if os(iOS)
-        query[kSecReturnData] = kCFBooleanTrue
+        query[kSecReturnData as! String] = kCFBooleanTrue
         #endif
         
         var result: AnyObject?
@@ -553,7 +553,9 @@ public class Keychain {
             completion(account: nil, password: nil, error: error)
         }
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public func getSharedPassword(account: String, completion: (password: String?, error: NSError?) -> () = { password, error -> () in }) {
         if let domain = server.host {
@@ -573,12 +575,16 @@ public class Keychain {
             completion(password: nil, error: error)
         }
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public func setSharedPassword(password: String, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         setSharedPassword(password as String?, account: account, completion: completion)
     }
-    
+    #endif
+
+    #if os(iOS)
     private func setSharedPassword(password: String?, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         if let domain = server.host {
             SecAddSharedWebCredential(domain, account, password) { error -> () in
@@ -593,27 +599,37 @@ public class Keychain {
             completion(error: error)
         }
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public func removeSharedPassword(account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         setSharedPassword(nil, account: account, completion: completion)
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public class func requestSharedWebCredential(completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: nil, account: nil, completion: completion)
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public class func requestSharedWebCredential(#domain: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain, account: nil, completion: completion)
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public class func requestSharedWebCredential(#domain: String, account: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain as String?, account: account as String?, completion: completion)
     }
-    
+    #endif
+
+    #if os(iOS)
     private class func requestSharedWebCredential(#domain: String?, account: String?, completion: (credentials: [[String: String]], error: NSError?) -> ()) {
         SecRequestSharedWebCredential(domain, account) { (credentials, error) -> () in
             var remoteError: NSError?
@@ -626,13 +642,13 @@ public class Keychain {
             if let credentials = credentials as? [[String: AnyObject]] {
                 let credentials = credentials.map { credentials -> [String: String] in
                     var credential = [String: String]()
-                    if let server = credentials[kSecAttrServer] as? String {
+                    if let server = credentials[kSecAttrServer as! String] as? String {
                         credential["server"] = server
                     }
-                    if let account = credentials[kSecAttrAccount] as? String {
+                    if let account = credentials[kSecAttrAccount as! String] as? String {
                         credential["account"] = account
                     }
-                    if let password = credentials[kSecSharedPassword.takeUnretainedValue() as String] as? String {
+                    if let password = credentials[kSecSharedPassword.takeUnretainedValue() as! String] as? String {
                         credential["password"] = password
                     }
                     return credential
@@ -643,10 +659,12 @@ public class Keychain {
             }
         }
     }
-    
+    #endif
+
+    #if os(iOS)
     @availability(iOS, introduced=8.0)
     public class func generatePassword() -> String {
-        return SecCreateSharedWebCredentialPassword().takeUnretainedValue()
+        return SecCreateSharedWebCredentialPassword().takeUnretainedValue() as! String
     }
     #endif
     
@@ -654,10 +672,10 @@ public class Keychain {
     
     private func items() -> [[String: AnyObject]] {
         var query = options.query()
-        query[kSecMatchLimit] = kSecMatchLimitAll
-        query[kSecReturnAttributes] = kCFBooleanTrue
+        query[kSecMatchLimit as! String] = kSecMatchLimitAll
+        query[kSecReturnAttributes as! String] = kCFBooleanTrue
         #if os(iOS)
-        query[kSecReturnData] = kCFBooleanTrue
+        query[kSecReturnData as! String] = kCFBooleanTrue
         #endif
         
         var result: AnyObject?
@@ -685,45 +703,45 @@ public class Keychain {
             
             switch itemClass {
             case .GenericPassword:
-                if let service = attributes[kSecAttrService] as? String {
+                if let service = attributes[kSecAttrService as! String] as? String {
                     item["service"] = service
                 }
-                if let accessGroup = attributes[kSecAttrAccessGroup] as? String {
+                if let accessGroup = attributes[kSecAttrAccessGroup as! String] as? String {
                     item["accessGroup"] = accessGroup
                 }
             case .InternetPassword:
-                if let server = attributes[kSecAttrServer] as? String {
+                if let server = attributes[kSecAttrServer as! String] as? String {
                     item["server"] = server
                 }
-                if let proto = attributes[kSecAttrProtocol] as? String {
+                if let proto = attributes[kSecAttrProtocol as! String] as? String {
                     if let protocolType = ProtocolType(rawValue: proto) {
                         item["protocol"] = protocolType.description
                     }
                 }
-                if let auth = attributes[kSecAttrAuthenticationType] as? String {
+                if let auth = attributes[kSecAttrAuthenticationType as! String] as? String {
                     if let authenticationType = AuthenticationType(rawValue: auth) {
                         item["authenticationType"] = authenticationType.description
                     }
                 }
             }
             
-            if let key = attributes[kSecAttrAccount] as? String {
+            if let key = attributes[kSecAttrAccount as! String] as? String {
                 item["key"] = key
             }
-            if let data = attributes[kSecValueData] as? NSData {
-                if let text = NSString(data: data, encoding: NSUTF8StringEncoding) {
+            if let data = attributes[kSecValueData as! String] as? NSData {
+                if let text = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
                     item["value"] = text
                 } else  {
                     item["value"] = data
                 }
             }
             
-            if let accessible = attributes[kSecAttrAccessible] as? String {
+            if let accessible = attributes[kSecAttrAccessible as! String] as? String {
                 if let accessibility = Accessibility(rawValue: accessible) {
                     item["accessibility"] = accessibility.description
                 }
             }
-            if let synchronizable = attributes[kSecAttrSynchronizable] as? Bool {
+            if let synchronizable = attributes[kSecAttrSynchronizable as! String] as? Bool {
                 item["synchronizable"] = synchronizable ? "true" : "false"
             }
 
@@ -746,7 +764,7 @@ public class Keychain {
     }
     
     private class func securityError(#status: OSStatus) -> NSError {
-        let message = Status(rawValue: status).description
+        let message = Status(rawValue: status)!.description
         
         let error = NSError(domain: KeychainAccessErrorDomain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
         println("OSStatus error:[\(error.code)] \(error.localizedDescription)")
@@ -807,28 +825,28 @@ extension Options {
     func query() -> [String: AnyObject] {
         var query = [String: AnyObject]()
         
-        query[kSecClass] = itemClass.rawValue
-        query[kSecAttrSynchronizable] = kSecAttrSynchronizableAny
+        query[kSecClass as! String] = itemClass.rawValue
+        query[kSecAttrSynchronizable as! String] = kSecAttrSynchronizableAny
         
         switch itemClass {
         case .GenericPassword:
-            query[kSecAttrService] = service
+            query[kSecAttrService as! String] = service
             #if (!arch(i386) && !arch(x86_64)) || !os(iOS)
             if let accessGroup = self.accessGroup {
-                query[kSecAttrAccessGroup] = accessGroup
+                query[kSecAttrAccessGroup as! String] = accessGroup
             }
             #endif
         case .InternetPassword:
-            query[kSecAttrServer] = server.host
-            query[kSecAttrPort] = server.port
-            query[kSecAttrProtocol] = protocolType.rawValue
-            query[kSecAttrAuthenticationType] = authenticationType.rawValue
+            query[kSecAttrServer as! String] = server.host
+            query[kSecAttrPort as! String] = server.port
+            query[kSecAttrProtocol as! String] = protocolType.rawValue
+            query[kSecAttrAuthenticationType as! String] = authenticationType.rawValue
         }
         
         #if os(iOS)
         if authenticationPrompt != nil {
             if floor(NSFoundationVersionNumber) > floor(NSFoundationVersionNumber_iOS_7_1) {
-                query[kSecUseOperationPrompt] = authenticationPrompt
+                query[kSecUseOperationPrompt as! String] = authenticationPrompt
             } else {
                 println("Unavailable 'authenticationPrompt' attribute on iOS versions prior to 8.0.")
             }
@@ -843,18 +861,18 @@ extension Options {
         
         if key != nil {
             attributes = query()
-            attributes[kSecAttrAccount] = key
+            attributes[kSecAttrAccount as! String] = key
         } else {
             attributes = [String: AnyObject]()
         }
         
-        attributes[kSecValueData] = value
+        attributes[kSecValueData as! String] = value
         
         if label != nil {
-            attributes[kSecAttrLabel] = label
+            attributes[kSecAttrLabel as! String] = label
         }
         if comment != nil {
-            attributes[kSecAttrComment] = comment
+            attributes[kSecAttrComment as! String] = comment
         }
         
         #if os(iOS)
@@ -878,7 +896,7 @@ extension Options {
                     let message = Status.UnexpectedError.description
                     return (attributes, NSError(domain: KeychainAccessErrorDomain, code: Int(Status.UnexpectedError.rawValue), userInfo: [NSLocalizedDescriptionKey: message]))
                 }
-                attributes[kSecAttrAccessControl] = accessControl.takeUnretainedValue()
+                attributes[kSecAttrAccessControl as! String] = accessControl.takeUnretainedValue()
             } else {
                 #if os(iOS)
                 println("Unavailable 'Touch ID integration' on iOS versions prior to 8.0.")
@@ -894,11 +912,11 @@ extension Options {
                 println("Unavailable 'Accessibility.WhenPasscodeSetThisDeviceOnly' attribute on OS X versions prior to 10.10.")
                 #endif
             } else {
-                attributes[kSecAttrAccessible] = accessibility.rawValue
+                attributes[kSecAttrAccessible as! String] = accessibility.rawValue
             }
         }
         
-        attributes[kSecAttrSynchronizable] = synchronizable
+        attributes[kSecAttrSynchronizable as! String] = synchronizable
         
         return (attributes, nil)
     }
@@ -910,9 +928,9 @@ extension ItemClass : RawRepresentable, Printable {
     
     public init?(rawValue: String) {
         switch rawValue {
-        case kSecClassGenericPassword:
+        case kSecClassGenericPassword as! String:
             self = GenericPassword
-        case kSecClassInternetPassword:
+        case kSecClassInternetPassword as! String:
             self = InternetPassword
         default:
             return nil
@@ -922,9 +940,9 @@ extension ItemClass : RawRepresentable, Printable {
     public var rawValue: String {
         switch self {
         case GenericPassword:
-            return kSecClassGenericPassword
+            return kSecClassGenericPassword as! String
         case InternetPassword:
-            return kSecClassInternetPassword
+            return kSecClassInternetPassword as! String
         }
     }
     
@@ -942,67 +960,67 @@ extension ProtocolType : RawRepresentable, Printable {
     
     public init?(rawValue: String) {
         switch rawValue {
-        case kSecAttrProtocolFTP:
+        case kSecAttrProtocolFTP as! String:
             self = FTP
-        case kSecAttrProtocolFTPAccount:
+        case kSecAttrProtocolFTPAccount as! String:
             self = FTPAccount
-        case kSecAttrProtocolHTTP:
+        case kSecAttrProtocolHTTP as! String:
             self = HTTP
-        case kSecAttrProtocolIRC:
+        case kSecAttrProtocolIRC as! String:
             self = IRC
-        case kSecAttrProtocolNNTP:
+        case kSecAttrProtocolNNTP as! String:
             self = NNTP
-        case kSecAttrProtocolPOP3:
+        case kSecAttrProtocolPOP3 as! String:
             self = POP3
-        case kSecAttrProtocolSMTP:
+        case kSecAttrProtocolSMTP as! String:
             self = SMTP
-        case kSecAttrProtocolSOCKS:
+        case kSecAttrProtocolSOCKS as! String:
             self = SOCKS
-        case kSecAttrProtocolIMAP:
+        case kSecAttrProtocolIMAP as! String:
             self = IMAP
-        case kSecAttrProtocolLDAP:
+        case kSecAttrProtocolLDAP as! String:
             self = LDAP
-        case kSecAttrProtocolAppleTalk:
+        case kSecAttrProtocolAppleTalk as! String:
             self = AppleTalk
-        case kSecAttrProtocolAFP:
+        case kSecAttrProtocolAFP as! String:
             self = AFP
-        case kSecAttrProtocolTelnet:
+        case kSecAttrProtocolTelnet as! String:
             self = Telnet
-        case kSecAttrProtocolSSH:
+        case kSecAttrProtocolSSH as! String:
             self = SSH
-        case kSecAttrProtocolFTPS:
+        case kSecAttrProtocolFTPS as! String:
             self = FTPS
-        case kSecAttrProtocolHTTPS:
+        case kSecAttrProtocolHTTPS as! String:
             self = HTTPS
-        case kSecAttrProtocolHTTPProxy:
+        case kSecAttrProtocolHTTPProxy as! String:
             self = HTTPProxy
-        case kSecAttrProtocolHTTPSProxy:
+        case kSecAttrProtocolHTTPSProxy as! String:
             self = HTTPSProxy
-        case kSecAttrProtocolFTPProxy:
+        case kSecAttrProtocolFTPProxy as! String:
             self = FTPProxy
-        case kSecAttrProtocolSMB:
+        case kSecAttrProtocolSMB as! String:
             self = SMB
-        case kSecAttrProtocolRTSP:
+        case kSecAttrProtocolRTSP as! String:
             self = RTSP
-        case kSecAttrProtocolRTSPProxy:
+        case kSecAttrProtocolRTSPProxy as! String:
             self = RTSPProxy
-        case kSecAttrProtocolDAAP:
+        case kSecAttrProtocolDAAP as! String:
             self = DAAP
-        case kSecAttrProtocolEPPC:
+        case kSecAttrProtocolEPPC as! String:
             self = EPPC
-        case kSecAttrProtocolIPP:
+        case kSecAttrProtocolIPP as! String:
             self = IPP
-        case kSecAttrProtocolNNTPS:
+        case kSecAttrProtocolNNTPS as! String:
             self = NNTPS
-        case kSecAttrProtocolLDAPS:
+        case kSecAttrProtocolLDAPS as! String:
             self = LDAPS
-        case kSecAttrProtocolTelnetS:
+        case kSecAttrProtocolTelnetS as! String:
             self = TelnetS
-        case kSecAttrProtocolIMAPS:
+        case kSecAttrProtocolIMAPS as! String:
             self = IMAPS
-        case kSecAttrProtocolIRCS:
+        case kSecAttrProtocolIRCS as! String:
             self = IRCS
-        case kSecAttrProtocolPOP3S:
+        case kSecAttrProtocolPOP3S as! String:
             self = POP3S
         default:
             return nil
@@ -1012,67 +1030,67 @@ extension ProtocolType : RawRepresentable, Printable {
     public var rawValue: String {
         switch self {
         case FTP:
-            return kSecAttrProtocolFTP
+            return kSecAttrProtocolFTP as! String
         case FTPAccount:
-            return kSecAttrProtocolFTPAccount
+            return kSecAttrProtocolFTPAccount as! String
         case HTTP:
-            return kSecAttrProtocolHTTP
+            return kSecAttrProtocolHTTP as! String
         case IRC:
-            return kSecAttrProtocolIRC
+            return kSecAttrProtocolIRC as! String
         case NNTP:
-            return kSecAttrProtocolNNTP
+            return kSecAttrProtocolNNTP as! String
         case POP3:
-            return kSecAttrProtocolPOP3
+            return kSecAttrProtocolPOP3 as! String
         case SMTP:
-            return kSecAttrProtocolSMTP
+            return kSecAttrProtocolSMTP as! String
         case SOCKS:
-            return kSecAttrProtocolSOCKS
+            return kSecAttrProtocolSOCKS as! String
         case IMAP:
-            return kSecAttrProtocolIMAP
+            return kSecAttrProtocolIMAP as! String
         case LDAP:
-            return kSecAttrProtocolLDAP
+            return kSecAttrProtocolLDAP as! String
         case AppleTalk:
-            return kSecAttrProtocolAppleTalk
+            return kSecAttrProtocolAppleTalk as! String
         case AFP:
-            return kSecAttrProtocolAFP
+            return kSecAttrProtocolAFP as! String
         case Telnet:
-            return kSecAttrProtocolTelnet
+            return kSecAttrProtocolTelnet as! String
         case SSH:
-            return kSecAttrProtocolSSH
+            return kSecAttrProtocolSSH as! String
         case FTPS:
-            return kSecAttrProtocolFTPS
+            return kSecAttrProtocolFTPS as! String
         case HTTPS:
-            return kSecAttrProtocolHTTPS
+            return kSecAttrProtocolHTTPS as! String
         case HTTPProxy:
-            return kSecAttrProtocolHTTPProxy
+            return kSecAttrProtocolHTTPProxy as! String
         case HTTPSProxy:
-            return kSecAttrProtocolHTTPSProxy
+            return kSecAttrProtocolHTTPSProxy as! String
         case FTPProxy:
-            return kSecAttrProtocolFTPProxy
+            return kSecAttrProtocolFTPProxy as! String
         case SMB:
-            return kSecAttrProtocolSMB
+            return kSecAttrProtocolSMB as! String
         case RTSP:
-            return kSecAttrProtocolRTSP
+            return kSecAttrProtocolRTSP as! String
         case RTSPProxy:
-            return kSecAttrProtocolRTSPProxy
+            return kSecAttrProtocolRTSPProxy as! String
         case DAAP:
-            return kSecAttrProtocolDAAP
+            return kSecAttrProtocolDAAP as! String
         case EPPC:
-            return kSecAttrProtocolEPPC
+            return kSecAttrProtocolEPPC as! String
         case IPP:
-            return kSecAttrProtocolIPP
+            return kSecAttrProtocolIPP as! String
         case NNTPS:
-            return kSecAttrProtocolNNTPS
+            return kSecAttrProtocolNNTPS as! String
         case LDAPS:
-            return kSecAttrProtocolLDAPS
+            return kSecAttrProtocolLDAPS as! String
         case TelnetS:
-            return kSecAttrProtocolTelnetS
+            return kSecAttrProtocolTelnetS as! String
         case IMAPS:
-            return kSecAttrProtocolIMAPS
+            return kSecAttrProtocolIMAPS as! String
         case IRCS:
-            return kSecAttrProtocolIRCS
+            return kSecAttrProtocolIRCS as! String
         case POP3S:
-            return kSecAttrProtocolPOP3S
+            return kSecAttrProtocolPOP3S as! String
         }
     }
     
@@ -1148,21 +1166,21 @@ extension AuthenticationType : RawRepresentable, Printable {
     
     public init?(rawValue: String) {
         switch rawValue {
-        case kSecAttrAuthenticationTypeNTLM:
+        case kSecAttrAuthenticationTypeNTLM as! String:
             self = NTLM
-        case kSecAttrAuthenticationTypeMSN:
+        case kSecAttrAuthenticationTypeMSN as! String:
             self = MSN
-        case kSecAttrAuthenticationTypeDPA:
+        case kSecAttrAuthenticationTypeDPA as! String:
             self = DPA
-        case kSecAttrAuthenticationTypeRPA:
+        case kSecAttrAuthenticationTypeRPA as! String:
             self = RPA
-        case kSecAttrAuthenticationTypeHTTPBasic:
+        case kSecAttrAuthenticationTypeHTTPBasic as! String:
             self = HTTPBasic
-        case kSecAttrAuthenticationTypeHTTPDigest:
+        case kSecAttrAuthenticationTypeHTTPDigest as! String:
             self = HTTPDigest
-        case kSecAttrAuthenticationTypeHTMLForm:
+        case kSecAttrAuthenticationTypeHTMLForm as! String:
             self = HTMLForm
-        case kSecAttrAuthenticationTypeDefault:
+        case kSecAttrAuthenticationTypeDefault as! String:
             self = Default
         default:
             return nil
@@ -1172,21 +1190,21 @@ extension AuthenticationType : RawRepresentable, Printable {
     public var rawValue: String {
         switch self {
         case NTLM:
-            return kSecAttrAuthenticationTypeNTLM
+            return kSecAttrAuthenticationTypeNTLM as! String
         case MSN:
-            return kSecAttrAuthenticationTypeMSN
+            return kSecAttrAuthenticationTypeMSN as! String
         case DPA:
-            return kSecAttrAuthenticationTypeDPA
+            return kSecAttrAuthenticationTypeDPA as! String
         case RPA:
-            return kSecAttrAuthenticationTypeRPA
+            return kSecAttrAuthenticationTypeRPA as! String
         case HTTPBasic:
-            return kSecAttrAuthenticationTypeHTTPBasic
+            return kSecAttrAuthenticationTypeHTTPBasic as! String
         case HTTPDigest:
-            return kSecAttrAuthenticationTypeHTTPDigest
+            return kSecAttrAuthenticationTypeHTTPDigest as! String
         case HTMLForm:
-            return kSecAttrAuthenticationTypeHTMLForm
+            return kSecAttrAuthenticationTypeHTMLForm as! String
         case Default:
-            return kSecAttrAuthenticationTypeDefault
+            return kSecAttrAuthenticationTypeDefault as! String
         }
     }
     
@@ -1216,19 +1234,19 @@ extension Accessibility : RawRepresentable, Printable {
     
     public init?(rawValue: String) {
         switch rawValue {
-        case kSecAttrAccessibleWhenUnlocked:
+        case kSecAttrAccessibleWhenUnlocked as! String:
             self = WhenUnlocked
-        case kSecAttrAccessibleAfterFirstUnlock:
+        case kSecAttrAccessibleAfterFirstUnlock as! String:
             self = AfterFirstUnlock
-        case kSecAttrAccessibleAlways:
+        case kSecAttrAccessibleAlways as! String:
             self = Always
-        case kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly:
+        case kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly as! String:
             self = WhenPasscodeSetThisDeviceOnly
-        case kSecAttrAccessibleWhenUnlockedThisDeviceOnly:
+        case kSecAttrAccessibleWhenUnlockedThisDeviceOnly as! String:
             self = WhenUnlockedThisDeviceOnly
-        case kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly:
+        case kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as! String:
             self = AfterFirstUnlockThisDeviceOnly
-        case kSecAttrAccessibleAlwaysThisDeviceOnly:
+        case kSecAttrAccessibleAlwaysThisDeviceOnly as! String:
             self = AlwaysThisDeviceOnly
         default:
             return nil
@@ -1238,19 +1256,19 @@ extension Accessibility : RawRepresentable, Printable {
     public var rawValue: String {
         switch self {
         case WhenUnlocked:
-            return kSecAttrAccessibleWhenUnlocked
+            return kSecAttrAccessibleWhenUnlocked as! String
         case AfterFirstUnlock:
-            return kSecAttrAccessibleAfterFirstUnlock
+            return kSecAttrAccessibleAfterFirstUnlock as! String
         case Always:
-            return kSecAttrAccessibleAlways
+            return kSecAttrAccessibleAlways as! String
         case WhenPasscodeSetThisDeviceOnly:
-            return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
+            return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly as! String
         case WhenUnlockedThisDeviceOnly:
-            return kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+            return kSecAttrAccessibleWhenUnlockedThisDeviceOnly as! String
         case AfterFirstUnlockThisDeviceOnly:
-            return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+            return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as! String
         case AlwaysThisDeviceOnly:
-            return kSecAttrAccessibleAlwaysThisDeviceOnly
+            return kSecAttrAccessibleAlwaysThisDeviceOnly as! String
         }
     }
     
@@ -1277,8 +1295,10 @@ extension Accessibility : RawRepresentable, Printable {
 extension AuthenticationPolicy : RawRepresentable, Printable {
     
     public init?(rawValue: Int) {
+        var flags = SecAccessControlCreateFlags.UserPresence
+        
         switch rawValue {
-        case SecAccessControlCreateFlags.UserPresence.rawValue:
+        case flags.rawValue:
             self = UserPresence
         default:
             return nil
@@ -1325,9 +1345,9 @@ extension FailableOf: Printable, DebugPrintable {
 
 extension CFError {
     var error: NSError {
-        var domain = CFErrorGetDomain(self)
+        var domain = CFErrorGetDomain(self) as String
         var code = CFErrorGetCode(self)
-        var userInfo = CFErrorCopyUserInfo(self)
+        var userInfo = CFErrorCopyUserInfo(self) as [NSObject: AnyObject]
         
         return NSError(domain: domain, code: code, userInfo: userInfo)
     }
@@ -1715,7 +1735,7 @@ public enum Status : OSStatus {
 
 extension Status : RawRepresentable, Printable {
     
-    public init(rawValue: OSStatus) {
+    public init?(rawValue: OSStatus) {
         switch rawValue {
         case 0:
             self = Success
