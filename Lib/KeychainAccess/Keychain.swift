@@ -535,8 +535,8 @@ public class Keychain {
         return self.dynamicType.prettify(itemClass: itemClass, items: items())
     }
     
-    #if os(iOS)
     @availability(iOS, introduced=8.0)
+    @availability(OSX, unavailable)
     public func getSharedPassword(completion: (account: String?, password: String?, error: NSError?) -> () = { account, password, error -> () in }) {
         if let domain = server.host {
             self.dynamicType.requestSharedWebCredential(domain: domain, account: nil) { (credentials, error) -> () in
@@ -557,6 +557,7 @@ public class Keychain {
 
     #if os(iOS)
     @availability(iOS, introduced=8.0)
+    @availability(OSX, unavailable)
     public func getSharedPassword(account: String, completion: (password: String?, error: NSError?) -> () = { password, error -> () in }) {
         if let domain = server.host {
             self.dynamicType.requestSharedWebCredential(domain: domain, account: account) { (credentials, error) -> () in
@@ -579,6 +580,7 @@ public class Keychain {
 
     #if os(iOS)
     @availability(iOS, introduced=8.0)
+    @availability(OSX, unavailable)
     public func setSharedPassword(password: String, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         setSharedPassword(password as String?, account: account, completion: completion)
     }
@@ -603,6 +605,7 @@ public class Keychain {
 
     #if os(iOS)
     @availability(iOS, introduced=8.0)
+    @availability(OSX, unavailable)
     public func removeSharedPassword(account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         setSharedPassword(nil, account: account, completion: completion)
     }
@@ -610,6 +613,7 @@ public class Keychain {
 
     #if os(iOS)
     @availability(iOS, introduced=8.0)
+    @availability(OSX, unavailable)
     public class func requestSharedWebCredential(completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: nil, account: nil, completion: completion)
     }
@@ -617,6 +621,7 @@ public class Keychain {
 
     #if os(iOS)
     @availability(iOS, introduced=8.0)
+    @availability(OSX, unavailable)
     public class func requestSharedWebCredential(#domain: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain, account: nil, completion: completion)
     }
@@ -624,6 +629,7 @@ public class Keychain {
 
     #if os(iOS)
     @availability(iOS, introduced=8.0)
+    @availability(OSX, unavailable)
     public class func requestSharedWebCredential(#domain: String, account: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain as String?, account: account as String?, completion: completion)
     }
@@ -648,9 +654,11 @@ public class Keychain {
                     if let account = credentials[kSecAttrAccount as! String] as? String {
                         credential["account"] = account
                     }
+                    #if os(iOS)
                     if let password = credentials[kSecSharedPassword.takeUnretainedValue() as! String] as? String {
                         credential["password"] = password
                     }
+                    #endif
                     return credential
                 }
                 completion(credentials: credentials, error: remoteError)
@@ -663,10 +671,10 @@ public class Keychain {
 
     #if os(iOS)
     @availability(iOS, introduced=8.0)
+    @availability(OSX, unavailable)
     public class func generatePassword() -> String {
         return SecCreateSharedWebCredentialPassword().takeUnretainedValue() as! String
     }
-    #endif
     
     // MARK:
     
@@ -4012,3 +4020,15 @@ extension Status : RawRepresentable, Printable {
         }
     }
 }
+
+#if os(OSX)
+func SecCreateSharedWebCredentialPassword() -> Unmanaged<CFString>! {
+    fatalError("\(__FUNCTION__) does not exists")
+}
+func SecAddSharedWebCredential(fqdn: CFString!, account: CFString!, password: CFString!, completionHandler: ((CFError!) -> Void)!) {
+    fatalError("\(__FUNCTION__) does not exists")
+}
+func SecRequestSharedWebCredential(fqdn: CFString!, account: CFString!, completionHandler: ((CFArray!, CFError!) -> Void)!) {
+    fatalError("\(__FUNCTION__) does not exists")
+}
+#endif
