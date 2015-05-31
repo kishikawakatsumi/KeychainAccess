@@ -12,5 +12,4 @@ dependencies:
 
 test:
   override:
-    - (cd Lib && bundle exec rake test:ios test:osx coverage)
-    - (cd Lib && coveralls)
+    - (cd SwiftCov && script/cibuild)
