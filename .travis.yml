@@ -11,7 +11,6 @@ script:
   - sudo chgrp wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 7.1.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
   - sudo chgrp wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 8.1.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
   - sudo chgrp wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 8.2.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
-  - sudo chgrp wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 8.3.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
   - (cd SwiftCov && sudo script/cibuild)
 branches:
   only:
