@@ -35,7 +35,6 @@ class CoverageReporterTests: XCTestCase {
                                                 "-scheme", "ExampleFramework-iOS",
                                                 "-configuration", "Release",
                                                 "-sdk", "iphonesimulator",
-                                                "-destination", "name=iPhone 6 Plus,OS=8.3",
                                                 "-derivedDataPath", temporaryDirectory])
         switch xcodebuild.showBuildSettings() {
         case let .Success(output):
