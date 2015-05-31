@@ -1,6 +1,15 @@
+PATH
+  remote: ../Tools/swift_coverage
+  specs:
+    swift_coverage (0.1.0)
+      commander
+
 GEM
   remote: https://rubygems.org/
   specs:
+    commander (4.3.4)
+      highline (~> 1.7.2)
+    highline (1.7.2)
     rake (10.4.2)
     xcjobs (0.1.0)
     xcpretty (0.1.10)
@@ -10,5 +19,6 @@ PLATFORMS
 
 DEPENDENCIES
   rake
+  swift_coverage!
   xcjobs
   xcpretty

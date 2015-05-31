@@ -1,11 +1,16 @@
 language: objective-c
+osx_image: beta-xcode6.3
 cache:
   directories:
     - Lib/vendor/bundle
 install:
+  - sudo easy_install cpp-coveralls
+  - (cd SwiftCov && sudo make install)
   - (cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)
 script:
   - (cd Lib && bundle exec rake test:ios test:osx)
+  - (cd Lib && swiftcov generate xcodebuild test -project KeychainAccess.xcodeproj -scheme KeychainAccess-Mac -sdk macosx -configuration Release -derivedDataPath build)
+  - (cd Lib && coveralls --extension '.swift' --no-gcov --verbose)
 branches:
   only:
     - master

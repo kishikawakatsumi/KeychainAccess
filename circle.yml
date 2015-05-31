@@ -3,12 +3,14 @@ machine:
     version: "6.3.1"
 
 dependencies:
+  pre:
+    - sudo easy_install cpp-coveralls
   override:
     - (cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)
-
   cache_directories:
     - 'Lib/vendor/bundle'
 
 test:
   override:
-    - (cd Lib && bundle exec rake test:ios test:osx coverage coverage:coveralls)
+    - (cd Lib && bundle exec rake test:ios test:osx coverage)
+    - (cd Lib && coveralls)
