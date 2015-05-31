@@ -8,7 +8,7 @@ install:
   - (cd SwiftCov && sudo make install)
   - (cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)
 script:
-  - (cd SwiftCov && script/cibuild)
+  - (cd SwiftCov && sudo script/cibuild)
 branches:
   only:
     - master
