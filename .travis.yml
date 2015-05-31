@@ -8,13 +8,13 @@ install:
   - (cd SwiftCov && sudo make install)
   - (cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)
 script:
-  - sudo chgrp wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 7.1.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
-  - sudo chgrp wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 8.1.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
-  - sudo chgrp wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 8.2.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
+  # - sudo chgrp wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 7.1.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
+  # - sudo chgrp wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 8.1.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
+  # - sudo chgrp wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 8.2.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
   # - (cd Lib && bundle exec rake test:ios test:osx)
-  - (cd SwiftCov &&swiftcov generate xcodebuild test -project ./Examples/ExampleFramework/ExampleFramework.xcodeproj -scheme ExampleFramework-iOS -configuration Release -sdk iphonesimulator -destination "name=iPhone 6,OS=8.3")
-  - xcrun simctl list
-  - (cd SwiftCov && swiftcov generate xcodebuild test -project ./Examples/ExampleFramework/ExampleFramework.xcodeproj -scheme ExampleFramework-Mac -configuration Release -sdk macosx)
+  - (cd SwiftCov &&swiftcov generate --debug xcodebuild test -project ./Examples/ExampleFramework/ExampleFramework.xcodeproj -scheme ExampleFramework-iOS -configuration Release -sdk iphonesimulator -destination "name=iPhone 6,OS=8.3")
+  # - xcrun simctl list
+  - (cd SwiftCov && swiftcov generate --debug xcodebuild test -project ./Examples/ExampleFramework/ExampleFramework.xcodeproj -scheme ExampleFramework-Mac -configuration Release -sdk macosx)
 branches:
   only:
     - master
