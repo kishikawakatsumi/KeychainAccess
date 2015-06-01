@@ -13,6 +13,4 @@ dependencies:
 test:
   override:
     - (cd Lib && bundle exec rake test:ios test:osx coverage)
-    - echo $TRAVIS_JOB_ID
-    - echo $CIRCLE_BUILD_NUM
-    - (cd Lib && TRAVIS_JOB_ID=$CIRCLE_BUILD_NUM coveralls --extension '.swift' --no-gcov --verbose)
+    - (cd Lib && coveralls --extension '.swift' --no-gcov --verbose)
