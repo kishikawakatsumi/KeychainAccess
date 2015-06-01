@@ -1,0 +1,3 @@
+github "Quick/Quick" ~> 0.3
+github "Quick/Nimble" ~> 0.4
+github "jspahrsummers/xcconfigs" ~> 0.8
