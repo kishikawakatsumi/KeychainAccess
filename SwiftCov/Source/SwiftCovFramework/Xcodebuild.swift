@@ -32,7 +32,7 @@ public struct Xcodebuild {
     }
 
     public func buildExecutable() -> Result<String, TerminationStatus> {
-        let command = Shell(commandPath: "/usr/bin/xcrun", arguments: ["xcodebuild", "SWIFT_OPTIMIZATION_LEVEL=-Onone", "ONLY_ACTIVE_ARCH=NO"] + arguments, verbose: verbose)
+        let command = Shell(commandPath: "/usr/bin/xcrun", arguments: ["xcodebuild", "SWIFT_OPTIMIZATION_LEVEL=-Onone", "ONLY_ACTIVE_ARCH=NO"] + arguments, verbose: true)
         return command.output()
     }
 }
