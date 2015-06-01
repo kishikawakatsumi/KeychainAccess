@@ -14,6 +14,7 @@
 		140F19681A49D79500B0016A /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140F195C1A49D79400B0016A /* KeychainAccess.framework */; };
 		140F196F1A49D79500B0016A /* KeychainAccessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F196E1A49D79500B0016A /* KeychainAccessTests.swift */; };
 		140F197B1A49D89200B0016A /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F197A1A49D89200B0016A /* Keychain.swift */; };
+		142852A71B1CED3500F27BD9 /* KeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 140F19611A49D79400B0016A /* KeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +142,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				142852A71B1CED3500F27BD9 /* KeychainAccess.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
