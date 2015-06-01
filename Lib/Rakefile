@@ -1,13 +1,13 @@
 require 'xcjobs'
 
 def destinations
-  [ 'name=iPad 2,OS=8.1',
-    'name=iPad Air,OS=8.1',
-    'name=iPhone 4s,OS=8.1',
-    'name=iPhone 5,OS=8.1',
-    'name=iPhone 5s,OS=8.1',
-    'name=iPhone 6,OS=8.1',
-    'name=iPhone 6 Plus,OS=8.1'
+  [ 'name=iPad 2,OS=8.3',
+    'name=iPad Air,OS=8.3',
+    'name=iPhone 4s,OS=8.3',
+    'name=iPhone 5,OS=8.3',
+    'name=iPhone 5s,OS=8.3',
+    'name=iPhone 6,OS=8.3',
+    'name=iPhone 6 Plus,OS=8.3'
   ]
 end
 
@@ -61,4 +61,16 @@ XCJobs::Test.new('test:osx') do |t|
   t.configuration = 'Release'
   t.build_dir = 'build'
   t.formatter = 'xcpretty -c'
+end
+
+desc "Collect code coverage"
+task :coverage do
+  sh 'swift_coverage -- xcodebuild test -project KeychainAccess.xcodeproj -scheme KeychainAccess-iOS -sdk iphonesimulator -configuration Release -derivedDataPath build -destination "name=iPhone 6,OS=8.3" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO GCC_SYMBOLS_PRIVATE_EXTERN=NO'
+end
+
+XCJobs::Coverage::Coveralls.new() do |t|
+  t.repo_token = 'lysDOlAt3k4EEBhtp623IleisaTlalUwU'
+  t.add_extension('.swift')
+  t.add_exclude('Examples')
+  t.add_exclude('Lib/KeychainAccessTests')
 end

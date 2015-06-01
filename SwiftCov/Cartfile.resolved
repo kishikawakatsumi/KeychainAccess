@@ -1,0 +1,4 @@
+github "robrix/Box" "1.2.2"
+github "jspahrsummers/xcconfigs" "0.8"
+github "antitypical/Result" "0.4.3"
+github "Carthage/Commandant" "0.6"
