@@ -333,20 +333,36 @@ class KeychainAccessTests: XCTestCase {
         
         XCTAssertNil(keychain["username"], "not stored username")
         XCTAssertNil(keychain["password"], "not stored password")
+        XCTAssertNil(keychain[string: "username"], "not stored username")
+        XCTAssertNil(keychain[string: "password"], "not stored password")
         
         keychain["username"] = "kishikawakatsumi"
         XCTAssertEqual(keychain["username"]!, "kishikawakatsumi", "stored username")
+        XCTAssertEqual(keychain[string: "username"]!, "kishikawakatsumi", "stored username")
         
         keychain["password"] = "password1234"
         XCTAssertEqual(keychain["password"]!, "password1234", "stored password")
+        XCTAssertEqual(keychain[string: "password"]!, "password1234", "stored password")
         
         keychain["username"] = nil
         XCTAssertNil(keychain["username"], "removed username")
         XCTAssertEqual(keychain["password"]!, "password1234", "left password")
+        XCTAssertNil(keychain[string: "username"], "removed username")
+        XCTAssertEqual(keychain[string: "password"]!, "password1234", "left password")
         
         keychain["password"] = nil
         XCTAssertNil(keychain["username"], "removed username")
         XCTAssertNil(keychain["password"], "removed password")
+        XCTAssertNil(keychain[string: "username"], "removed username")
+        XCTAssertNil(keychain[string: "password"], "removed password")
+
+        let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
+        let JSONData = NSJSONSerialization.dataWithJSONObject(JSONObject, options: nil, error: nil)
+
+        XCTAssertNil(keychain[data:"JSONData"], "not stored JSON data")
+
+        keychain[data: "JSONData"] = JSONData
+        XCTAssertEqual(keychain[data:"JSONData"]!, JSONData!, "stored JSON data")
     }
     
     // MARK:
