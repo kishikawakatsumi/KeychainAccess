@@ -468,6 +468,34 @@ public class Keychain {
             }
         }
     }
+
+    public subscript(string key: String) -> String? {
+        get {
+            return get(key)
+        }
+
+        set {
+            if let value = newValue {
+                set(value, key: key)
+            } else {
+                remove(key)
+            }
+        }
+    }
+
+    public subscript(data key: String) -> NSData? {
+        get {
+            return getData(key)
+        }
+
+        set {
+            if let value = newValue {
+                set(value, key: key)
+            } else {
+                remove(key)
+            }
+        }
+    }
     
     // MARK:
     

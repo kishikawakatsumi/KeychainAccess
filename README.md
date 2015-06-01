@@ -69,8 +69,20 @@ let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS, auth
 
 #### subscripting
 
+##### for String
+
 ```swift
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
+```
+
+```swift
+keychain[string: "kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
+```
+
+##### for NSData
+
+```swift
+keychain[data: "secret"] = NSData(contentsOfFile: "secret.bin")
 ```
 
 #### set method
@@ -89,10 +101,22 @@ if let error = keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishik
 
 ### :key: Obtaining an item
 
-#### subscripting (automatically converts to string)
+#### subscripting
+
+##### for String (If the value is NSData, attempt to convert to String)
 
 ```swift
 let token = keychain["kishikawakatsumi"]
+```
+
+```swift
+let token = keychain[string: "kishikawakatsumi"]
+```
+
+##### for NSData
+
+```swift
+let secretData = keychain[data: "secret"]
 ```
 
 #### get methods
