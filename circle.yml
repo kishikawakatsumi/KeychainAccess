@@ -4,7 +4,7 @@ machine:
 
 dependencies:
   pre:
-    - sudo easy_install cpp-coveralls
+    - sudo easy_install cpp-coveralls pyyaml
   override:
     - (cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)
   cache_directories:
