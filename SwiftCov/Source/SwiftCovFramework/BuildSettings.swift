@@ -47,6 +47,7 @@ public struct BuildSettings {
         let lines: [String] = {
             var lines = [String]()
             output.enumerateLines { line, _ in
+                println(line)
                 lines.append(line.stringByTrimmingCharactersInSet(whitespaceAndNewlineCharacterSet))
             }
             return lines.filter { !$0.isEmpty }
