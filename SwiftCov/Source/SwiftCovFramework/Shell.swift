@@ -49,7 +49,7 @@ public class Shell {
 
     private func createTask() -> NSTask {
         let task = NSTask()
-        task.setValue(false, forKey: "startsNewProcessGroup")
+//        task.setValue(false, forKey: "startsNewProcessGroup")
         task.launchPath = commandPath
         task.arguments = arguments
         if let workingDirectoryPath = workingDirectoryPath {
