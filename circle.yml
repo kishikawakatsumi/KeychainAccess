@@ -13,4 +13,4 @@ dependencies:
 test:
   override:
     - (cd Lib && bundle exec rake test:ios test:osx coverage)
-    - (coveralls --extension '.swift' --no-gcov --verbose)
+    - (cd Lib && coveralls --root ./ --extension '.swift' --no-gcov --verbose)
