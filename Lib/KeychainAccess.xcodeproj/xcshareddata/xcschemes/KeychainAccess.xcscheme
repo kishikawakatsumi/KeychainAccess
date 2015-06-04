@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0610"
+   LastUpgradeVersion = "0630"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "140C8F091A4EBE3100F85556"
+               BlueprintIdentifier = "140F195B1A49D79400B0016A"
                BuildableName = "KeychainAccess.framework"
-               BlueprintName = "KeychainAccess-Mac"
-               ReferencedContainer = "container:KeychainAccess.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "140C8F131A4EBE3100F85556"
-               BuildableName = "KeychainAccess-MacTests.xctest"
-               BlueprintName = "KeychainAccess-MacTests"
+               BlueprintName = "KeychainAccess"
                ReferencedContainer = "container:KeychainAccess.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,26 +28,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "140C8F131A4EBE3100F85556"
-               BuildableName = "KeychainAccess-MacTests.xctest"
-               BlueprintName = "KeychainAccess-MacTests"
-               ReferencedContainer = "container:KeychainAccess.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "140C8F091A4EBE3100F85556"
-            BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess-Mac"
-            ReferencedContainer = "container:KeychainAccess.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -75,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "140C8F091A4EBE3100F85556"
+            BlueprintIdentifier = "140F195B1A49D79400B0016A"
             BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess-Mac"
+            BlueprintName = "KeychainAccess"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -93,9 +60,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "140C8F091A4EBE3100F85556"
+            BlueprintIdentifier = "140F195B1A49D79400B0016A"
             BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess-Mac"
+            BlueprintName = "KeychainAccess"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
