@@ -424,7 +424,7 @@ public class Keychain {
     public func removeAll() -> NSError? {
         var query = options.query()
         #if !os(iOS)
-        query[kSecMatchLimit as! String] = kSecMatchLimitAll
+        query[kSecMatchLimit as String] = kSecMatchLimitAll
         #endif
         
         let status = SecItemDelete(query)
@@ -861,7 +861,7 @@ extension Options {
             query[kSecAttrService as String] = service
             #if (!arch(i386) && !arch(x86_64)) || !os(iOS)
             if let accessGroup = self.accessGroup {
-                query[kSecAttrAccessGroup as! String] = accessGroup
+                query[kSecAttrAccessGroup as String] = accessGroup
             }
             #endif
         case .InternetPassword:
@@ -873,11 +873,7 @@ extension Options {
         
         #if os(iOS)
         if authenticationPrompt != nil {
-            if floor(NSFoundationVersionNumber) > floor(NSFoundationVersionNumber_iOS_7_1) {
-                query[kSecUseOperationPrompt as String] = authenticationPrompt
-            } else {
-                print("Unavailable 'authenticationPrompt' attribute on iOS versions prior to 8.0.")
-            }
+            query[kSecUseOperationPrompt as String] = authenticationPrompt
         }
         #endif
         
@@ -902,14 +898,9 @@ extension Options {
         if comment != nil {
             attributes[kSecAttrComment as String] = comment
         }
-        
-        #if os(iOS)
-        let iOS_7_1_or_10_9_2 = NSFoundationVersionNumber_iOS_7_1
-        #else
-        let iOS_7_1_or_10_9_2 = NSFoundationVersionNumber10_9_2
-        #endif
+
         if let policy = authenticationPolicy {
-            if floor(NSFoundationVersionNumber) > floor(iOS_7_1_or_10_9_2) {
+            if #available(OSX 10.10, *) {
                 var error: Unmanaged<CFError>?
                 let accessControl = SecAccessControlCreateWithFlags(
                     kCFAllocatorDefault,
@@ -917,6 +908,7 @@ extension Options {
                     SecAccessControlCreateFlags(rawValue: policy.rawValue),
                     &error
                 )
+
                 if let error = error?.takeUnretainedValue() {
                     return (attributes, error.error)
                 }
@@ -926,22 +918,10 @@ extension Options {
                 }
                 attributes[kSecAttrAccessControl as String] = accessControl.takeUnretainedValue()
             } else {
-                #if os(iOS)
-                print("Unavailable 'Touch ID integration' on iOS versions prior to 8.0.")
-                #else
                 print("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
-                #endif
             }
         } else {
-            if floor(NSFoundationVersionNumber) <= floor(iOS_7_1_or_10_9_2) && accessibility == .WhenPasscodeSetThisDeviceOnly {
-                #if os(iOS)
-                print("Unavailable 'Accessibility.WhenPasscodeSetThisDeviceOnly' attribute on iOS versions prior to 8.0.")
-                #else
-                print("Unavailable 'Accessibility.WhenPasscodeSetThisDeviceOnly' attribute on OS X versions prior to 10.10.")
-                #endif
-            } else {
-                attributes[kSecAttrAccessible as String] = accessibility.rawValue
-            }
+            attributes[kSecAttrAccessible as String] = accessibility.rawValue
         }
         
         attributes[kSecAttrSynchronizable as String] = synchronizable
@@ -1261,6 +1241,9 @@ extension AuthenticationType : RawRepresentable, CustomStringConvertible {
 extension Accessibility : RawRepresentable, CustomStringConvertible {
     
     public init?(rawValue: String) {
+        guard #available(OSX 10.10, *) else  {
+            return nil
+        }
         switch rawValue {
         case String(kSecAttrAccessibleWhenUnlocked):
             self = WhenUnlocked
@@ -1290,7 +1273,11 @@ extension Accessibility : RawRepresentable, CustomStringConvertible {
         case Always:
             return kSecAttrAccessibleAlways as String
         case WhenPasscodeSetThisDeviceOnly:
-            return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly as String
+            if #available(OSX 10.10, *) {
+                return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly as String
+            } else {
+                fatalError("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
+            }
         case WhenUnlockedThisDeviceOnly:
             return kSecAttrAccessibleWhenUnlockedThisDeviceOnly as String
         case AfterFirstUnlockThisDeviceOnly:
@@ -1323,6 +1310,9 @@ extension Accessibility : RawRepresentable, CustomStringConvertible {
 extension AuthenticationPolicy : RawRepresentable, CustomStringConvertible {
     
     public init?(rawValue: Int) {
+        guard #available(OSX 10.10, *) else  {
+            return nil
+        }
         let flags = SecAccessControlCreateFlags.UserPresence
         
         switch rawValue {
@@ -1336,7 +1326,11 @@ extension AuthenticationPolicy : RawRepresentable, CustomStringConvertible {
     public var rawValue: Int {
         switch self {
         case UserPresence:
-            return SecAccessControlCreateFlags.UserPresence.rawValue
+            if #available(OSX 10.10, *) {
+                return SecAccessControlCreateFlags.UserPresence.rawValue
+            } else {
+                fatalError("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
+            }
         }
     }
     
