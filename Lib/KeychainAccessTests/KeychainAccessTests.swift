@@ -280,7 +280,12 @@ class KeychainAccessTests: XCTestCase {
     
     func testSetData() {
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
-        let JSONData = NSJSONSerialization.dataWithJSONObject(JSONObject, options: nil, error: nil)
+        let JSONData: NSData?
+        do {
+            JSONData = try NSJSONSerialization.dataWithJSONObject(JSONObject, options: [])
+        } catch _ {
+            JSONData = nil
+        }
         
         let keychain = Keychain(service: "Twitter")
         
@@ -313,7 +318,12 @@ class KeychainAccessTests: XCTestCase {
     
     func testRemoveData() {
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
-        let JSONData = NSJSONSerialization.dataWithJSONObject(JSONObject, options: nil, error: nil)
+        let JSONData: NSData?
+        do {
+            JSONData = try NSJSONSerialization.dataWithJSONObject(JSONObject, options: [])
+        } catch _ {
+            JSONData = nil
+        }
         
         let keychain = Keychain(service: "Twitter")
         
@@ -357,7 +367,12 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(keychain[string: "password"], "removed password")
 
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
-        let JSONData = NSJSONSerialization.dataWithJSONObject(JSONObject, options: nil, error: nil)
+        let JSONData: NSData?
+        do {
+            JSONData = try NSJSONSerialization.dataWithJSONObject(JSONObject, options: [])
+        } catch _ {
+            JSONData = nil
+        }
 
         XCTAssertNil(keychain[data:"JSONData"], "not stored JSON data")
 
@@ -403,6 +418,7 @@ class KeychainAccessTests: XCTestCase {
             }
             
             if let error = username.error { // error object
+                XCTAssertNotNil(error)
                 XCTFail("unknown error occurred")
             } else {
                 XCTAssertEqual(username.value!, "kishikawa_katsumi")
@@ -429,6 +445,7 @@ class KeychainAccessTests: XCTestCase {
             }
             
             if let error = password.error { // error object
+                XCTAssertNotNil(error)
                 XCTFail("unknown error occurred")
             } else {
                 XCTAssertEqual(password.value!, "password_1234")
@@ -467,6 +484,7 @@ class KeychainAccessTests: XCTestCase {
             }
             
             if let error = username.error { // error object
+                XCTAssertNotNil(error)
                 XCTFail("unknown error occurred")
             } else {
                 XCTAssertEqual(username.value!, "katsumi_kishikawa")
@@ -493,6 +511,7 @@ class KeychainAccessTests: XCTestCase {
             }
             
             if let error = password.error { // check error object
+                XCTAssertNotNil(error)
                 XCTFail("unknown error occurred")
             } else {
                 XCTAssertEqual(password.value!, "1234_password")
