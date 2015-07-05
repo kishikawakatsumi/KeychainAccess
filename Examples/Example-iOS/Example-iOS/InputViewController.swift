@@ -36,14 +36,14 @@ class InputViewController: UITableViewController {
     }
 
     @IBAction func saveAction(sender: UIBarButtonItem) {
-        let keychain = Keychain(service: serviceField.text)
-        keychain[usernameField.text] = passwordField.text
+        let keychain = Keychain(service: serviceField.text!)
+        keychain[usernameField.text!] = passwordField.text
         
         dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func editingChanged(sender: UITextField) {
-        saveButton.enabled = !usernameField.text.isEmpty && !passwordField.text.isEmpty
+        saveButton.enabled = !(usernameField.text?.isEmpty ?? true) && !(passwordField.text?.isEmpty ?? true)
     }
 
 }
