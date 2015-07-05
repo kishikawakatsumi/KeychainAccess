@@ -1895,7 +1895,7 @@ extension Status : RawRepresentable, CustomStringConvertible {
             self = ReturnAttributesUnsupported
         case -34010:
             self = ReturnRefUnsupported
-        case -34010:
+        case -34011:
             self = ReturnPersitentRefUnsupported
         case -34012:
             self = ValueRefUnsupported
@@ -2655,7 +2655,7 @@ extension Status : RawRepresentable, CustomStringConvertible {
         case ReturnRefUnsupported:
             return -34010
         case ReturnPersitentRefUnsupported:
-            return -34010
+            return -34011
         case ValueRefUnsupported:
             return -34012
         case ValuePersistentRefUnsupported:
