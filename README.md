@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/cocoapods/l/KeychainAccess.svg?style=flat)](http://cocoadocs.org/docsets/KeychainAccess)
 [![Platform](https://img.shields.io/cocoapods/p/KeychainAccess.svg?style=flat)](http://cocoadocs.org/docsets/KeychainAccess)
 
-**A Swift 2.0 and compatible version is in the works. Check out the [`swift-2.0` branch](https://github.com/kishikawakatsumi/KeychainAccess/tree/swift-2.0).**
+**A Swift 2.0 compatible version is in the works. Check out the [`swift-2.0` branch](https://github.com/kishikawakatsumi/KeychainAccess/tree/swift-2.0).**
 
 - **[Install via CocoaPods](#swift-2.0-cocoapods)**
 - **[Install using Cathage](#swift-2.0-carthage)**
