@@ -692,7 +692,10 @@ public class Keychain {
     #if os(iOS)
     @available(iOS, introduced=8.0)
     public class func generatePassword() -> String {
-        return SecCreateSharedWebCredentialPassword() as! String
+        if let password = SecCreateSharedWebCredentialPassword() {
+            return password as String
+        }
+        return ""
     }
     #endif
     
@@ -912,11 +915,13 @@ extension Options {
                 if let error = error?.takeUnretainedValue() {
                     return (attributes, error.error)
                 }
-                if accessControl == nil {
+                if let accessControl = accessControl {
+                    attributes[kSecAttrAccessControl as String] = accessControl
+                }
+                else {
                     let message = Status.UnexpectedError.description
                     return (attributes, NSError(domain: KeychainAccessErrorDomain, code: Int(Status.UnexpectedError.rawValue), userInfo: [NSLocalizedDescriptionKey: message]))
                 }
-                attributes[kSecAttrAccessControl as String] = accessControl
             } else {
                 print("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
             }
