@@ -1,0 +1,100 @@
+#!/usr/bin/env ruby
+
+require 'commander/import'
+require 'open3'
+
+require "swift_coverage"
+
+HighLine.track_eof = false # Fix for built-in Ruby
+Signal.trap("INT") {} # Suppress backtrace when exiting command
+
+program :version, SwiftCoverage::VERSION
+program :description, 'Swift code coverage report tool'
+
+program :help, 'Author', 'kishikawa katsumi <kishikawakatsumi@mac.com>'
+program :help, 'Website', 'https://github.com/kishikawakatsumi'
+program :help_formatter, :compact
+
+default_command :help
+
+command :xcodebuild do |c|
+  c.syntax = 'swift_coverage xcodebuild [test] [<xcodebuild option>]...'
+  c.summary = ''
+  c.description = ''
+
+  c.example 'description', 'swift_coverage xcodebuild test -project <project> -scheme <scheme>'
+  c.option '--[no-]hitcount', 'Disable/Enable collecting hit count (for performance)'
+
+  c.action do |args, options|
+    say_error "Abort" and abort if args.empty? or !args.include? 'test'
+
+    puts %[[Info] xcodebuild #{args.join(' ')}]
+    puts '[Info] Load settings ...'
+
+    out, status = Open3.capture2(*(['xcodebuild'] + args + ['-showBuildSettings']))
+    lines = out.lines
+
+    sdk_name = lines.reverse.grep(/\bSDK_NAME\b/).first.split('=').last.strip
+    sdkroot = lines.reverse.grep(/\bSDKROOT\b/).first.split('=').last.strip.gsub(/iPhoneOS/, 'iPhoneSimulator')
+    built_products_dir = lines.reverse.grep(/\bBUILT_PRODUCTS_DIR\b/).first.split('=').last.strip.gsub(/iphoneos/, 'iphonesimulator')
+    full_product_name = lines.reverse.grep(/\bFULL_PRODUCT_NAME\b/).first.split('=').last.strip
+    srcroot = lines.grep(/\bSRCROOT\b/).first.split('=').last.strip
+    object_file_dir_normal = lines.grep(/\bOBJECT_FILE_DIR_normal\b/).first.split('=').last.strip.gsub(/iphoneos/, 'iphonesimulator')
+    current_arch = lines.grep(/\bCURRENT_ARCH\b/).first.split('=').last.strip.gsub(/arm64/, 'x86_64')
+
+    puts %([Info] SDK_NAME=#{sdk_name}).gsub(/iphoneos/, 'iphonesimulator')
+    puts %([Info] BUILT_PRODUCTS_DIR=#{built_products_dir})
+    puts %([Info] FULL_PRODUCT_NAME=#{full_product_name})
+    puts %([Info] SRCROOT=#{srcroot})
+
+    puts '[Info] Build and run tests ...'
+
+    out, status = Open3.capture2(*(['xcodebuild'] + args + ['SWIFT_OPTIMIZATION_LEVEL=-Onone']))
+    say_error "Abort" and abort if !status.success?
+    puts out
+
+    puts '[Info] Collect coverage information ...'
+
+    script = File.join(bin, 'coverage.py')
+    target = File.join(built_products_dir, full_product_name)
+    output_dir = File.join(object_file_dir_normal, current_arch)
+
+    puts %([Info] target: #{target})
+    puts %([Info] output_dir: #{output_dir})
+
+    xcode_path = %x(xcode-select --print-path).strip
+
+    dyld_fallback_framework_path = "/Library/Frameworks:/Network/Library/Frameworks:/System/Library/Frameworks:#{xcode_path}/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks:#{xcode_path}/Library/PrivateFrameworks:#{xcode_path}/../OtherFrameworks:#{xcode_path}/../SharedFrameworks:#{xcode_path}/Library/Frameworks:#{xcode_path}/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"
+    dyld_fallback_library_path = "#{xcode_path}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib"
+
+    env = {}
+    env['SWIFTCOV_SDK_NAME'] = sdk_name unless sdk_name.empty?
+    env['SWIFTCOV_DYLD_FRAMEWORK_PATH'] = built_products_dir
+    env['SWIFTCOV_DYLD_LIBRARY_PATH'] = built_products_dir
+    env['SWIFTCOV_DYLD_FALLBACK_FRAMEWORK_PATH'] = dyld_fallback_framework_path
+    env['SWIFTCOV_DYLD_FALLBACK_LIBRARY_PATH'] = dyld_fallback_library_path
+    env['SWIFTCOV_DYLD_ROOT_PATH'] = sdkroot
+    env['SWIFTCOV_HIT_COUNT'] = 'YES' if options.hitcount
+
+    command = ['python', script, target, srcroot, output_dir]
+    puts %([Info] #{command.join(' ')})
+
+    out, status = Open3.capture2(env, *(command))
+    puts out
+    say_error "Abort" and abort if !status.success?
+
+    say_ok '[Info] Coverage report generation finished successfully'
+  end
+
+  def self.root
+    File.dirname __dir__
+  end
+
+  def self.bin
+    File.join root, 'bin'
+  end
+
+  def self.lib
+    File.join root, 'lib'
+  end
+end
