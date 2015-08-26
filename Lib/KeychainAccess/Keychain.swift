@@ -326,7 +326,7 @@ public class Keychain {
         var query = options.query()
         
         query[kSecMatchLimit as! String] = kSecMatchLimitOne
-        query[kSecReturnData as! String] = kCFBooleanTrue
+        query[kSecReturnData as! String] = true
         
         query[kSecAttrAccount as! String] = key
         
@@ -362,7 +362,7 @@ public class Keychain {
         query[kSecAttrAccount as! String] = key
         #if os(iOS)
         if floor(NSFoundationVersionNumber) > floor(NSFoundationVersionNumber_iOS_7_1) {
-            query[kSecUseNoAuthenticationUI as! String] = kCFBooleanTrue
+            query[kSecUseNoAuthenticationUI as! String] = true
         }
         #endif
         
@@ -503,7 +503,7 @@ public class Keychain {
         var query = [String: AnyObject]()
         query[kSecClass as! String] = itemClass.rawValue
         query[kSecMatchLimit as! String] = kSecMatchLimitAll
-        query[kSecReturnAttributes as! String] = kCFBooleanTrue
+        query[kSecReturnAttributes as! String] = true
         
         var result: AnyObject?
         var status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
@@ -537,9 +537,9 @@ public class Keychain {
         var query = [String: AnyObject]()
         query[kSecClass as! String] = itemClass.rawValue
         query[kSecMatchLimit as! String] = kSecMatchLimitAll
-        query[kSecReturnAttributes as! String] = kCFBooleanTrue
+        query[kSecReturnAttributes as! String] = true
         #if os(iOS)
-        query[kSecReturnData as! String] = kCFBooleanTrue
+        query[kSecReturnData as! String] = true
         #endif
         
         var result: AnyObject?
@@ -701,14 +701,19 @@ public class Keychain {
     private func items() -> [[String: AnyObject]] {
         var query = options.query()
         query[kSecMatchLimit as! String] = kSecMatchLimitAll
-        query[kSecReturnAttributes as! String] = kCFBooleanTrue
+        query[kSecReturnAttributes as! String] = true
         #if os(iOS)
-        query[kSecReturnData as! String] = kCFBooleanTrue
+        query[kSecReturnData as! String] = true
         #endif
         
         var result: AnyObject?
-        var status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
-        
+		var status: OSStatus
+		(result, status) = {
+			var tmpstat: Unmanaged<AnyObject>? = nil
+			var tmpx = SecItemCopyMatching(query, &tmpstat)
+			return (tmpstat?.takeRetainedValue(), tmpx)
+		}()
+		
         switch status {
         case errSecSuccess:
             if let items = result as? [[String: AnyObject]] {
