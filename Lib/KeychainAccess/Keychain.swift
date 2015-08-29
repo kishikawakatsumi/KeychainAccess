@@ -76,11 +76,11 @@ public enum AuthenticationPolicy : Int {
 }
 
 public enum FailableOf<T> {
-    case Success(Value<T?>)
+    case Success(T?)
     case Failure(NSError)
     
     init(_ value: T?) {
-        self = .Success(Value(value))
+        self = .Success(value)
     }
     
     init(_ error: NSError) {
@@ -117,16 +117,11 @@ public enum FailableOf<T> {
     public var value: T? {
         switch self {
         case .Success(let success):
-            return success.value
+            return success
         default:
             return nil
         }
     }
-}
-
-public class Value<T> {
-    let value: T
-    init(_ value: T) { self.value = value }
 }
 
 public class Keychain {
@@ -1346,7 +1341,7 @@ extension FailableOf: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         switch self {
         case .Success(let success):
-            if let value = success.value {
+            if let value = success {
                 return "\(value)"
             }
             return "nil"
@@ -1358,7 +1353,7 @@ extension FailableOf: CustomStringConvertible, CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case .Success(let success):
-            return "\(success.value)"
+            return "\(success)"
         case .Failure(let error):
             return "\(error)"
         }
