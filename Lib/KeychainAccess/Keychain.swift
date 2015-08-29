@@ -75,55 +75,6 @@ public enum AuthenticationPolicy : Int {
     case UserPresence
 }
 
-public enum FailableOf<T> {
-    case Success(T?)
-    case Failure(NSError)
-    
-    init(_ value: T?) {
-        self = .Success(value)
-    }
-    
-    init(_ error: NSError) {
-        self = .Failure(error)
-    }
-    
-    public var succeeded: Bool {
-        switch self {
-        case .Success:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    public var failed: Bool {
-        switch self {
-        case .Failure:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    public var error: NSError? {
-        switch self {
-        case .Failure(let error):
-            return error
-        default:
-            return nil
-        }
-    }
-    
-    public var value: T? {
-        switch self {
-        case .Success(let success):
-            return success
-        default:
-            return nil
-        }
-    }
-}
-
 public class Keychain {
     public var itemClass: ItemClass {
         return options.itemClass
@@ -286,72 +237,54 @@ public class Keychain {
     
     // MARK:
     
-    public func get(key: String) -> String? {
-        return getString(key)
+    public func get(key: String) throws -> String? {
+        return try getString(key)
     }
     
-    public func getString(key: String) -> String? {
-        let failable = getStringOrError(key)
-        return failable.value
-    }
-    
-    public func getData(key: String) -> NSData? {
-        let failable = getDataOrError(key)
-        return failable.value
-    }
-    
-    public func getStringOrError(key: String) -> FailableOf<String> {
-        let failable = getDataOrError(key)
-        switch failable {
-        case .Success:
-            if let data = failable.value {
-                if let string = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
-                    return FailableOf(string)
-                }
-                return FailableOf(conversionError(message: "failed to convert data to string"))
-            } else {
-                return FailableOf(nil)
-            }
-        case .Failure(let error):
-            return FailableOf(error)
+    public func getString(key: String) throws -> String? {
+        guard let data = try getData(key) else  {
+            return nil
         }
+        guard let string = NSString(data: data, encoding: NSUTF8StringEncoding) as? String else {
+            throw conversionError(message: "failed to convert data to string")
+        }
+        return string
     }
-    
-    public func getDataOrError(key: String) -> FailableOf<NSData> {
+
+    public func getData(key: String) throws -> NSData? {
         var query = options.query()
-        
+
         query[kSecMatchLimit as String] = kSecMatchLimitOne
         query[kSecReturnData as String] = kCFBooleanTrue
-        
+
         query[kSecAttrAccount as String] = key
-        
+
         var result: AnyObject?
         let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
-        
+
         switch status {
         case errSecSuccess:
-            if let data = result as? NSData {
-                return FailableOf(data)
+            guard let data = result as? NSData else {
+                throw Status.UnexpectedError
             }
-            return FailableOf(securityError(status: Status.UnexpectedError.rawValue))
+            return data
         case errSecItemNotFound:
-            return FailableOf(nil)
-        default: ()
+            return nil
+        default:
+            throw securityError(status: status)
         }
-        
-        return FailableOf(securityError(status: status))
     }
-    
+
     // MARK:
     
-    public func set(value: String, key: String) -> NSError? {
-        if let data = value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-            return set(data, key: key)
+    public func set(value: String, key: String) throws {
+        guard let data = value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) else {
+            throw conversionError(message: "failed to convert string to data")
         }
-        return conversionError(message: "failed to convert string to data")
+        try set(data, key: key)
     }
     
-    public func set(value: NSData, key: String) -> NSError? {
+    public func set(value: NSData, key: String) throws {
         var query = options.query()
         
         query[kSecAttrAccount as String] = key
@@ -370,53 +303,47 @@ public class Keychain {
             let (attributes, error) = options.attributes(key: nil, value: value)
             if let error = error {
                 print("error:[\(error.code)] \(error.localizedDescription)")
-                return error
+                throw error
+            }
+
+            if status == errSecInteractionNotAllowed && floor(NSFoundationVersionNumber) <= floor(NSFoundationVersionNumber_iOS_8_0) {
+                try remove(key)
+                try set(value, key: key)
             } else {
-                if status == errSecInteractionNotAllowed && floor(NSFoundationVersionNumber) <= floor(NSFoundationVersionNumber_iOS_8_0) {
-                    let error = remove(key)
-                    if error != nil {
-                        return error
-                    } else {
-                        return set(value, key: key)
-                    }
-                } else {
-                    status = SecItemUpdate(query, attributes)
-                }
+                status = SecItemUpdate(query, attributes)
                 if status != errSecSuccess {
-                    return securityError(status: status)
+                    throw securityError(status: status)
                 }
             }
         case errSecItemNotFound:
             let (attributes, error) = options.attributes(key: key, value: value)
             if let error = error {
                 print("error:[\(error.code)] \(error.localizedDescription)")
-                return error
-            } else {
-                status = SecItemAdd(attributes, nil)
-                if status != errSecSuccess {
-                    return securityError(status: status)
-                }
+                throw error
+            }
+
+            status = SecItemAdd(attributes, nil)
+            if status != errSecSuccess {
+                throw securityError(status: status)
             }
         default:
-            return securityError(status: status)
+            throw securityError(status: status)
         }
-        return nil
     }
     
     // MARK:
     
-    public func remove(key: String) -> NSError? {
+    public func remove(key: String) throws {
         var query = options.query()
         query[kSecAttrAccount as String] = key
         
         let status = SecItemDelete(query)
         if status != errSecSuccess && status != errSecItemNotFound {
-            return securityError(status: status)
+            throw securityError(status: status)
         }
-        return nil
     }
     
-    public func removeAll() -> NSError? {
+    public func removeAll() throws {
         var query = options.query()
         #if !os(iOS)
         query[kSecMatchLimit as String] = kSecMatchLimitAll
@@ -424,27 +351,24 @@ public class Keychain {
         
         let status = SecItemDelete(query)
         if status != errSecSuccess && status != errSecItemNotFound {
-            return securityError(status: status)
+            throw securityError(status: status)
         }
-        return nil
     }
     
     // MARK:
     
-    public func contains(key: String) -> Bool {
+    public func contains(key: String) throws -> Bool {
         var query = options.query()
         query[kSecAttrAccount as String] = key
         
         let status = SecItemCopyMatching(query, nil)
-        
         switch status {
         case errSecSuccess:
             return true
         case errSecItemNotFound:
             return false
         default:
-            securityError(status: status)
-            return false
+            throw securityError(status: status)
         }
     }
     
@@ -452,42 +376,46 @@ public class Keychain {
     
     public subscript(key: String) -> String? {
         get {
-            return get(key)
+            return (try? get(key)).flatMap { $0 }
         }
         
         set {
             if let value = newValue {
-                set(value, key: key)
+                do {
+                    try set(value, key: key)
+                } catch {}
             } else {
-                remove(key)
+                do {
+                    try remove(key)
+                } catch {}
             }
         }
     }
 
     public subscript(string key: String) -> String? {
         get {
-            return get(key)
+            return self[key]
         }
 
         set {
-            if let value = newValue {
-                set(value, key: key)
-            } else {
-                remove(key)
-            }
+            self[key] = newValue
         }
     }
 
     public subscript(data key: String) -> NSData? {
         get {
-            return getData(key)
+            return (try? getData(key))?.flatMap { $0 }
         }
 
         set {
             if let value = newValue {
-                set(value, key: key)
+                do {
+                    try set(value, key: key)
+                } catch {}
             } else {
-                remove(key)
+                do {
+                    try remove(key)
+                } catch {}
             }
         }
     }
@@ -897,17 +825,10 @@ extension Options {
         if let policy = authenticationPolicy {
             if #available(OSX 10.10, *) {
                 var error: Unmanaged<CFError>?
-                let accessControl = SecAccessControlCreateWithFlags(
-                    kCFAllocatorDefault,
-                    accessibility.rawValue,
-                    SecAccessControlCreateFlags(rawValue: policy.rawValue),
-                    &error
-                )
-
-                if let error = error?.takeUnretainedValue() {
-                    return (attributes, error.error)
-                }
-                if accessControl == nil {
+                guard let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, SecAccessControlCreateFlags(rawValue: policy.rawValue), &error) else {
+                    if let error = error?.takeUnretainedValue() {
+                        return (attributes, error.error)
+                    }
                     let message = Status.UnexpectedError.description
                     return (attributes, NSError(domain: KeychainAccessErrorDomain, code: Int(Status.UnexpectedError.rawValue), userInfo: [NSLocalizedDescriptionKey: message]))
                 }
@@ -1337,29 +1258,6 @@ extension AuthenticationPolicy : RawRepresentable, CustomStringConvertible {
     }
 }
 
-extension FailableOf: CustomStringConvertible, CustomDebugStringConvertible {
-    public var description: String {
-        switch self {
-        case .Success(let success):
-            if let value = success {
-                return "\(value)"
-            }
-            return "nil"
-        case .Failure(let error):
-            return "\(error.localizedDescription)"
-        }
-    }
-    
-    public var debugDescription: String {
-        switch self {
-        case .Success(let success):
-            return "\(success)"
-        case .Failure(let error):
-            return "\(error)"
-        }
-    }
-}
-
 extension CFError {
     var error: NSError {
         let domain = CFErrorGetDomain(self) as String
@@ -1370,7 +1268,7 @@ extension CFError {
     }
 }
 
-public enum Status : OSStatus {
+public enum Status : OSStatus, ErrorType {
     case Success
     case Unimplemented
     case Param
