@@ -130,11 +130,6 @@ public class Keychain {
     
     private let options: Options
     
-    private let NSFoundationVersionNumber_iOS_7_1 = 1047.25
-    private let NSFoundationVersionNumber_iOS_8_0 = 1140.11
-    private let NSFoundationVersionNumber_iOS_8_1 = 1141.1
-    private let NSFoundationVersionNumber10_9_2 = 1056.13
-    
     // MARK:
     
     public convenience init() {
@@ -289,7 +284,9 @@ public class Keychain {
         
         query[kSecAttrAccount as String] = key
         #if os(iOS)
-        if #available(iOS 8.0, *) {
+        if #available(iOS 9.0, *) {
+            query[kSecUseAuthenticationUI as String] = kCFBooleanFalse
+        } else if #available(iOS 8.0, *) {
             query[kSecUseNoAuthenticationUI as String] = kCFBooleanTrue
         }
         #endif
@@ -306,6 +303,7 @@ public class Keychain {
                 throw error
             }
 
+            #if os(iOS)
             if status == errSecInteractionNotAllowed && floor(NSFoundationVersionNumber) <= floor(NSFoundationVersionNumber_iOS_8_0) {
                 try remove(key)
                 try set(value, key: key)
@@ -315,6 +313,12 @@ public class Keychain {
                     throw securityError(status: status)
                 }
             }
+            #else
+                status = SecItemUpdate(query, attributes)
+                if status != errSecSuccess {
+                    throw securityError(status: status)
+                }
+            #endif
         case errSecItemNotFound:
             let (attributes, error) = options.attributes(key: key, value: value)
             if let error = error {
