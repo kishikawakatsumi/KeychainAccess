@@ -289,7 +289,7 @@ public class Keychain {
         
         query[kSecAttrAccount as String] = key
         #if os(iOS)
-        if floor(NSFoundationVersionNumber) > floor(NSFoundationVersionNumber_iOS_7_1) {
+        if #available(iOS 8.0, *) {
             query[kSecUseNoAuthenticationUI as String] = kCFBooleanTrue
         }
         #endif
@@ -536,6 +536,7 @@ public class Keychain {
     #endif
 
     #if os(iOS)
+    @available(iOS, introduced=8.0)
     private func setSharedPassword(password: String?, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         if let domain = server.host {
             SecAddSharedWebCredential(domain, account, password) { error -> () in
@@ -581,6 +582,7 @@ public class Keychain {
     #endif
 
     #if os(iOS)
+    @available(iOS, introduced=8.0)
     private class func requestSharedWebCredential(domain domain: String?, account: String?, completion: (credentials: [[String: String]], error: NSError?) -> ()) {
         SecRequestSharedWebCredential(domain, account) { (credentials, error) -> () in
             var remoteError: NSError?
@@ -795,8 +797,10 @@ extension Options {
         }
         
         #if os(iOS)
-        if authenticationPrompt != nil {
-            query[kSecUseOperationPrompt as String] = authenticationPrompt
+        if #available(iOS 8.0, *) {
+            if authenticationPrompt != nil {
+                query[kSecUseOperationPrompt as String] = authenticationPrompt
+            }
         }
         #endif
         
@@ -823,7 +827,7 @@ extension Options {
         }
 
         if let policy = authenticationPolicy {
-            if #available(OSX 10.10, *) {
+            if #available(OSX 10.10, iOS 8.0, *) {
                 var error: Unmanaged<CFError>?
                 guard let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, SecAccessControlCreateFlags(rawValue: policy.rawValue), &error) else {
                     if let error = error?.takeUnretainedValue() {
@@ -1157,7 +1161,7 @@ extension AuthenticationType : RawRepresentable, CustomStringConvertible {
 extension Accessibility : RawRepresentable, CustomStringConvertible {
     
     public init?(rawValue: String) {
-        guard #available(OSX 10.10, *) else  {
+        guard #available(OSX 10.10, iOS 8.0, *) else  {
             return nil
         }
         switch rawValue {
@@ -1189,7 +1193,7 @@ extension Accessibility : RawRepresentable, CustomStringConvertible {
         case Always:
             return kSecAttrAccessibleAlways as String
         case WhenPasscodeSetThisDeviceOnly:
-            if #available(OSX 10.10, *) {
+            if #available(OSX 10.10, iOS 8.0, *) {
                 return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly as String
             } else {
                 fatalError("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
@@ -1226,7 +1230,7 @@ extension Accessibility : RawRepresentable, CustomStringConvertible {
 extension AuthenticationPolicy : RawRepresentable, CustomStringConvertible {
     
     public init?(rawValue: Int) {
-        guard #available(OSX 10.10, *) else  {
+        guard #available(OSX 10.10, iOS 8.0, *) else  {
             return nil
         }
         let flags = SecAccessControlCreateFlags.UserPresence
@@ -1242,7 +1246,7 @@ extension AuthenticationPolicy : RawRepresentable, CustomStringConvertible {
     public var rawValue: Int {
         switch self {
         case UserPresence:
-            if #available(OSX 10.10, *) {
+            if #available(OSX 10.10, iOS 8.0, *) {
                 return SecAccessControlCreateFlags.UserPresence.rawValue
             } else {
                 fatalError("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
