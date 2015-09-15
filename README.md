@@ -553,7 +553,7 @@ Then, add the following lines to your Podfile:
 
 ```ruby
 use_frameworks!
-pod 'KeychainAccess', :git => 'git@github.com:kishikawakatsumi/KeychainAccess.git', :branch => 'swift-2.0'
+pod 'KeychainAccess', :git => 'git@github.com/kishikawakatsumi/KeychainAccess.git', :branch => 'swift-2.0'
 ```
 
 ##### <a name="watchos2-cocoapods"> For watchOS 2
@@ -570,12 +570,12 @@ Then, add the following lines to your Podfile:
 use_frameworks!
 
 target 'EampleApp' do
-  pod 'KeychainAccess', :git => 'git@github.com:kishikawakatsumi/KeychainAccess.git', :branch => 'swift-2.0'
+  pod 'KeychainAccess', :git => 'git@github.com/kishikawakatsumi/KeychainAccess.git', :branch => 'swift-2.0'
 end
 
 target 'EampleApp WatchKit Extension' do
   platform :watchos, '2.0'
-  pod 'KeychainAccess', :git => 'git@github.com:kishikawakatsumi/KeychainAccess.git', :branch => 'swift-2.0'
+  pod 'KeychainAccess', :git => 'git@github.com/kishikawakatsumi/KeychainAccess.git', :branch => 'swift-2.0'
 end
 ```
 
