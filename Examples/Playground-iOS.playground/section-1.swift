@@ -62,7 +62,7 @@ keychain.remove("kishikawakatsumi")
 
 /* set */
 if let error = keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi") {
-    println("error: \(error.localizedDescription)")
+    print("error: \(error.localizedDescription)")
 }
 
 /* get */
@@ -72,28 +72,28 @@ let failable = keychain.getStringOrError("kishikawakatsumi")
 // 1. check the enum state
 switch failable {
 case .Success:
-    println("token: \(failable.value)")
+    print("token: \(failable.value)")
 case .Failure:
-    println("error: \(failable.error)")
+    print("error: \(failable.error)")
 }
 
 // 2. check the error object
 if let error = failable.error {
-    println("error: \(failable.error)")
+    print("error: \(failable.error)")
 } else {
-    println("token: \(failable.value)")
+    print("token: \(failable.value)")
 }
 
 // 3. check the failed property
 if failable.failed {
-    println("error: \(failable.error)")
+    print("error: \(failable.error)")
 } else {
-    println("token: \(failable.value)")
+    print("token: \(failable.value)")
 }
 
 /* remove */
 if let error = keychain.remove("kishikawakatsumi") {
-    println("error: \(error.localizedDescription)")
+    print("error: \(error.localizedDescription)")
 }
 
 
@@ -143,16 +143,16 @@ keychain
 
 /* Display all stored items if print keychain object */
 keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
-println("\(keychain)")
+print("\(keychain)")
 
 /* Obtaining all stored keys */
 let keys = keychain.allKeys()
 for key in keys {
-    println("key: \(key)")
+    print("key: \(key)")
 }
 
 /* Obtaining all stored items */
 let items = keychain.allItems()
 for item in items {
-    println("item: \(item)")
+    print("item: \(item)")
 }

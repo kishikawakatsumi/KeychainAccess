@@ -36,14 +36,28 @@ class InputViewController: UITableViewController {
     }
 
     @IBAction func saveAction(sender: UIBarButtonItem) {
-        let keychain = Keychain(service: serviceField.text)
-        keychain[usernameField.text] = passwordField.text
+        let keychain: Keychain
+        if let service = serviceField.text where !service.isEmpty {
+            keychain = Keychain(service: service)
+        } else {
+            keychain = Keychain()
+        }
+        keychain[usernameField.text!] = passwordField.text
         
         dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func editingChanged(sender: UITextField) {
-        saveButton.enabled = !usernameField.text.isEmpty && !passwordField.text.isEmpty
+        switch (usernameField.text, passwordField.text) {
+        case let (username?, password?):
+            saveButton.enabled = !username.isEmpty && !password.isEmpty
+        case (_?, nil):
+            saveButton.enabled = false
+        case (nil, _?):
+            saveButton.enabled = false
+        case (nil, nil):
+            saveButton.enabled = false
+        }
     }
 
 }
