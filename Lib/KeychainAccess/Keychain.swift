@@ -305,6 +305,11 @@ public class Keychain {
         return failable.value
     }
     
+    public func getPersistentRef(key: String) -> NSData? {
+        let failable = getDataOrError(key, ofType: kSecReturnPersistentRef as String)
+        return failable.value
+    }
+    
     public func getStringOrError(key: String) -> FailableOf<String> {
         let failable = getDataOrError(key)
         switch failable {
@@ -322,11 +327,11 @@ public class Keychain {
         }
     }
     
-    public func getDataOrError(key: String) -> FailableOf<NSData> {
+    public func getDataOrError(key: String, ofType: String = kSecReturnData as String) -> FailableOf<NSData> {
         var query = options.query()
         
         query[kSecMatchLimit as! String] = kSecMatchLimitOne
-        query[kSecReturnData as! String] = kCFBooleanTrue
+        query[ofType] = kCFBooleanTrue
         
         query[kSecAttrAccount as! String] = key
         
