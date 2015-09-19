@@ -408,7 +408,7 @@ public class Keychain {
 
     public subscript(data key: String) -> NSData? {
         get {
-            return (try? getData(key))?.flatMap { $0 }
+            return (try? getData(key)).flatMap { $0 }
         }
 
         set {
