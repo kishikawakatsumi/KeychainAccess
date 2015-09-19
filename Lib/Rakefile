@@ -49,9 +49,9 @@ XCJobs::Test.new('test:ios') do |t|
   t.project = 'KeychainAccess'
   t.scheme = 'KeychainAccess-iOS'
   t.configuration = 'Release'
-  destinations.each do |destination|
-    t.add_destination(destination)
-  end
+  # destinations.each do |destination|
+  #   t.add_destination(destination)
+  # end
   t.build_dir = 'build'
   t.formatter = 'xcpretty -c'
 end

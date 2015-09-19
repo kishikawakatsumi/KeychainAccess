@@ -1,6 +1,6 @@
 machine:
   xcode:
-    version: "6.3.1"
+    version: "7.0"
     
 dependencies:
   override:
@@ -11,4 +11,5 @@ dependencies:
 
 test:
   override:
+    - sudo chown :wheel /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ *.simruntime/Contents/Resources/RuntimeRoot/usr/lib/dyld_sim
     - (cd Lib && bundle exec rake test:ios test:osx)
