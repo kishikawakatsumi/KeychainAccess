@@ -255,7 +255,7 @@ public class Keychain {
         var query = options.query()
 
         query[kSecMatchLimit as String] = kSecMatchLimitOne
-        query[kSecReturnData as String] = kCFBooleanTrue
+        query[ofType as String] = kCFBooleanTrue
 
         query[kSecAttrAccount as String] = key
 
