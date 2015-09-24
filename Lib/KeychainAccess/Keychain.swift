@@ -246,11 +246,11 @@ public class Keychain {
         return string
     }
 
-    public func getData(key: String) throws -> NSData? {
+    public func getData(key: String, ofType: String = kSecReturnData as String) throws -> NSData? {
         var query = options.query()
 
         query[kSecMatchLimit as String] = kSecMatchLimitOne
-        query[kSecReturnData as String] = kCFBooleanTrue
+        query[ofType as String] = kCFBooleanTrue
 
         query[kSecAttrAccount as String] = key
 
@@ -268,6 +268,13 @@ public class Keychain {
         default:
             throw securityError(status: status)
         }
+    }
+    
+    public func getPersistentRef(key: String) throws -> NSData? {
+        guard let data = try getData(key, ofType: kSecReturnPersistentRef as String) else {
+            return nil
+        }
+        return data
     }
 
     // MARK:
