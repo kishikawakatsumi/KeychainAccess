@@ -162,6 +162,7 @@
 		14DAEE881A51E1BE0070B77E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0620;
 				ORGANIZATIONNAME = "kishikawa katsumi";
 				TargetAttributes = {
