@@ -349,7 +349,7 @@ public class Keychain {
     
     public func removeAll() throws {
         var query = options.query()
-        #if !os(iOS) && !os(watchOS)
+        #if !os(iOS) && !os(watchOS) && !os(tvOS)
         query[kSecMatchLimit as String] = kSecMatchLimitAll
         #endif
         
@@ -789,7 +789,7 @@ extension Options {
         case .GenericPassword:
             query[kSecAttrService as String] = service
             // Access group is not supported on any simulators.
-            #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS))
+            #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS) && !os(tvOS))
             if let accessGroup = self.accessGroup {
                 query[kSecAttrAccessGroup as String] = accessGroup
             }
