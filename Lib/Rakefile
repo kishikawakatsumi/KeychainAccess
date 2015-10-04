@@ -19,7 +19,7 @@ def destinations
   end
 end
 
-XCJobs::Build.new('build:simulator') do |t|
+XCJobs::Build.new('build:ios:simulator') do |t|
   t.project = 'KeychainAccess'
   t.scheme = 'KeychainAccess-iOS'
   t.sdk = 'iphonesimulator'
@@ -30,10 +30,32 @@ XCJobs::Build.new('build:simulator') do |t|
   t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
 end
 
-XCJobs::Build.new('build:device') do |t|
+XCJobs::Build.new('build:io:device') do |t|
   t.project = 'KeychainAccess'
   t.scheme = 'KeychainAccess-iOS'
   t.sdk = 'iphoneos'
+  t.configuration = 'Release'
+  t.build_dir = 'build'
+  t.formatter = 'xcpretty -c'
+  t.add_build_setting('CODE_SIGN_IDENTITY', '')
+  t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
+end
+
+XCJobs::Build.new('build:tvos:simulator') do |t|
+  t.project = 'KeychainAccess'
+  t.scheme = 'KeychainAccess-tvOS'
+  t.sdk = 'appletvsimulator'
+  t.configuration = 'Release'
+  t.build_dir = 'build'
+  t.formatter = 'xcpretty -c'
+  t.add_build_setting('CODE_SIGN_IDENTITY', '')
+  t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
+end
+
+XCJobs::Build.new('build:tvos:device') do |t|
+  t.project = 'KeychainAccess'
+  t.scheme = 'KeychainAccess-tvOS'
+  t.sdk = 'appletvos'
   t.configuration = 'Release'
   t.build_dir = 'build'
   t.formatter = 'xcpretty -c'
@@ -66,6 +88,15 @@ XCJobs::Test.new('test:osx') do |t|
   t.project = 'KeychainAccess'
   t.scheme = 'KeychainAccess-Mac'
   t.sdk = 'macosx'
+  t.configuration = 'Release'
+  t.build_dir = 'build'
+  t.formatter = 'xcpretty -c'
+end
+
+XCJobs::Test.new('test:tvos') do |t|
+  t.project = 'KeychainAccess'
+  t.scheme = 'KeychainAccess-tvOS'
+  t.sdk = 'appletvsimulator'
   t.configuration = 'Release'
   t.build_dir = 'build'
   t.formatter = 'xcpretty -c'
