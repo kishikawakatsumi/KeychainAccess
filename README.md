@@ -5,15 +5,6 @@
 [![License](https://img.shields.io/cocoapods/l/KeychainAccess.svg?style=flat)](http://cocoadocs.org/docsets/KeychainAccess)
 [![Platform](https://img.shields.io/cocoapods/p/KeychainAccess.svg?style=flat)](http://cocoadocs.org/docsets/KeychainAccess)
 
-**A Swift 2.0 compatible version is in the works. Check out the [`swift-2.0` branch](https://github.com/kishikawakatsumi/KeychainAccess/tree/swift-2.0).**
-
-- **[Install via CocoaPods](#swift-2.0-cocoapods)**
-- **[Install using Carthage](#swift-2.0-carthage)**
-
-**A watchOS 2 support is also in the [`swift-2.0` branch](https://github.com/kishikawakatsumi/KeychainAccess/tree/swift-2.0).**
-
-- **[Install via CocoaPods](#watchos2-cocoapods)**
-
 KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X. Makes using Keychain APIs exremely easy and much more palatable to use in Swift.
 
 <img src="https://raw.githubusercontent.com/kishikawakatsumi/KeychainAccess/master/Screenshots/01.png" width="320px" />
@@ -502,54 +493,12 @@ use_frameworks!
 pod 'KeychainAccess'
 ```
 
-##### <a name="swift-2.0-cocoapods"> For Swift 2
-
-You should install CocoaPods 0.38.0.beta2.
-
-```shell
-[sudo] gem install cocoapods --pre
-```
-
-Then, add the following lines to your Podfile:
-
-```ruby
-use_frameworks!
-pod 'KeychainAccess', :git => 'https://github.com/kishikawakatsumi/KeychainAccess.git', :branch => 'swift-2.0'
-```
-
-##### <a name="watchos2-cocoapods"> For watchOS 2
-
-You should install CocoaPods 0.38.0.beta2.
-
-```shell
-[sudo] gem install cocoapods --pre
-```
-
-Then, add the following lines to your Podfile:
-
-```ruby
-use_frameworks!
-
-target 'EampleApp' do
-  pod 'KeychainAccess', :git => 'https://github.com/kishikawakatsumi/KeychainAccess.git', :branch => 'swift-2.0'
-end
-
-target 'EampleApp WatchKit Extension' do
-  platform :watchos, '2.0'
-  pod 'KeychainAccess', :git => 'https://github.com/kishikawakatsumi/KeychainAccess.git', :branch => 'swift-2.0'
-end
-```
-
 ### Carthage
 
 KeychainAccess is available through [Carthage](https://github.com/Carthage/Carthage). To install
 it, simply add the following line to your Cartfile:
 
 `github "kishikawakatsumi/KeychainAccess"`
-
-##### <a name="swift-2.0-carthage"> For Swift 2
-
-`github "kishikawakatsumi/KeychainAccess" "swift-2.0"`
 
 ### To manually add to your project
 
