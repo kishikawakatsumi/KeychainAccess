@@ -103,9 +103,8 @@ public class Keychain {
     public var accessibility: Accessibility {
         return options.accessibility
     }
-    
-    @available(iOS, introduced=8.0)
-    @available(OSX, introduced=10.10)
+
+    @available(iOS 8.0, OSX 10.10, *)
     public var authenticationPolicy: AuthenticationPolicy? {
         return options.authenticationPolicy
     }
@@ -121,9 +120,8 @@ public class Keychain {
     public var comment: String? {
         return options.comment
     }
-    
-    @available(iOS, introduced=8.0)
-    @available(OSX, unavailable)
+
+    @available(iOS 8.0, OSX 10.10, *)
     public var authenticationPrompt: String? {
         return options.authenticationPrompt
     }
@@ -194,9 +192,8 @@ public class Keychain {
         options.accessibility = accessibility
         return Keychain(options)
     }
-    
-    @available(iOS, introduced=8.0)
-    @available(OSX, introduced=10.10)
+
+    @available(iOS 8.0, OSX 10.10, *)
     public func accessibility(accessibility: Accessibility, authenticationPolicy: AuthenticationPolicy) -> Keychain {
         var options = self.options
         options.accessibility = accessibility
@@ -221,9 +218,8 @@ public class Keychain {
         options.comment = comment
         return Keychain(options)
     }
-    
-    @available(iOS, introduced=8.0)
-    @available(OSX, unavailable)
+
+    @available(iOS 8.0, OSX 10.10, *)
     public func authenticationPrompt(authenticationPrompt: String) -> Keychain {
         var options = self.options
         options.authenticationPrompt = authenticationPrompt
@@ -491,7 +487,7 @@ public class Keychain {
     }
     
     #if os(iOS)
-    @available(iOS, introduced=8.0)
+    @available(iOS 8.0, *)
     public func getSharedPassword(completion: (account: String?, password: String?, error: NSError?) -> () = { account, password, error -> () in }) {
         if let domain = server.host {
             self.dynamicType.requestSharedWebCredential(domain: domain, account: nil) { (credentials, error) -> () in
@@ -511,7 +507,7 @@ public class Keychain {
     #endif
 
     #if os(iOS)
-    @available(iOS, introduced=8.0)
+    @available(iOS 8.0, *)
     public func getSharedPassword(account: String, completion: (password: String?, error: NSError?) -> () = { password, error -> () in }) {
         if let domain = server.host {
             self.dynamicType.requestSharedWebCredential(domain: domain, account: account) { (credentials, error) -> () in
@@ -533,14 +529,14 @@ public class Keychain {
     #endif
 
     #if os(iOS)
-    @available(iOS, introduced=8.0)
+    @available(iOS 8.0, *)
     public func setSharedPassword(password: String, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         setSharedPassword(password as String?, account: account, completion: completion)
     }
     #endif
 
     #if os(iOS)
-    @available(iOS, introduced=8.0)
+    @available(iOS 8.0, *)
     private func setSharedPassword(password: String?, account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         if let domain = server.host {
             SecAddSharedWebCredential(domain, account, password) { error -> () in
@@ -558,35 +554,35 @@ public class Keychain {
     #endif
 
     #if os(iOS)
-    @available(iOS, introduced=8.0)
+    @available(iOS 8.0, *)
     public func removeSharedPassword(account: String, completion: (error: NSError?) -> () = { e -> () in }) {
         setSharedPassword(nil, account: account, completion: completion)
     }
     #endif
 
     #if os(iOS)
-    @available(iOS, introduced=8.0)
+    @available(iOS 8.0, *)
     public class func requestSharedWebCredential(completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: nil, account: nil, completion: completion)
     }
     #endif
 
     #if os(iOS)
-    @available(iOS, introduced=8.0)
+    @available(iOS 8.0, *)
     public class func requestSharedWebCredential(domain domain: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain, account: nil, completion: completion)
     }
     #endif
 
     #if os(iOS)
-    @available(iOS, introduced=8.0)
+    @available(iOS 8.0, *)
     public class func requestSharedWebCredential(domain domain: String, account: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain as String?, account: account as String?, completion: completion)
     }
     #endif
 
     #if os(iOS)
-    @available(iOS, introduced=8.0)
+    @available(iOS 8.0, *)
     private class func requestSharedWebCredential(domain domain: String?, account: String?, completion: (credentials: [[String: String]], error: NSError?) -> ()) {
         SecRequestSharedWebCredential(domain, account) { (credentials, error) -> () in
             var remoteError: NSError?
@@ -619,7 +615,7 @@ public class Keychain {
     #endif
 
     #if os(iOS)
-    @available(iOS, introduced=8.0)
+    @available(iOS 8.0, *)
     public class func generatePassword() -> String {
         return SecCreateSharedWebCredentialPassword() as! String
     }
@@ -800,14 +796,12 @@ extension Options {
             query[kSecAttrProtocol as String] = protocolType.rawValue
             query[kSecAttrAuthenticationType as String] = authenticationType.rawValue
         }
-        
-        #if os(iOS)
-        if #available(iOS 8.0, *) {
+
+        if #available(iOS 8.0, OSX 10.10, *) {
             if authenticationPrompt != nil {
                 query[kSecUseOperationPrompt as String] = authenticationPrompt
             }
         }
-        #endif
         
         return query
     }
@@ -832,7 +826,7 @@ extension Options {
         }
 
         if let policy = authenticationPolicy {
-            if #available(OSX 10.10, iOS 8.0, *) {
+            if #available(iOS 8.0, OSX 10.10, *) {
                 var error: Unmanaged<CFError>?
                 guard let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, SecAccessControlCreateFlags(rawValue: policy.rawValue), &error) else {
                     if let error = error?.takeUnretainedValue() {
@@ -1198,10 +1192,10 @@ extension Accessibility : RawRepresentable, CustomStringConvertible {
         case Always:
             return kSecAttrAccessibleAlways as String
         case WhenPasscodeSetThisDeviceOnly:
-            if #available(OSX 10.10, iOS 8.0, *) {
+            if #available(iOS 8.0, OSX 10.10, *) {
                 return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly as String
             } else {
-                fatalError("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
+                fatalError("'Accessibility.WhenPasscodeSetThisDeviceOnly' is not available on this version of OS.")
             }
         case WhenUnlockedThisDeviceOnly:
             return kSecAttrAccessibleWhenUnlockedThisDeviceOnly as String
