@@ -1221,26 +1221,42 @@ extension AuthenticationType : RawRepresentable, CustomStringConvertible {
 extension Accessibility : RawRepresentable, CustomStringConvertible {
     
     public init?(rawValue: String) {
-        guard #available(OSX 10.10, iOS 8.0, *) else  {
-            return nil
-        }
-        switch rawValue {
-        case String(kSecAttrAccessibleWhenUnlocked):
-            self = WhenUnlocked
-        case String(kSecAttrAccessibleAfterFirstUnlock):
-            self = AfterFirstUnlock
-        case String(kSecAttrAccessibleAlways):
-            self = Always
-        case String(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly):
-            self = WhenPasscodeSetThisDeviceOnly
-        case String(kSecAttrAccessibleWhenUnlockedThisDeviceOnly):
-            self = WhenUnlockedThisDeviceOnly
-        case String(kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly):
-            self = AfterFirstUnlockThisDeviceOnly
-        case String(kSecAttrAccessibleAlwaysThisDeviceOnly):
-            self = AlwaysThisDeviceOnly
-        default:
-            return nil
+        if #available(iOS 8.0, OSX 10.10, *) {
+            switch rawValue {
+            case String(kSecAttrAccessibleWhenUnlocked):
+                self = WhenUnlocked
+            case String(kSecAttrAccessibleAfterFirstUnlock):
+                self = AfterFirstUnlock
+            case String(kSecAttrAccessibleAlways):
+                self = Always
+            case String(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly):
+                self = WhenPasscodeSetThisDeviceOnly
+            case String(kSecAttrAccessibleWhenUnlockedThisDeviceOnly):
+                self = WhenUnlockedThisDeviceOnly
+            case String(kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly):
+                self = AfterFirstUnlockThisDeviceOnly
+            case String(kSecAttrAccessibleAlwaysThisDeviceOnly):
+                self = AlwaysThisDeviceOnly
+            default:
+                return nil
+            }
+        } else {
+            switch rawValue {
+            case String(kSecAttrAccessibleWhenUnlocked):
+                self = WhenUnlocked
+            case String(kSecAttrAccessibleAfterFirstUnlock):
+                self = AfterFirstUnlock
+            case String(kSecAttrAccessibleAlways):
+                self = Always
+            case String(kSecAttrAccessibleWhenUnlockedThisDeviceOnly):
+                self = WhenUnlockedThisDeviceOnly
+            case String(kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly):
+                self = AfterFirstUnlockThisDeviceOnly
+            case String(kSecAttrAccessibleAlwaysThisDeviceOnly):
+                self = AlwaysThisDeviceOnly
+            default:
+                return nil
+            }
         }
     }
     
