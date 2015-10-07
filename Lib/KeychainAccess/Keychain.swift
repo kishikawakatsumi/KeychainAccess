@@ -62,12 +62,73 @@ public enum AuthenticationType {
 }
 
 public enum Accessibility {
+
+    /**
+    Item data can only be accessed
+    while the device is unlocked. This is recommended for items that only
+    need be accesible while the application is in the foreground. Items
+    with this attribute will migrate to a new device when using encrypted
+    backups.
+    */
     case WhenUnlocked
+
+    /**
+    Item data can only be
+    accessed once the device has been unlocked after a restart. This is
+    recommended for items that need to be accesible by background
+    applications. Items with this attribute will migrate to a new device
+    when using encrypted backups.
+    */
     case AfterFirstUnlock
+
+    /**
+    Item data can always be accessed
+    regardless of the lock state of the device. This is not recommended
+    for anything except system use. Items with this attribute will migrate
+    to a new device when using encrypted backups.
+    */
     case Always
+
+    /**
+    Item data can
+    only be accessed while the device is unlocked. This class is only
+    available if a passcode is set on the device. This is recommended for
+    items that only need to be accessible while the application is in the
+    foreground. Items with this attribute will never migrate to a new
+    device, so after a backup is restored to a new device, these items
+    will be missing. No items can be stored in this class on devices
+    without a passcode. Disabling the device passcode will cause all
+    items in this class to be deleted.
+    */
+    @available(iOS 8.0, OSX 10.10, *)
     case WhenPasscodeSetThisDeviceOnly
+
+    /**
+    Item data can only
+    be accessed while the device is unlocked. This is recommended for items
+    that only need be accesible while the application is in the foreground.
+    Items with this attribute will never migrate to a new device, so after
+    a backup is restored to a new device, these items will be missing.
+    */
     case WhenUnlockedThisDeviceOnly
+
+    /**
+    Item data can
+    only be accessed once the device has been unlocked after a restart.
+    This is recommended for items that need to be accessible by background
+    applications. Items with this attribute will never migrate to a new
+    device, so after a backup is restored to a new device these items will
+    be missing.
+    */
     case AfterFirstUnlockThisDeviceOnly
+
+    /**
+    Item data can always
+    be accessed regardless of the lock state of the device. This option
+    is not recommended for anything except system use. Items with this
+    attribute will never migrate to a new device, so after a backup is
+    restored to a new device, these items will be missing.
+    */
     case AlwaysThisDeviceOnly
 }
 
