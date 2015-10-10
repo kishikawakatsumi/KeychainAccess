@@ -62,7 +62,6 @@ public enum AuthenticationType {
 }
 
 public enum Accessibility {
-
     /**
     Item data can only be accessed
     while the device is unlocked. This is recommended for items that only
@@ -196,6 +195,60 @@ public struct AuthenticationPolicy : OptionSetType {
         self.rawValue = rawValue
     }
 }
+
+/** Class Key Constant */
+private let Class = kSecClass as String
+
+/** Attribute Key Constants */
+private let AttributeAccessible = kSecAttrAccessible as String
+
+@available(iOS 8.0, OSX 10.10, *)
+private let AttributeAccessControl = kSecAttrAccessControl as String
+
+private let AttributeAccessGroup = kSecAttrAccessGroup as String
+private let AttributeSynchronizable = kSecAttrSynchronizable as String
+private let AttributeComment = kSecAttrComment as String
+private let AttributeLabel = kSecAttrLabel as String
+private let AttributeAccount = kSecAttrAccount as String
+private let AttributeService = kSecAttrService as String
+private let AttributeServer = kSecAttrServer as String
+private let AttributeProtocol = kSecAttrProtocol as String
+private let AttributeAuthenticationType = kSecAttrAuthenticationType as String
+private let AttributePort = kSecAttrPort as String
+
+private let SynchronizableAny = kSecAttrSynchronizableAny
+
+/** Search Constants */
+private let MatchLimit = kSecMatchLimit as String
+private let MatchLimitOne = kSecMatchLimitOne
+private let MatchLimitAll = kSecMatchLimitAll
+
+/** Return Type Key Constants */
+private let ReturnData = kSecReturnData as String
+private let ReturnAttributes = kSecReturnAttributes as String
+
+/** Value Type Key Constants */
+private let ValueData = kSecValueData as String
+
+/** Other Constants */
+@available(iOS 8.0, OSX 10.10, *)
+private let UseOperationPrompt = kSecUseOperationPrompt as String
+
+#if os(iOS)
+@available(iOS, introduced=8.0, deprecated=9.0, message="Use a UseAuthenticationUI instead.")
+private let UseNoAuthenticationUI = kSecUseNoAuthenticationUI as String
+#endif
+
+@available(iOS 9.0, OSX 10.11, *)
+private let UseAuthenticationUI = kSecUseAuthenticationUI as String
+
+@available(iOS 9.0, OSX 10.11, *)
+private let UseAuthenticationContext = kSecUseAuthenticationContext as String
+
+#if os(iOS)
+/** Credential Key Constants */
+private let SharedPassword = kSecSharedPassword as String
+#endif
 
 public class Keychain {
     public var itemClass: ItemClass {
@@ -367,10 +420,10 @@ public class Keychain {
     public func getData(key: String) throws -> NSData? {
         var query = options.query()
 
-        query[kSecMatchLimit as String] = kSecMatchLimitOne
-        query[kSecReturnData as String] = kCFBooleanTrue
+        query[MatchLimit] = MatchLimitOne
+        query[ReturnData] = true
 
-        query[kSecAttrAccount as String] = key
+        query[AttributeAccount] = key
 
         var result: AnyObject?
         let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
@@ -413,11 +466,11 @@ public class Keychain {
         switch status {
         case errSecSuccess, errSecInteractionNotAllowed:
             var query = options.query()
-            query[kSecAttrAccount as String] = key
+            query[AttributeAccount] = key
             
             let (attributes, error) = options.attributes(key: nil, value: value)
             if let error = error {
-                print("error:[\(error.code)] \(error.localizedDescription)")
+                print(error.localizedDescription)
                 throw error
             }
 
@@ -440,7 +493,7 @@ public class Keychain {
         case errSecItemNotFound:
             let (attributes, error) = options.attributes(key: key, value: value)
             if let error = error {
-                print("error:[\(error.code)] \(error.localizedDescription)")
+                print(error.localizedDescription)
                 throw error
             }
 
@@ -503,7 +556,7 @@ public class Keychain {
     
     public func remove(key: String) throws {
         var query = options.query()
-        query[kSecAttrAccount as String] = key
+        query[AttributeAccount] = key
         
         let status = SecItemDelete(query)
         if status != errSecSuccess && status != errSecItemNotFound {
@@ -514,7 +567,7 @@ public class Keychain {
     public func removeAll() throws {
         var query = options.query()
         #if !os(iOS) && !os(watchOS)
-        query[kSecMatchLimit as String] = kSecMatchLimitAll
+        query[MatchLimit] = MatchLimitAll
         #endif
         
         let status = SecItemDelete(query)
@@ -527,7 +580,7 @@ public class Keychain {
     
     public func contains(key: String) throws -> Bool {
         var query = options.query()
-        query[kSecAttrAccount as String] = key
+        query[AttributeAccount] = key
         
         let status = SecItemCopyMatching(query, nil)
         switch status {
@@ -544,10 +597,10 @@ public class Keychain {
     
     public class func allKeys(itemClass: ItemClass) -> [(String, String)] {
         var query = [String: AnyObject]()
-        query[kSecClass as String] = itemClass.rawValue
-        query[kSecAttrSynchronizable as String] = kSecAttrSynchronizableAny
-        query[kSecMatchLimit as String] = kSecMatchLimitAll
-        query[kSecReturnAttributes as String] = kCFBooleanTrue
+        query[Class] = itemClass.rawValue
+        query[AttributeSynchronizable] = SynchronizableAny
+        query[MatchLimit] = MatchLimitAll
+        query[ReturnAttributes] = true
         
         var result: AnyObject?
         let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
@@ -579,11 +632,11 @@ public class Keychain {
     
     public class func allItems(itemClass: ItemClass) -> [[String: AnyObject]] {
         var query = [String: AnyObject]()
-        query[kSecClass as String] = itemClass.rawValue
-        query[kSecMatchLimit as String] = kSecMatchLimitAll
-        query[kSecReturnAttributes as String] = kCFBooleanTrue
-        #if os(iOS)
-        query[kSecReturnData as String] = kCFBooleanTrue
+        query[Class] = itemClass.rawValue
+        query[MatchLimit] = MatchLimitAll
+        query[ReturnAttributes] = true
+        #if os(iOS) || os(watchOS)
+        query[ReturnData] = true
         #endif
         
         var result: AnyObject?
@@ -698,7 +751,7 @@ public class Keychain {
     #if os(iOS)
     @available(iOS 8.0, *)
     public class func requestSharedWebCredential(domain domain: String, account: String, completion: (credentials: [[String: String]], error: NSError?) -> () = { credentials, error -> () in }) {
-        requestSharedWebCredential(domain: domain as String?, account: account as String?, completion: completion)
+        requestSharedWebCredential(domain: Optional(domain), account: Optional(account), completion: completion)
     }
     #endif
 
@@ -716,13 +769,13 @@ public class Keychain {
             if let credentials = credentials as? [[String: AnyObject]] {
                 let credentials = credentials.map { credentials -> [String: String] in
                     var credential = [String: String]()
-                    if let server = credentials[kSecAttrServer as String] as? String {
+                    if let server = credentials[AttributeServer] as? String {
                         credential["server"] = server
                     }
-                    if let account = credentials[kSecAttrAccount as String] as? String {
+                    if let account = credentials[AttributeAccount] as? String {
                         credential["account"] = account
                     }
-                    if let password = credentials[kSecSharedPassword as String] as? String {
+                    if let password = credentials[SharedPassword] as? String {
                         credential["password"] = password
                     }
                     return credential
@@ -750,10 +803,10 @@ public class Keychain {
     
     private func items() -> [[String: AnyObject]] {
         var query = options.query()
-        query[kSecMatchLimit as String] = kSecMatchLimitAll
-        query[kSecReturnAttributes as String] = kCFBooleanTrue
+        query[MatchLimit] = MatchLimitAll
+        query[ReturnAttributes] = true
         #if os(iOS)
-        query[kSecReturnData as String] = kCFBooleanTrue
+        query[ReturnData] = true
         #endif
         
         var result: AnyObject?
@@ -781,32 +834,32 @@ public class Keychain {
             
             switch itemClass {
             case .GenericPassword:
-                if let service = attributes[kSecAttrService as String] as? String {
+                if let service = attributes[AttributeService] as? String {
                     item["service"] = service
                 }
-                if let accessGroup = attributes[kSecAttrAccessGroup as String] as? String {
+                if let accessGroup = attributes[AttributeAccessGroup] as? String {
                     item["accessGroup"] = accessGroup
                 }
             case .InternetPassword:
-                if let server = attributes[kSecAttrServer as String] as? String {
+                if let server = attributes[AttributeServer] as? String {
                     item["server"] = server
                 }
-                if let proto = attributes[kSecAttrProtocol as String] as? String {
+                if let proto = attributes[AttributeProtocol] as? String {
                     if let protocolType = ProtocolType(rawValue: proto) {
                         item["protocol"] = protocolType.description
                     }
                 }
-                if let auth = attributes[kSecAttrAuthenticationType as String] as? String {
+                if let auth = attributes[AttributeAuthenticationType] as? String {
                     if let authenticationType = AuthenticationType(rawValue: auth) {
                         item["authenticationType"] = authenticationType.description
                     }
                 }
             }
             
-            if let key = attributes[kSecAttrAccount as String] as? String {
+            if let key = attributes[AttributeAccount] as? String {
                 item["key"] = key
             }
-            if let data = attributes[kSecValueData as String] as? NSData {
+            if let data = attributes[ValueData] as? NSData {
                 if let text = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
                     item["value"] = text
                 } else  {
@@ -814,12 +867,12 @@ public class Keychain {
                 }
             }
             
-            if let accessible = attributes[kSecAttrAccessible as String] as? String {
+            if let accessible = attributes[AttributeAccessible] as? String {
                 if let accessibility = Accessibility(rawValue: accessible) {
                     item["accessibility"] = accessibility.description
                 }
             }
-            if let synchronizable = attributes[kSecAttrSynchronizable as String] as? Bool {
+            if let synchronizable = attributes[AttributeSynchronizable] as? Bool {
                 item["synchronizable"] = synchronizable ? "true" : "false"
             }
 
@@ -903,28 +956,28 @@ extension Options {
     func query() -> [String: AnyObject] {
         var query = [String: AnyObject]()
         
-        query[kSecClass as String] = itemClass.rawValue
-        query[kSecAttrSynchronizable as String] = kSecAttrSynchronizableAny
+        query[Class] = itemClass.rawValue
+        query[AttributeSynchronizable] = SynchronizableAny
         
         switch itemClass {
         case .GenericPassword:
-            query[kSecAttrService as String] = service
+            query[AttributeService] = service
             // Access group is not supported on any simulators.
             #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS))
             if let accessGroup = self.accessGroup {
-                query[kSecAttrAccessGroup as String] = accessGroup
+                query[AttributeAccessGroup] = accessGroup
             }
             #endif
         case .InternetPassword:
-            query[kSecAttrServer as String] = server.host
-            query[kSecAttrPort as String] = server.port
-            query[kSecAttrProtocol as String] = protocolType.rawValue
-            query[kSecAttrAuthenticationType as String] = authenticationType.rawValue
+            query[AttributeServer] = server.host
+            query[AttributePort] = server.port
+            query[AttributeProtocol] = protocolType.rawValue
+            query[AttributeAuthenticationType] = authenticationType.rawValue
         }
 
         if #available(iOS 8.0, OSX 10.10, *) {
             if authenticationPrompt != nil {
-                query[kSecUseOperationPrompt as String] = authenticationPrompt
+                query[UseOperationPrompt] = authenticationPrompt
             }
         }
         
@@ -936,18 +989,18 @@ extension Options {
         
         if key != nil {
             attributes = query()
-            attributes[kSecAttrAccount as String] = key
+            attributes[AttributeAccount] = key
         } else {
             attributes = [String: AnyObject]()
         }
         
-        attributes[kSecValueData as String] = value
+        attributes[ValueData] = value
         
         if label != nil {
-            attributes[kSecAttrLabel as String] = label
+            attributes[AttributeLabel] = label
         }
         if comment != nil {
-            attributes[kSecAttrComment as String] = comment
+            attributes[AttributeComment] = comment
         }
 
         if let policy = authenticationPolicy {
@@ -960,15 +1013,15 @@ extension Options {
                     let message = Status.UnexpectedError.description
                     return (attributes, NSError(domain: KeychainAccessErrorDomain, code: Int(Status.UnexpectedError.rawValue), userInfo: [NSLocalizedDescriptionKey: message]))
                 }
-                attributes[kSecAttrAccessControl as String] = accessControl
+                attributes[AttributeAccessControl] = accessControl
             } else {
                 print("Unavailable 'Touch ID integration' on OS X versions prior to 10.10.")
             }
         } else {
-            attributes[kSecAttrAccessible as String] = accessibility.rawValue
+            attributes[AttributeAccessible] = accessibility.rawValue
         }
         
-        attributes[kSecAttrSynchronizable as String] = synchronizable
+        attributes[AttributeSynchronizable] = synchronizable
         
         return (attributes, nil)
     }
