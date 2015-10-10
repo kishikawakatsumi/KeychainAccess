@@ -855,6 +855,7 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNil(error)
             XCTAssertNotNil(accessControl)
         }
+        #if os(iOS)
         do {
             let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
 
@@ -1035,5 +1036,32 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNil(error)
             XCTAssertNotNil(accessControl)
         }
+        #endif
+        #if os(OSX)
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.UserPresence]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.DevicePasscode]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        #endif
     }
 }
