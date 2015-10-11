@@ -55,6 +55,7 @@ XCJobs::Test.new('test:ios') do |t|
   t.project = 'KeychainAccess'
   t.scheme = 'KeychainAccess-iOS'
   t.configuration = 'Release'
+  t.coverage = true
   destinations.each do |destination|
     t.add_destination(destination)
   end
@@ -67,6 +68,10 @@ XCJobs::Test.new('test:osx') do |t|
   t.scheme = 'KeychainAccess-Mac'
   t.sdk = 'macosx'
   t.configuration = 'Release'
+  t.coverage = true
   t.build_dir = 'build'
   t.formatter = 'xcpretty -c'
+end
+
+XCJobs::Coverage::Coveralls.new() do |t|
 end
