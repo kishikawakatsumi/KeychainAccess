@@ -223,21 +223,39 @@ class KeychainAccessTests: XCTestCase {
     }
     
     func testInitializerWithServer() {
-        let URL = NSURL(string: "https://kishikawakatsumi.com")!
-        
-        let keychain = Keychain(server: URL, protocolType: .HTTPS)
-        XCTAssertEqual(keychain.server, URL)
-        XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
-        XCTAssertEqual(keychain.authenticationType, AuthenticationType.Default)
+        let server = "https://kishikawakatsumi.com"
+        let URL = NSURL(string: server)!
+
+        do {
+            let keychain = Keychain(server: server, protocolType: .HTTPS)
+            XCTAssertEqual(keychain.server, URL)
+            XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
+            XCTAssertEqual(keychain.authenticationType, AuthenticationType.Default)
+        }
+        do {
+            let keychain = Keychain(server: URL, protocolType: .HTTPS)
+            XCTAssertEqual(keychain.server, URL)
+            XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
+            XCTAssertEqual(keychain.authenticationType, AuthenticationType.Default)
+        }
     }
     
     func testInitializerWithServerAndAuthenticationType() {
-        let URL = NSURL(string: "https://kishikawakatsumi.com")!
-        
-        let keychain = Keychain(server: URL, protocolType: .HTTPS, authenticationType: .HTMLForm)
-        XCTAssertEqual(keychain.server, URL)
-        XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
-        XCTAssertEqual(keychain.authenticationType, AuthenticationType.HTMLForm)
+        let server = "https://kishikawakatsumi.com"
+        let URL = NSURL(string: server)!
+
+        do {
+            let keychain = Keychain(server: server, protocolType: .HTTPS, authenticationType: .HTMLForm)
+            XCTAssertEqual(keychain.server, URL)
+            XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
+            XCTAssertEqual(keychain.authenticationType, AuthenticationType.HTMLForm)
+        }
+        do {
+            let keychain = Keychain(server: URL, protocolType: .HTTPS, authenticationType: .HTMLForm)
+            XCTAssertEqual(keychain.server, URL)
+            XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
+            XCTAssertEqual(keychain.authenticationType, AuthenticationType.HTMLForm)
+        }
     }
     
     // MARK:
@@ -284,6 +302,22 @@ class KeychainAccessTests: XCTestCase {
         
         do { try keychain.set(JSONData, key: "JSONData") } catch {}
         XCTAssertEqual(try! keychain.getData("JSONData")!, JSONData, "stored JSON data")
+    }
+
+    func testStringConversionError() {
+        let keychain = Keychain(service: "Twitter")
+
+        let length = 256
+        let data = NSMutableData(length: length)!
+        SecRandomCopyBytes(kSecRandomDefault, length, UnsafeMutablePointer<UInt8>(data.mutableBytes))
+
+        do {
+            try keychain.set(data, key: "RandomData")
+            let _ = try keychain.getString("RandomData")
+        } catch let error as NSError {
+            XCTAssertEqual(error.domain, KeychainAccessErrorDomain)
+            XCTAssertEqual(error.code, Int(Status.ConversionError.rawValue))
+        }
     }
     
     func testRemoveString() {
@@ -340,13 +374,13 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertEqual(keychain["password"]!, "password1234", "stored password")
         XCTAssertEqual(keychain[string: "password"]!, "password1234", "stored password")
         
-        keychain["username"] = nil
+        keychain[string: "username"] = nil
         XCTAssertNil(keychain["username"], "removed username")
         XCTAssertEqual(keychain["password"]!, "password1234", "left password")
         XCTAssertNil(keychain[string: "username"], "removed username")
         XCTAssertEqual(keychain[string: "password"]!, "password1234", "left password")
         
-        keychain["password"] = nil
+        keychain[string: "password"] = nil
         XCTAssertNil(keychain["username"], "removed username")
         XCTAssertNil(keychain["password"], "removed password")
         XCTAssertNil(keychain[string: "username"], "removed username")
@@ -358,7 +392,10 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(keychain[data:"JSONData"], "not stored JSON data")
 
         keychain[data: "JSONData"] = JSONData
-        XCTAssertEqual(keychain[data:"JSONData"]!, JSONData, "stored JSON data")
+        XCTAssertEqual(keychain[data: "JSONData"]!, JSONData, "stored JSON data")
+
+        keychain[data: "JSONData"] = nil
+        XCTAssertNil(keychain[data:"JSONData"], "removed JSON data")
     }
     
     // MARK:
@@ -602,5 +639,228 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(try! Keychain(service: service_2).get("password"), "removed password")
         XCTAssertNil(try! Keychain(service: service_2).get("password"), "removed password")
         XCTAssertNil(try! Keychain(service: service_2).get("password"), "removed password")
+    }
+
+    // MARK:
+
+    func testProperties() {
+        guard #available(OSX 10.10, *) else {
+            return
+        }
+
+        let keychain = Keychain()
+
+        XCTAssertEqual(keychain.synchronizable, false)
+        XCTAssertEqual(keychain.synchronizable(true).synchronizable, true)
+        XCTAssertEqual(keychain.synchronizable(false).synchronizable, false)
+        XCTAssertEqual(keychain.accessibility(.AfterFirstUnlock).accessibility, Accessibility.AfterFirstUnlock)
+        XCTAssertEqual(keychain.accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence).accessibility, Accessibility.WhenPasscodeSetThisDeviceOnly)
+        XCTAssertEqual(keychain.accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence).authenticationPolicy, AuthenticationPolicy.UserPresence)
+        XCTAssertNil(keychain.label)
+        XCTAssertEqual(keychain.label("Label").label, "Label")
+        XCTAssertNil(keychain.comment)
+        XCTAssertEqual(keychain.comment("Comment").comment, "Comment")
+        XCTAssertEqual(keychain.authenticationPrompt("Prompt").authenticationPrompt, "Prompt")
+    }
+
+    // MARK:
+
+    func testAuthenticationPolicy() {
+        guard #available(iOS 9.0, OSX 10.11, *) else {
+            return
+        }
+
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.UserPresence]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.UserPresence, .ApplicationPassword]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.UserPresence, .ApplicationPassword, .PrivateKeyUsage]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.ApplicationPassword]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.ApplicationPassword, .PrivateKeyUsage]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.PrivateKeyUsage]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.TouchIDAny]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.TouchIDAny, .DevicePasscode]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.TouchIDAny, .ApplicationPassword]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.TouchIDAny, .ApplicationPassword, .PrivateKeyUsage]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.TouchIDCurrentSet]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.TouchIDCurrentSet, .DevicePasscode]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.TouchIDCurrentSet, .ApplicationPassword]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+
+            let policy: AuthenticationPolicy = [.TouchIDCurrentSet, .ApplicationPassword, .PrivateKeyUsage]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+            
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            
+            let policy: AuthenticationPolicy = [.TouchIDAny, .Or, .DevicePasscode]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+            
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+            
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
+        do {
+            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            
+            let policy: AuthenticationPolicy = [.TouchIDAny, .And, .DevicePasscode]
+            let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
+            
+            var error: Unmanaged<CFError>?
+            let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
+            
+            XCTAssertNil(error)
+            XCTAssertNotNil(accessControl)
+        }
     }
 }
