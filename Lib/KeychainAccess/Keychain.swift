@@ -485,13 +485,16 @@ public class Keychain {
     
     public func set(value: NSData, key: String) throws {
         var query = options.query()
-        
-        query[kSecAttrAccount as String] = key
+        query[AttributeAccount] = key
         #if os(iOS)
         if #available(iOS 9.0, *) {
-            query[kSecUseAuthenticationUI as String] = kCFBooleanFalse
+            query[UseAuthenticationUI] = UseAuthenticationUIFail
         } else if #available(iOS 8.0, *) {
-            query[kSecUseNoAuthenticationUI as String] = kCFBooleanTrue
+            query[UseNoAuthenticationUI] = true
+        }
+        #elseif os(OSX)
+        if #available(OSX 10.11, *) {
+            query[UseAuthenticationUI] = UseAuthenticationUIFail
         }
         #endif
         
