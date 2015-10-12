@@ -452,6 +452,52 @@ public class Keychain {
             throw securityError(status: status)
         }
     }
+
+    public subscript(key: String) -> String? {
+        get {
+            return (try? get(key)).flatMap { $0 }
+        }
+
+        set {
+            if let value = newValue {
+                do {
+                    try set(value, key: key)
+                } catch {}
+            } else {
+                do {
+                    try remove(key)
+                } catch {}
+            }
+        }
+    }
+
+    public subscript(string key: String) -> String? {
+        get {
+            return self[key]
+        }
+
+        set {
+            self[key] = newValue
+        }
+    }
+
+    public subscript(data key: String) -> NSData? {
+        get {
+            return (try? getData(key)).flatMap { $0 }
+        }
+
+        set {
+            if let value = newValue {
+                do {
+                    try set(value, key: key)
+                } catch {}
+            } else {
+                do {
+                    try remove(key)
+                } catch {}
+            }
+        }
+    }
     
     // MARK:
     
@@ -491,54 +537,6 @@ public class Keychain {
             return false
         default:
             throw securityError(status: status)
-        }
-    }
-    
-    // MARK:
-    
-    public subscript(key: String) -> String? {
-        get {
-            return (try? get(key)).flatMap { $0 }
-        }
-        
-        set {
-            if let value = newValue {
-                do {
-                    try set(value, key: key)
-                } catch {}
-            } else {
-                do {
-                    try remove(key)
-                } catch {}
-            }
-        }
-    }
-
-    public subscript(string key: String) -> String? {
-        get {
-            return self[key]
-        }
-
-        set {
-            self[key] = newValue
-        }
-    }
-
-    public subscript(data key: String) -> NSData? {
-        get {
-            return (try? getData(key)).flatMap { $0 }
-        }
-
-        set {
-            if let value = newValue {
-                do {
-                    try set(value, key: key)
-                } catch {}
-            } else {
-                do {
-                    try remove(key)
-                } catch {}
-            }
         }
     }
     
