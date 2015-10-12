@@ -138,6 +138,7 @@ public struct AuthenticationPolicy : OptionSetType {
     even if fingers are added or removed.
     */
     @available(iOS 8.0, OSX 10.10, *)
+    @available(watchOS, unavailable)
     public static let UserPresence = AuthenticationPolicy(rawValue: 1 << 0)
 
     /**
@@ -147,6 +148,7 @@ public struct AuthenticationPolicy : OptionSetType {
     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
+    @available(watchOS, unavailable)
     public static let TouchIDAny = AuthenticationPolicy(rawValue: 1 << 1)
 
     /**
@@ -156,12 +158,14 @@ public struct AuthenticationPolicy : OptionSetType {
     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
+    @available(watchOS, unavailable)
     public static let TouchIDCurrentSet = AuthenticationPolicy(rawValue: 1 << 3)
 
     /**
     Constraint: Device passcode
     */
     @available(iOS 9.0, OSX 10.11, *)
+    @available(watchOS, unavailable)
     public static let DevicePasscode = AuthenticationPolicy(rawValue: 1 << 4)
 
     /**
@@ -170,6 +174,7 @@ public struct AuthenticationPolicy : OptionSetType {
     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
+    @available(watchOS, unavailable)
     public static let Or = AuthenticationPolicy(rawValue: 1 << 14)
 
     /**
@@ -178,6 +183,7 @@ public struct AuthenticationPolicy : OptionSetType {
     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
+    @available(watchOS, unavailable)
     public static let And = AuthenticationPolicy(rawValue: 1 << 15)
 
     /**
@@ -185,6 +191,7 @@ public struct AuthenticationPolicy : OptionSetType {
     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
+    @available(watchOS, unavailable)
     public static let PrivateKeyUsage = AuthenticationPolicy(rawValue: 1 << 30)
 
     /**
@@ -193,6 +200,7 @@ public struct AuthenticationPolicy : OptionSetType {
     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
+    @available(watchOS, unavailable)
     public static let ApplicationPassword = AuthenticationPolicy(rawValue: 1 << 31)
 
     public let rawValue : Int
@@ -246,18 +254,23 @@ private let UseNoAuthenticationUI = kSecUseNoAuthenticationUI as String
 #endif
 
 @available(iOS 9.0, OSX 10.11, *)
+@available(watchOS, unavailable)
 private let UseAuthenticationUI = kSecUseAuthenticationUI as String
 
 @available(iOS 9.0, OSX 10.11, *)
+@available(watchOS, unavailable)
 private let UseAuthenticationContext = kSecUseAuthenticationContext as String
 
 @available(iOS 9.0, OSX 10.11, *)
+@available(watchOS, unavailable)
 private let UseAuthenticationUIAllow = kSecUseAuthenticationUIAllow as String
 
 @available(iOS 9.0, OSX 10.11, *)
+@available(watchOS, unavailable)
 private let UseAuthenticationUIFail = kSecUseAuthenticationUIFail as String
 
 @available(iOS 9.0, OSX 10.11, *)
+@available(watchOS, unavailable)
 private let UseAuthenticationUISkip = kSecUseAuthenticationUISkip as String
 
 #if os(iOS)
@@ -295,6 +308,7 @@ public class Keychain {
     }
 
     @available(iOS 8.0, OSX 10.10, *)
+    @available(watchOS, unavailable)
     public var authenticationPolicy: AuthenticationPolicy? {
         return options.authenticationPolicy
     }
@@ -312,6 +326,7 @@ public class Keychain {
     }
 
     @available(iOS 8.0, OSX 10.10, *)
+    @available(watchOS, unavailable)
     public var authenticationPrompt: String? {
         return options.authenticationPrompt
     }
@@ -384,6 +399,7 @@ public class Keychain {
     }
 
     @available(iOS 8.0, OSX 10.10, *)
+    @available(watchOS, unavailable)
     public func accessibility(accessibility: Accessibility, authenticationPolicy: AuthenticationPolicy) -> Keychain {
         var options = self.options
         options.accessibility = accessibility
@@ -410,6 +426,7 @@ public class Keychain {
     }
 
     @available(iOS 8.0, OSX 10.10, *)
+    @available(watchOS, unavailable)
     public func authenticationPrompt(authenticationPrompt: String) -> Keychain {
         var options = self.options
         options.authenticationPrompt = authenticationPrompt
