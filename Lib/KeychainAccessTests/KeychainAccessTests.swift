@@ -665,6 +665,150 @@ class KeychainAccessTests: XCTestCase {
 
     // MARK:
 
+#if os(iOS)
+    func testAllKeys() {
+        do {
+            let keychain = Keychain()
+            keychain["key1"] = "value1"
+            keychain["key2"] = "value2"
+            keychain["key3"] = "value3"
+
+            let allKeys = keychain.allKeys()
+            print(allKeys)
+            XCTAssertEqual(allKeys.count, 3)
+            XCTAssertEqual(allKeys.sort(), ["key1", "key2", "key3"])
+
+            let allItems = keychain.allItems()
+            XCTAssertEqual(allItems.count, 3)
+
+            let sortedItems = allItems.sort { (item1, item2) -> Bool in
+                let value1 = item1["value"] as! String
+                let value2 = item2["value"] as! String
+                return value1.compare(value2) == NSComparisonResult.OrderedAscending || value1.compare(value2) == NSComparisonResult.OrderedSame
+            }
+
+            XCTAssertEqual(sortedItems[0]["accessGroup"] as? String, "")
+            XCTAssertEqual(sortedItems[0]["synchronizable"] as? String, "false")
+            XCTAssertEqual(sortedItems[0]["service"] as? String, "")
+            XCTAssertEqual(sortedItems[0]["value"] as? String, "value1")
+            XCTAssertEqual(sortedItems[0]["key"] as? String, "key1")
+            XCTAssertEqual(sortedItems[0]["class"] as? String, "GenericPassword")
+            XCTAssertEqual(sortedItems[0]["accessibility"] as? String, "AfterFirstUnlock")
+
+            XCTAssertEqual(sortedItems[1]["accessGroup"] as? String, "")
+            XCTAssertEqual(sortedItems[1]["synchronizable"] as? String, "false")
+            XCTAssertEqual(sortedItems[1]["service"] as? String, "")
+            XCTAssertEqual(sortedItems[1]["value"] as? String, "value2")
+            XCTAssertEqual(sortedItems[1]["key"] as? String, "key2")
+            XCTAssertEqual(sortedItems[1]["class"] as? String, "GenericPassword")
+            XCTAssertEqual(sortedItems[1]["accessibility"] as? String, "AfterFirstUnlock")
+
+            XCTAssertEqual(sortedItems[2]["accessGroup"] as? String, "")
+            XCTAssertEqual(sortedItems[2]["synchronizable"] as? String, "false")
+            XCTAssertEqual(sortedItems[2]["service"] as? String, "")
+            XCTAssertEqual(sortedItems[2]["value"] as? String, "value3")
+            XCTAssertEqual(sortedItems[2]["key"] as? String, "key3")
+            XCTAssertEqual(sortedItems[2]["class"] as? String, "GenericPassword")
+            XCTAssertEqual(sortedItems[2]["accessibility"] as? String, "AfterFirstUnlock")
+        }
+        do {
+            let keychain = Keychain(service: "service1")
+            try! keychain
+                .synchronizable(true)
+                .accessibility(.WhenUnlockedThisDeviceOnly)
+                .set("service1_value1", key: "service1_key1")
+
+            try! keychain
+                .synchronizable(false)
+                .accessibility(.AfterFirstUnlockThisDeviceOnly)
+                .set("service1_value2", key: "service1_key2")
+
+            let allKeys = keychain.allKeys()
+            XCTAssertEqual(allKeys.count, 2)
+            XCTAssertEqual(allKeys.sort(), ["service1_key1", "service1_key2"])
+
+            let allItems = keychain.allItems()
+            XCTAssertEqual(allItems.count, 2)
+
+            let sortedItems = allItems.sort { (item1, item2) -> Bool in
+                let value1 = item1["value"] as! String
+                let value2 = item2["value"] as! String
+                return value1.compare(value2) == NSComparisonResult.OrderedAscending || value1.compare(value2) == NSComparisonResult.OrderedSame
+            }
+
+            XCTAssertEqual(sortedItems[0]["accessGroup"] as? String, "")
+            XCTAssertEqual(sortedItems[0]["synchronizable"] as? String, "true")
+            XCTAssertEqual(sortedItems[0]["service"] as? String, "service1")
+            XCTAssertEqual(sortedItems[0]["value"] as? String, "service1_value1")
+            XCTAssertEqual(sortedItems[0]["key"] as? String, "service1_key1")
+            XCTAssertEqual(sortedItems[0]["class"] as? String, "GenericPassword")
+            XCTAssertEqual(sortedItems[0]["accessibility"] as? String, "WhenUnlockedThisDeviceOnly")
+
+            XCTAssertEqual(sortedItems[1]["accessGroup"] as? String, "")
+            XCTAssertEqual(sortedItems[1]["synchronizable"] as? String, "false")
+            XCTAssertEqual(sortedItems[1]["service"] as? String, "service1")
+            XCTAssertEqual(sortedItems[1]["value"] as? String, "service1_value2")
+            XCTAssertEqual(sortedItems[1]["key"] as? String, "service1_key2")
+            XCTAssertEqual(sortedItems[1]["class"] as? String, "GenericPassword")
+            XCTAssertEqual(sortedItems[1]["accessibility"] as? String, "AfterFirstUnlockThisDeviceOnly")
+        }
+        do {
+            let keychain = Keychain(server: "https://google.com", protocolType: .HTTPS)
+            try! keychain
+                .synchronizable(false)
+                .accessibility(.AlwaysThisDeviceOnly)
+                .set("google.com_value1", key: "google.com_key1")
+
+            try! keychain
+                .synchronizable(true)
+                .accessibility(.Always)
+                .set("google.com_value2", key: "google.com_key2")
+
+            let allKeys = keychain.allKeys()
+            XCTAssertEqual(allKeys.count, 2)
+            XCTAssertEqual(allKeys.sort(), ["google.com_key1", "google.com_key2"])
+
+            let allItems = keychain.allItems()
+            XCTAssertEqual(allItems.count, 2)
+
+            let sortedItems = allItems.sort { (item1, item2) -> Bool in
+                let value1 = item1["value"] as! String
+                let value2 = item2["value"] as! String
+                return value1.compare(value2) == NSComparisonResult.OrderedAscending || value1.compare(value2) == NSComparisonResult.OrderedSame
+            }
+
+            XCTAssertEqual(sortedItems[0]["synchronizable"] as? String, "false")
+            XCTAssertEqual(sortedItems[0]["value"] as? String, "google.com_value1")
+            XCTAssertEqual(sortedItems[0]["key"] as? String, "google.com_key1")
+            XCTAssertEqual(sortedItems[0]["server"] as? String, "google.com")
+            XCTAssertEqual(sortedItems[0]["class"] as? String, "InternetPassword")
+            XCTAssertEqual(sortedItems[0]["authenticationType"] as? String, "Default")
+            XCTAssertEqual(sortedItems[0]["protocol"] as? String, "HTTPS")
+            XCTAssertEqual(sortedItems[0]["accessibility"] as? String, "AlwaysThisDeviceOnly")
+
+            XCTAssertEqual(sortedItems[1]["synchronizable"] as? String, "true")
+            XCTAssertEqual(sortedItems[1]["value"] as? String, "google.com_value2")
+            XCTAssertEqual(sortedItems[1]["key"] as? String, "google.com_key2")
+            XCTAssertEqual(sortedItems[1]["server"] as? String, "google.com")
+            XCTAssertEqual(sortedItems[1]["class"] as? String, "InternetPassword")
+            XCTAssertEqual(sortedItems[1]["authenticationType"] as? String, "Default")
+            XCTAssertEqual(sortedItems[1]["protocol"] as? String, "HTTPS")
+            XCTAssertEqual(sortedItems[1]["accessibility"] as? String, "Always")
+        }
+    }
+
+    func testDescription() {
+        do {
+            let keychain = Keychain()
+
+            XCTAssertEqual(keychain.description, "[]")
+            XCTAssertEqual(keychain.debugDescription, "[]")
+        }
+    }
+#endif
+
+    // MARK:
+
     func testAuthenticationPolicy() {
         guard #available(iOS 9.0, OSX 10.11, *) else {
             return
