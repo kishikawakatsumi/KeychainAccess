@@ -735,9 +735,13 @@ public class Keychain {
     #endif
 
     #if os(iOS)
+    /**
+    @abstract Returns a randomly generated password.
+    @return String password in the form xxx-xxx-xxx-xxx where x is taken from the sets "abcdefghkmnopqrstuvwxy", "ABCDEFGHJKLMNPQRSTUVWXYZ", "3456789" with at least one character from each set being present.
+    */
     @available(iOS 8.0, *)
     public class func generatePassword() -> String {
-        return SecCreateSharedWebCredentialPassword() as! String
+        return SecCreateSharedWebCredentialPassword()! as String
     }
     #endif
     
