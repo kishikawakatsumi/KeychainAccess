@@ -488,7 +488,7 @@ public class Keychain {
         #if os(iOS)
         if #available(iOS 9.0, *) {
             query[UseAuthenticationUI] = UseAuthenticationUIFail
-        } else if #available(iOS 8.0, *) {
+        } else {
             query[UseNoAuthenticationUI] = true
         }
         #elseif os(OSX)
@@ -1010,7 +1010,7 @@ extension Options {
             query[AttributeAuthenticationType] = authenticationType.rawValue
         }
 
-        if #available(iOS 8.0, OSX 10.10, *) {
+        if #available(OSX 10.10, *) {
             if authenticationPrompt != nil {
                 query[UseOperationPrompt] = authenticationPrompt
             }
@@ -1039,7 +1039,7 @@ extension Options {
         }
 
         if let policy = authenticationPolicy {
-            if #available(iOS 8.0, OSX 10.10, *) {
+            if #available(OSX 10.10, *) {
                 var error: Unmanaged<CFError>?
                 guard let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, SecAccessControlCreateFlags(rawValue: policy.rawValue), &error) else {
                     if let error = error?.takeUnretainedValue() {
@@ -1373,7 +1373,7 @@ extension AuthenticationType : RawRepresentable, CustomStringConvertible {
 extension Accessibility : RawRepresentable, CustomStringConvertible {
     
     public init?(rawValue: String) {
-        if #available(iOS 8.0, OSX 10.10, *) {
+        if #available(OSX 10.10, *) {
             switch rawValue {
             case String(kSecAttrAccessibleWhenUnlocked):
                 self = WhenUnlocked
@@ -1411,7 +1411,7 @@ extension Accessibility : RawRepresentable, CustomStringConvertible {
             }
         }
     }
-    
+
     public var rawValue: String {
         switch self {
         case WhenUnlocked:
@@ -1421,7 +1421,7 @@ extension Accessibility : RawRepresentable, CustomStringConvertible {
         case Always:
             return kSecAttrAccessibleAlways as String
         case WhenPasscodeSetThisDeviceOnly:
-            if #available(iOS 8.0, OSX 10.10, *) {
+            if #available(OSX 10.10, *) {
                 return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly as String
             } else {
                 fatalError("'Accessibility.WhenPasscodeSetThisDeviceOnly' is not available on this version of OS.")
