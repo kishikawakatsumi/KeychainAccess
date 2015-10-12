@@ -287,7 +287,7 @@ public class Keychain {
     }
     
     public convenience init(server: String, protocolType: ProtocolType, authenticationType: AuthenticationType) {
-        self.init(server: NSURL(string: server)!, protocolType: protocolType, authenticationType: .Default)
+        self.init(server: NSURL(string: server)!, protocolType: protocolType, authenticationType: authenticationType)
     }
     
     public convenience init(server: NSURL, protocolType: ProtocolType) {
