@@ -601,7 +601,7 @@ public class Keychain {
     
     public func removeAll() throws {
         var query = options.query()
-        #if !os(iOS) && !os(watchOS)
+        #if !os(iOS) && !os(watchOS) && !os(tvOS)
         query[MatchLimit] = MatchLimitAll
         #endif
         
@@ -670,7 +670,7 @@ public class Keychain {
         query[Class] = itemClass.rawValue
         query[MatchLimit] = MatchLimitAll
         query[ReturnAttributes] = true
-        #if os(iOS) || os(watchOS)
+        #if os(iOS) || os(watchOS) || os(tvOS)
         query[ReturnData] = true
         #endif
         
@@ -840,7 +840,7 @@ public class Keychain {
         var query = options.query()
         query[MatchLimit] = MatchLimitAll
         query[ReturnAttributes] = true
-        #if os(iOS)
+        #if os(iOS) || os(watchOS) || os(tvOS)
         query[ReturnData] = true
         #endif
         
@@ -998,7 +998,7 @@ extension Options {
         case .GenericPassword:
             query[AttributeService] = service
             // Access group is not supported on any simulators.
-            #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS))
+            #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS) && !os(tvOS))
             if let accessGroup = self.accessGroup {
                 query[AttributeAccessGroup] = accessGroup
             }
