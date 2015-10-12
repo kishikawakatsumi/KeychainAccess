@@ -286,6 +286,7 @@ let keychain = Keychain(service: "com.example.github-token")
 
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
     do {
+        // Should be the secret invalidated when passcode is removed? If not then use `.WhenUnlocked`
         try keychain
             .accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence)
             .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
@@ -310,6 +311,7 @@ let keychain = Keychain(service: "com.example.github-token")
 
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
     do {
+        // Should be the secret invalidated when passcode is removed? If not then use `.WhenUnlocked`
         try keychain
             .accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence)
             .authenticationPrompt("Authenticate to update your access token")
