@@ -1011,11 +1011,13 @@ extension Options {
             query[AttributeAuthenticationType] = authenticationType.rawValue
         }
 
+        #if !os(watchOS)
         if #available(iOS 8.0, OSX 10.10, *) {
             if authenticationPrompt != nil {
                 query[UseOperationPrompt] = authenticationPrompt
             }
         }
+        #endif
         
         return query
     }
