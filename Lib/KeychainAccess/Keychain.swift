@@ -1375,8 +1375,15 @@ extension CFError {
 public enum Status : OSStatus, ErrorType {
     case Success
     case Unimplemented
+    case DiskFull
+    case IO
+    case OpWr
     case Param
+    case WrPerm
     case Allocate
+    case UserCanceled
+    case BadReq
+    case InternalComponent
     case NotAvailable
     case ReadOnly
     case AuthFailed
@@ -1406,6 +1413,7 @@ public enum Status : OSStatus, ErrorType {
     case DataNotModifiable
     case CreateChainFailed
     case InvalidPrefsDomain
+    case InDarkWake
     case ACLNotSimple
     case PolicyNotFound
     case InvalidTrustSetting
@@ -1464,7 +1472,6 @@ public enum Status : OSStatus, ErrorType {
     case AppleInvalidKeyEndDate
     case ConversionError
     case AppleSSLv2Rollback
-    case DiskFull
     case QuotaExceeded
     case FileTooBig
     case InvalidDatabaseBlob
@@ -1749,6 +1756,25 @@ public enum Status : OSStatus, ErrorType {
     case InvalidIndexInfo
     case InvalidNewOwner
     case InvalidModifyMode
+    case MissingRequiredExtension
+    case ExtendedKeyUsageNotCritical
+    case TimestampMissing
+    case TimestampInvalid
+    case TimestampNotTrusted
+    case TimestampServiceNotAvailable
+    case TimestampBadAlg
+    case TimestampBadRequest
+    case TimestampBadDataFormat
+    case TimestampTimeNotAvailable
+    case TimestampUnacceptedPolicy
+    case TimestampUnacceptedExtension
+    case TimestampAddInfoNotAvailable
+    case TimestampSystemFailure
+    case SigningTimeMissing
+    case TimestampRejection
+    case TimestampWaiting
+    case TimestampRevocationWarning
+    case TimestampRevocationNotification
     case UnexpectedError
 }
 
@@ -1760,10 +1786,24 @@ extension Status : RawRepresentable, CustomStringConvertible {
             self = Success
         case -4:
             self = Unimplemented
+        case -34:
+            self = DiskFull
+        case -36:
+            self = IO
+        case -49:
+            self = OpWr
         case -50:
             self = Param
+        case -61:
+            self = WrPerm
         case -108:
             self = Allocate
+        case -128:
+            self = UserCanceled
+        case -909:
+            self = BadReq
+        case -2070:
+            self = InternalComponent
         case -25291:
             self = NotAvailable
         case -25292:
@@ -1822,6 +1862,8 @@ extension Status : RawRepresentable, CustomStringConvertible {
             self = CreateChainFailed
         case -25319:
             self = InvalidPrefsDomain
+        case -25320:
+            self = InDarkWake
         case -25240:
             self = ACLNotSimple
         case -25241:
@@ -1938,8 +1980,6 @@ extension Status : RawRepresentable, CustomStringConvertible {
             self = ConversionError
         case -67595:
             self = AppleSSLv2Rollback
-        case -34:
-            self = DiskFull
         case -67596:
             self = QuotaExceeded
         case -67597:
@@ -2508,6 +2548,44 @@ extension Status : RawRepresentable, CustomStringConvertible {
             self = InvalidNewOwner
         case -67879:
             self = InvalidModifyMode
+        case -67880:
+            self = MissingRequiredExtension
+        case -67881:
+            self = ExtendedKeyUsageNotCritical
+        case -67882:
+            self = TimestampMissing
+        case -67883:
+            self = TimestampInvalid
+        case -67884:
+            self = TimestampNotTrusted
+        case -67885:
+            self = TimestampServiceNotAvailable
+        case -67886:
+            self = TimestampBadAlg
+        case -67887:
+            self = TimestampBadRequest
+        case -67888:
+            self = TimestampBadDataFormat
+        case -67889:
+            self = TimestampTimeNotAvailable
+        case -67890:
+            self = TimestampUnacceptedPolicy
+        case -67891:
+            self = TimestampUnacceptedExtension
+        case -67892:
+            self = TimestampAddInfoNotAvailable
+        case -67893:
+            self = TimestampSystemFailure
+        case -67894:
+            self = SigningTimeMissing
+        case -67895:
+            self = TimestampRejection
+        case -67896:
+            self = TimestampWaiting
+        case -67897:
+            self = TimestampRevocationWarning
+        case -67898:
+            self = TimestampRevocationNotification
         default:
             self = UnexpectedError
         }
@@ -2519,10 +2597,24 @@ extension Status : RawRepresentable, CustomStringConvertible {
             return 0
         case Unimplemented:
             return -4
+        case DiskFull:
+            return -34
+        case IO:
+            return -36
+        case OpWr:
+            return -49
         case Param:
             return -50
+        case WrPerm:
+            return -61
         case Allocate:
             return -108
+        case UserCanceled:
+            return -128
+        case BadReq:
+            return -909
+        case InternalComponent:
+            return -2070
         case NotAvailable:
             return -25291
         case ReadOnly:
@@ -2581,6 +2673,8 @@ extension Status : RawRepresentable, CustomStringConvertible {
             return -25318
         case InvalidPrefsDomain:
             return -25319
+        case InDarkWake:
+            return -25320
         case ACLNotSimple:
             return -25240
         case PolicyNotFound:
@@ -2697,8 +2791,6 @@ extension Status : RawRepresentable, CustomStringConvertible {
             return -67594
         case AppleSSLv2Rollback:
             return -67595
-        case DiskFull:
-            return -34
         case QuotaExceeded:
             return -67596
         case FileTooBig:
@@ -3267,6 +3359,44 @@ extension Status : RawRepresentable, CustomStringConvertible {
             return -67878
         case InvalidModifyMode:
             return -67879
+        case MissingRequiredExtension:
+            return -67880
+        case ExtendedKeyUsageNotCritical:
+            return -67881
+        case TimestampMissing:
+            return -67882
+        case TimestampInvalid:
+            return -67883
+        case TimestampNotTrusted:
+            return -67884
+        case TimestampServiceNotAvailable:
+            return -67885
+        case TimestampBadAlg:
+            return -67886
+        case TimestampBadRequest:
+            return -67887
+        case TimestampBadDataFormat:
+            return -67888
+        case TimestampTimeNotAvailable:
+            return -67889
+        case TimestampUnacceptedPolicy:
+            return -67890
+        case TimestampUnacceptedExtension:
+            return -67891
+        case TimestampAddInfoNotAvailable:
+            return -67892
+        case TimestampSystemFailure:
+            return -67893
+        case SigningTimeMissing:
+            return -67894
+        case TimestampRejection:
+            return -67895
+        case TimestampWaiting:
+            return -67896
+        case TimestampRevocationWarning:
+            return -67897
+        case TimestampRevocationNotification:
+            return -67898
         default:
             return -99999
         }
@@ -3278,10 +3408,24 @@ extension Status : RawRepresentable, CustomStringConvertible {
             return "No error."
         case Unimplemented:
             return "Function or operation not implemented."
+        case DiskFull:
+            return "The disk is full."
+        case IO:
+            return "I/O error (bummers)"
+        case OpWr:
+            return "file already open with with write permission"
         case Param:
             return "One or more parameters passed to a function were not valid."
+        case WrPerm:
+            return "write permissions error"
         case Allocate:
             return "Failed to allocate memory."
+        case UserCanceled:
+            return "User canceled the operation."
+        case BadReq:
+            return "Bad parameter or invalid state for operation."
+        case InternalComponent:
+            return ""
         case NotAvailable:
             return "No keychain is available. You may need to restart your computer."
         case ReadOnly:
@@ -3340,6 +3484,8 @@ extension Status : RawRepresentable, CustomStringConvertible {
             return "One or more certificates required to validate this certificate cannot be found."
         case InvalidPrefsDomain:
             return "The specified preferences domain is not valid."
+        case InDarkWake:
+            return "In dark wake, no UI possible"
         case ACLNotSimple:
             return "The specified access control list is not in standard (simple) form."
         case PolicyNotFound:
@@ -3456,8 +3602,6 @@ extension Status : RawRepresentable, CustomStringConvertible {
             return "A conversion error has occurred."
         case AppleSSLv2Rollback:
             return "A SSLv2 rollback error has occurred."
-        case DiskFull:
-            return "The disk is full."
         case QuotaExceeded:
             return "The quota was exceeded."
         case FileTooBig:
@@ -4026,6 +4170,44 @@ extension Status : RawRepresentable, CustomStringConvertible {
             return "The new owner is not valid."
         case InvalidModifyMode:
             return "The modify mode is not valid."
+        case MissingRequiredExtension:
+            return "A required certificate extension is missing."
+        case ExtendedKeyUsageNotCritical:
+            return "The extended key usage extension was not marked critical."
+        case TimestampMissing:
+            return "A timestamp was expected but was not found."
+        case TimestampInvalid:
+            return "The timestamp was not valid."
+        case TimestampNotTrusted:
+            return "The timestamp was not trusted."
+        case TimestampServiceNotAvailable:
+            return "The timestamp service is not available."
+        case TimestampBadAlg:
+            return "An unrecognized or unsupported Algorithm Identifier in timestamp."
+        case TimestampBadRequest:
+            return "The timestamp transaction is not permitted or supported."
+        case TimestampBadDataFormat:
+            return "The timestamp data submitted has the wrong format."
+        case TimestampTimeNotAvailable:
+            return "The time source for the Timestamp Authority is not available."
+        case TimestampUnacceptedPolicy:
+            return "The requested policy is not supported by the Timestamp Authority."
+        case TimestampUnacceptedExtension:
+            return "The requested extension is not supported by the Timestamp Authority."
+        case TimestampAddInfoNotAvailable:
+            return "The additional information requested is not available."
+        case TimestampSystemFailure:
+            return "The timestamp request cannot be handled due to system failure."
+        case SigningTimeMissing:
+            return "A signing time was expected but was not found."
+        case TimestampRejection:
+            return "A timestamp transaction was rejected."
+        case TimestampWaiting:
+            return "A timestamp transaction is waiting."
+        case TimestampRevocationWarning:
+            return "A timestamp authority revocation warning was issued."
+        case TimestampRevocationNotification:
+            return "A timestamp authority revocation notification was issued."
         default:
             return "Unexpected error has occurred."
         }

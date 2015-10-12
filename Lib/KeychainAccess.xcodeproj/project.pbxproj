@@ -15,6 +15,8 @@
 		140F196F1A49D79500B0016A /* KeychainAccessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F196E1A49D79500B0016A /* KeychainAccessTests.swift */; };
 		140F197B1A49D89200B0016A /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F197A1A49D89200B0016A /* Keychain.swift */; };
 		142852A71B1CED3500F27BD9 /* KeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 140F19611A49D79400B0016A /* KeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		142EDA851BCB505F00A32149 /* ErrorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */; settings = {ASSET_TAGS = (); }; };
+		142EDA861BCB505F00A32149 /* ErrorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */; settings = {ASSET_TAGS = (); }; };
 		148F9D4A1BCB4118006EDF48 /* EnumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148F9D491BCB4118006EDF48 /* EnumTests.swift */; settings = {ASSET_TAGS = (); }; };
 		148F9D4B1BCB4118006EDF48 /* EnumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148F9D491BCB4118006EDF48 /* EnumTests.swift */; settings = {ASSET_TAGS = (); }; };
 		14FDD4681B49B9EF00C39FE8 /* KeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 140F19611A49D79400B0016A /* KeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -48,6 +50,7 @@
 		140F196D1A49D79500B0016A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		140F196E1A49D79500B0016A /* KeychainAccessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainAccessTests.swift; sourceTree = "<group>"; };
 		140F197A1A49D89200B0016A /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorTypeTests.swift; sourceTree = "<group>"; };
 		148F9D491BCB4118006EDF48 /* EnumTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumTests.swift; sourceTree = "<group>"; };
 		14FDD4601B49B9AD00C39FE8 /* KeychainAccess.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeychainAccess.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -137,6 +140,7 @@
 			children = (
 				140F196E1A49D79500B0016A /* KeychainAccessTests.swift */,
 				148F9D491BCB4118006EDF48 /* EnumTests.swift */,
+				142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */,
 				140F196C1A49D79500B0016A /* Supporting Files */,
 			);
 			path = KeychainAccessTests;
@@ -370,6 +374,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				148F9D4B1BCB4118006EDF48 /* EnumTests.swift in Sources */,
+				142EDA861BCB505F00A32149 /* ErrorTypeTests.swift in Sources */,
 				140C8F241A4EBF9A00F85556 /* KeychainAccessTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				148F9D4A1BCB4118006EDF48 /* EnumTests.swift in Sources */,
+				142EDA851BCB505F00A32149 /* ErrorTypeTests.swift in Sources */,
 				140F196F1A49D79500B0016A /* KeychainAccessTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
