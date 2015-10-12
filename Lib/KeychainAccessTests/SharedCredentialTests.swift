@@ -19,6 +19,37 @@ class SharedCredentialTests: XCTestCase {
         super.tearDown()
     }
 
+    func testGetSharedPassword() {
+        do {
+            let expectation = expectationWithDescription("getSharedPassword")
+
+            let keychain = Keychain(server: "https://kishikawakatsumi.com", protocolType: .HTTPS)
+
+            keychain.getSharedPassword("kishikawakatsumi") { (password, error) -> () in
+                XCTAssertNil(password)
+                XCTAssertNotNil(error)
+                expectation.fulfill()
+            }
+
+            waitForExpectationsWithTimeout(10.0, handler: nil)
+        }
+        do {
+            let expectation = expectationWithDescription("getSharedPassword")
+
+            let keychain = Keychain(server: "https://kishikawakatsumi.com", protocolType: .HTTPS)
+
+            keychain.getSharedPassword { (account, password, error) -> () in
+                XCTAssertNil(account)
+                XCTAssertNil(password)
+                XCTAssertNotNil(error)
+                expectation.fulfill()
+            }
+
+            waitForExpectationsWithTimeout(10.0, handler: nil)
+        }
+
+    }
+
     func testGeneratePassword() {
         do {
             var passwords = Set<String>()
