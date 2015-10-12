@@ -674,7 +674,6 @@ class KeychainAccessTests: XCTestCase {
             keychain["key3"] = "value3"
 
             let allKeys = keychain.allKeys()
-            print(allKeys)
             XCTAssertEqual(allKeys.count, 3)
             XCTAssertEqual(allKeys.sort(), ["key1", "key2", "key3"])
 
@@ -794,6 +793,36 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(sortedItems[1]["authenticationType"] as? String, "Default")
             XCTAssertEqual(sortedItems[1]["protocol"] as? String, "HTTPS")
             XCTAssertEqual(sortedItems[1]["accessibility"] as? String, "Always")
+        }
+        do {
+            let allKeys = Keychain.allKeys(.GenericPassword)
+            XCTAssertEqual(allKeys.count, 5)
+
+            let sortedKeys = allKeys.sort { (key1, key2) -> Bool in
+                return key1.1.compare(key2.1) == NSComparisonResult.OrderedAscending || key1.1.compare(key2.1) == NSComparisonResult.OrderedSame
+            }
+            XCTAssertEqual(sortedKeys[0].0, "")
+            XCTAssertEqual(sortedKeys[0].1, "key1")
+            XCTAssertEqual(sortedKeys[1].0, "")
+            XCTAssertEqual(sortedKeys[1].1, "key2")
+            XCTAssertEqual(sortedKeys[2].0, "")
+            XCTAssertEqual(sortedKeys[2].1, "key3")
+            XCTAssertEqual(sortedKeys[3].0, "service1")
+            XCTAssertEqual(sortedKeys[3].1, "service1_key1")
+            XCTAssertEqual(sortedKeys[4].0, "service1")
+            XCTAssertEqual(sortedKeys[4].1, "service1_key2")
+        }
+        do {
+            let allKeys = Keychain.allKeys(.InternetPassword)
+            XCTAssertEqual(allKeys.count, 2)
+
+            let sortedKeys = allKeys.sort { (key1, key2) -> Bool in
+                return key1.1.compare(key2.1) == NSComparisonResult.OrderedAscending || key1.1.compare(key2.1) == NSComparisonResult.OrderedSame
+            }
+            XCTAssertEqual(sortedKeys[0].0, "google.com")
+            XCTAssertEqual(sortedKeys[0].1, "google.com_key1")
+            XCTAssertEqual(sortedKeys[1].0, "google.com")
+            XCTAssertEqual(sortedKeys[1].1, "google.com_key2")
         }
     }
 

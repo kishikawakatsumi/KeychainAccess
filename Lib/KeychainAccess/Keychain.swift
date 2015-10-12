@@ -545,6 +545,7 @@ public class Keychain {
     public class func allKeys(itemClass: ItemClass) -> [(String, String)] {
         var query = [String: AnyObject]()
         query[kSecClass as String] = itemClass.rawValue
+        query[kSecAttrSynchronizable as String] = kSecAttrSynchronizableAny
         query[kSecMatchLimit as String] = kSecMatchLimitAll
         query[kSecReturnAttributes as String] = kCFBooleanTrue
         
