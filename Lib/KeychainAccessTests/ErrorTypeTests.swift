@@ -314,9 +314,27 @@ class ErrorTypeTests: XCTestCase {
             XCTAssertEqual(status?.description, "MAC verification failed during PKCS12 import (wrong password?)")
         }
         do {
+            let errSecInvalidCertificate: OSStatus = -26265
+            let status = Status(rawValue: errSecInvalidCertificate)
+            XCTAssertEqual(status, .InvalidCertificate)
+            XCTAssertEqual(status?.description, "This certificate could not be decoded.")
+        }
+        do {
             let status = Status(rawValue: errSecNotSigner)
             XCTAssertEqual(status, .NotSigner)
             XCTAssertEqual(status?.description, "A certificate was not signed by its proposed parent.")
+        }
+        do {
+            let errSecPolicyDenied: OSStatus = -26270
+            let status = Status(rawValue: errSecPolicyDenied)
+            XCTAssertEqual(status, .PolicyDenied)
+            XCTAssertEqual(status?.description, "The certificate chain was not trusted due to a policy not accepting it.")
+        }
+        do {
+            let errSecInvalidKey: OSStatus = -26274
+            let status = Status(rawValue: errSecInvalidKey)
+            XCTAssertEqual(status, .InvalidKey)
+            XCTAssertEqual(status?.description, "The provided key material was not valid.")
         }
         #endif
         do {
@@ -329,6 +347,156 @@ class ErrorTypeTests: XCTestCase {
             let status = Status(rawValue: errSecServiceNotAvailable)
             XCTAssertEqual(status, .ServiceNotAvailable)
             XCTAssertEqual(status?.description, "The required service is not available.")
+        }
+        do {
+            let errSecUnsupportedAlgorithm: OSStatus = -26268
+            let status = Status(rawValue: errSecUnsupportedAlgorithm)
+            XCTAssertEqual(status, .UnsupportedAlgorithm)
+            XCTAssertEqual(status?.description, "An unsupported algorithm was encountered.")
+        }
+            do {
+            let errSecUnsupportedOperation: OSStatus = -26271
+            let status = Status(rawValue: errSecUnsupportedOperation)
+            XCTAssertEqual(status, .UnsupportedOperation)
+            XCTAssertEqual(status?.description, "The operation you requested is not supported by this key.")
+        }
+        do {
+            let errSecUnsupportedPadding: OSStatus = -26273
+            let status = Status(rawValue: errSecUnsupportedPadding)
+            XCTAssertEqual(status, .UnsupportedPadding)
+            XCTAssertEqual(status?.description, "The padding you requested is not supported.")
+        }
+        do {
+            let errSecItemInvalidKey: OSStatus = -34000
+            let status = Status(rawValue: errSecItemInvalidKey)
+            XCTAssertEqual(status, .ItemInvalidKey)
+            XCTAssertEqual(status?.description, "A string key in dictionary is not one of the supported keys.")
+        }
+        do {
+            let errSecItemInvalidKeyType: OSStatus = -34001
+            let status = Status(rawValue: errSecItemInvalidKeyType)
+            XCTAssertEqual(status, .ItemInvalidKeyType)
+            XCTAssertEqual(status?.description, "A key in a dictionary is neither a CFStringRef nor a CFNumberRef.")
+        }
+        do {
+            let errSecItemInvalidValue: OSStatus = -34002
+            let status = Status(rawValue: errSecItemInvalidValue)
+            XCTAssertEqual(status, .ItemInvalidValue)
+            XCTAssertEqual(status?.description, "A value in a dictionary is an invalid (or unsupported) CF type.")
+        }
+        do {
+            let errSecItemClassMissing: OSStatus = -34003
+            let status = Status(rawValue: errSecItemClassMissing)
+            XCTAssertEqual(status, .ItemClassMissing)
+            XCTAssertEqual(status?.description, "No kSecItemClass key was specified in a dictionary.")
+        }
+        do {
+            let errSecItemMatchUnsupported: OSStatus = -34004
+            let status = Status(rawValue: errSecItemMatchUnsupported)
+            XCTAssertEqual(status, .ItemMatchUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed one or more kSecMatch keys to a function which does not support matches.")
+        }
+        do {
+            let errSecUseItemListUnsupported: OSStatus = -34005
+            let status = Status(rawValue: errSecUseItemListUnsupported)
+            XCTAssertEqual(status, .UseItemListUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed in a kSecUseItemList key to a function which does not support it.")
+        }
+        do {
+            let errSecUseKeychainUnsupported: OSStatus = -34006
+            let status = Status(rawValue: errSecUseKeychainUnsupported)
+            XCTAssertEqual(status, .UseKeychainUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed in a kSecUseKeychain key to a function which does not support it.")
+        }
+        do {
+            let errSecUseKeychainListUnsupported: OSStatus = -34007
+            let status = Status(rawValue: errSecUseKeychainListUnsupported)
+            XCTAssertEqual(status, .UseKeychainListUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed in a kSecUseKeychainList key to a function which does not support it.")
+        }
+        do {
+            let errSecReturnDataUnsupported: OSStatus = -34008
+            let status = Status(rawValue: errSecReturnDataUnsupported)
+            XCTAssertEqual(status, .ReturnDataUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed in a kSecReturnData key to a function which does not support it.")
+        }
+        do {
+            let errSecReturnAttributesUnsupported: OSStatus = -34009
+            let status = Status(rawValue: errSecReturnAttributesUnsupported)
+            XCTAssertEqual(status, .ReturnAttributesUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed in a kSecReturnAttributes key to a function which does not support it.")
+        }
+        do {
+            let errSecReturnRefUnsupported: OSStatus = -34010
+            let status = Status(rawValue: errSecReturnRefUnsupported)
+            XCTAssertEqual(status, .ReturnRefUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed in a kSecReturnRef key to a function which does not support it.")
+        }
+        do {
+            let errSecValueRefUnsupported: OSStatus = -34012
+            let status = Status(rawValue: errSecValueRefUnsupported)
+            XCTAssertEqual(status, .ValueRefUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed in a kSecValueRef key to a function which does not support it.")
+        }
+        do {
+            let errSecValuePersistentRefUnsupported: OSStatus = -34013
+            let status = Status(rawValue: errSecValuePersistentRefUnsupported)
+            XCTAssertEqual(status, .ValuePersistentRefUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed in a kSecValuePersistentRef key to a function which does not support it.")
+        }
+        do {
+            let errSecReturnMissingPointer: OSStatus = -34014
+            let status = Status(rawValue: errSecReturnMissingPointer)
+            XCTAssertEqual(status, .ReturnMissingPointer)
+            XCTAssertEqual(status?.description, "The caller passed asked for something to be returned but did not pass in a result pointer.")
+        }
+        do {
+            let errSecMatchLimitUnsupported: OSStatus = -34015
+            let status = Status(rawValue: errSecMatchLimitUnsupported)
+            XCTAssertEqual(status, .MatchLimitUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed in a kSecMatchLimit key to a call which does not support limits.")
+        }
+        do {
+            let errSecItemIllegalQuery: OSStatus = -34016
+            let status = Status(rawValue: errSecItemIllegalQuery)
+            XCTAssertEqual(status, .ItemIllegalQuery)
+            XCTAssertEqual(status?.description, "The caller passed in a query which contained too many keys.")
+        }
+        do {
+            let errSecWaitForCallback: OSStatus = -34017
+            let status = Status(rawValue: errSecWaitForCallback)
+            XCTAssertEqual(status, .WaitForCallback)
+            XCTAssertEqual(status?.description, "This operation is incomplete, until the callback is invoked (not an error).")
+        }
+        do {
+            let errSecMissingEntitlement: OSStatus = -34018
+            let status = Status(rawValue: errSecMissingEntitlement)
+            XCTAssertEqual(status, .MissingEntitlement)
+            XCTAssertEqual(status?.description, "Internal error when a required entitlement isn't present, client has neither application-identifier nor keychain-access-groups entitlements.")
+        }
+        do {
+            let errSecUpgradePending: OSStatus = -34019
+            let status = Status(rawValue: errSecUpgradePending)
+            XCTAssertEqual(status, .UpgradePending)
+            XCTAssertEqual(status?.description, "Error returned if keychain database needs a schema migration but the device is locked, clients should wait for a device unlock notification and retry the command.")
+        }
+        do {
+            let errSecMPSignatureInvalid: OSStatus = -25327
+            let status = Status(rawValue: errSecMPSignatureInvalid)
+            XCTAssertEqual(status, .MPSignatureInvalid)
+            XCTAssertEqual(status?.description, "Signature invalid on MP message")
+        }
+        do {
+            let errSecOTRTooOld: OSStatus = -25328
+            let status = Status(rawValue: errSecOTRTooOld)
+            XCTAssertEqual(status, .OTRTooOld)
+            XCTAssertEqual(status?.description, "Message is too old to use")
+        }
+        do {
+            let errSecOTRIDTooNew: OSStatus = -25329
+            let status = Status(rawValue: errSecOTRIDTooNew)
+            XCTAssertEqual(status, .OTRIDTooNew)
+            XCTAssertEqual(status?.description, "Key ID is too new to use! Message from the future?")
         }
         do {
             let status = Status(rawValue: errSecInsufficientClientID)
