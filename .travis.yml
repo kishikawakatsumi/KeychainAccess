@@ -10,7 +10,6 @@ script:
 branches:
   only:
     - master
-    - swift-2.0
 env:
   global:
     - LANG=en_US.UTF-8
