@@ -96,8 +96,11 @@ keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 #### error handling
 
 ```swift
-if let error = try? keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi") {
-    print("error: \(error)")
+do {
+    try keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
+}
+catch let error {
+    print(error)
 }
 ```
 
