@@ -15,11 +15,11 @@
 		140F196F1A49D79500B0016A /* KeychainAccessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F196E1A49D79500B0016A /* KeychainAccessTests.swift */; };
 		140F197B1A49D89200B0016A /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F197A1A49D89200B0016A /* Keychain.swift */; };
 		142852A71B1CED3500F27BD9 /* KeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 140F19611A49D79400B0016A /* KeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		142EDA851BCB505F00A32149 /* ErrorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */; settings = {ASSET_TAGS = (); }; };
-		142EDA861BCB505F00A32149 /* ErrorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */; settings = {ASSET_TAGS = (); }; };
-		142EDB041BCBB0DD00A32149 /* SharedCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDB031BCBB0DD00A32149 /* SharedCredentialTests.swift */; settings = {ASSET_TAGS = (); }; };
-		148F9D4A1BCB4118006EDF48 /* EnumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148F9D491BCB4118006EDF48 /* EnumTests.swift */; settings = {ASSET_TAGS = (); }; };
-		148F9D4B1BCB4118006EDF48 /* EnumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148F9D491BCB4118006EDF48 /* EnumTests.swift */; settings = {ASSET_TAGS = (); }; };
+		142EDA851BCB505F00A32149 /* ErrorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */; };
+		142EDA861BCB505F00A32149 /* ErrorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */; };
+		142EDB041BCBB0DD00A32149 /* SharedCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDB031BCBB0DD00A32149 /* SharedCredentialTests.swift */; };
+		148F9D4A1BCB4118006EDF48 /* EnumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148F9D491BCB4118006EDF48 /* EnumTests.swift */; };
+		148F9D4B1BCB4118006EDF48 /* EnumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148F9D491BCB4118006EDF48 /* EnumTests.swift */; };
 		14FDD4681B49B9EF00C39FE8 /* KeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 140F19611A49D79400B0016A /* KeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14FDD4691B49BA0200C39FE8 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F197A1A49D89200B0016A /* Keychain.swift */; };
 /* End PBXBuildFile section */
@@ -603,7 +603,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				BITCODE_GENERATION_MODE = bitcode;
+				BITCODE_GENERATION_MODE = marker;
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -670,7 +670,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				BITCODE_GENERATION_MODE = bitcode;
+				BITCODE_GENERATION_MODE = marker;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
