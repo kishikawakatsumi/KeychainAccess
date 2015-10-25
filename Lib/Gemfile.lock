@@ -3,7 +3,7 @@ GEM
   specs:
     rake (10.4.2)
     rouge (1.10.1)
-    xcjobs (0.2.1)
+    xcjobs (0.2.2)
     xcpretty (0.2.0)
       rouge (~> 1.8)
 
