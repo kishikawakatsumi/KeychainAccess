@@ -930,7 +930,7 @@ public class Keychain {
     }
     
     private class func securityError(status status: OSStatus) -> NSError {
-        let message = Status(rawValue: status)!.description
+        let message = Status(status: status).description
         
         let error = NSError(domain: KeychainAccessErrorDomain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
         print("OSStatus error:[\(error.code)] \(error.localizedDescription)")
@@ -1466,2032 +1466,418 @@ extension CFError {
 }
 
 public enum Status : OSStatus, ErrorType {
-    case Success
-    case Unimplemented
-    case DiskFull
-    case IO
-    case OpWr
-    case Param
-    case WrPerm
-    case Allocate
-    case UserCanceled
-    case BadReq
-    case InternalComponent
-    case NotAvailable
-    case ReadOnly
-    case AuthFailed
-    case NoSuchKeychain
-    case InvalidKeychain
-    case DuplicateKeychain
-    case DuplicateCallback
-    case InvalidCallback
-    case DuplicateItem
-    case ItemNotFound
-    case BufferTooSmall
-    case DataTooLarge
-    case NoSuchAttr
-    case InvalidItemRef
-    case InvalidSearchRef
-    case NoSuchClass
-    case NoDefaultKeychain
-    case InteractionNotAllowed
-    case ReadOnlyAttr
-    case WrongSecVersion
-    case KeySizeNotAllowed
-    case NoStorageModule
-    case NoCertificateModule
-    case NoPolicyModule
-    case InteractionRequired
-    case DataNotAvailable
-    case DataNotModifiable
-    case CreateChainFailed
-    case InvalidPrefsDomain
-    case InDarkWake
-    case ACLNotSimple
-    case PolicyNotFound
-    case InvalidTrustSetting
-    case NoAccessForItem
-    case InvalidOwnerEdit
-    case TrustNotAvailable
-    case UnsupportedFormat
-    case UnknownFormat
-    case KeyIsSensitive
-    case MultiplePrivKeys
-    case PassphraseRequired
-    case InvalidPasswordRef
-    case InvalidTrustSettings
-    case NoTrustSettings
-    case Pkcs12VerifyFailure
-    case InvalidCertificate
-    case NotSigner
-    case PolicyDenied
-    case InvalidKey
-    case Decode
-    case Internal
-    case UnsupportedAlgorithm
-    case UnsupportedOperation
-    case UnsupportedPadding
-    case ItemInvalidKey
-    case ItemInvalidKeyType
-    case ItemInvalidValue
-    case ItemClassMissing
-    case ItemMatchUnsupported
-    case UseItemListUnsupported
-    case UseKeychainUnsupported
-    case UseKeychainListUnsupported
-    case ReturnDataUnsupported
-    case ReturnAttributesUnsupported
-    case ReturnRefUnsupported
-    case ReturnPersitentRefUnsupported
-    case ValueRefUnsupported
-    case ValuePersistentRefUnsupported
-    case ReturnMissingPointer
-    case MatchLimitUnsupported
-    case ItemIllegalQuery
-    case WaitForCallback
-    case MissingEntitlement
-    case UpgradePending
-    case MPSignatureInvalid
-    case OTRTooOld
-    case OTRIDTooNew
-    case ServiceNotAvailable
-    case InsufficientClientID
-    case DeviceReset
-    case DeviceFailed
-    case AppleAddAppACLSubject
-    case ApplePublicKeyIncomplete
-    case AppleSignatureMismatch
-    case AppleInvalidKeyStartDate
-    case AppleInvalidKeyEndDate
-    case ConversionError
-    case AppleSSLv2Rollback
-    case QuotaExceeded
-    case FileTooBig
-    case InvalidDatabaseBlob
-    case InvalidKeyBlob
-    case IncompatibleDatabaseBlob
-    case IncompatibleKeyBlob
-    case HostNameMismatch
-    case UnknownCriticalExtensionFlag
-    case NoBasicConstraints
-    case NoBasicConstraintsCA
-    case InvalidAuthorityKeyID
-    case InvalidSubjectKeyID
-    case InvalidKeyUsageForPolicy
-    case InvalidExtendedKeyUsage
-    case InvalidIDLinkage
-    case PathLengthConstraintExceeded
-    case InvalidRoot
-    case CRLExpired
-    case CRLNotValidYet
-    case CRLNotFound
-    case CRLServerDown
-    case CRLBadURI
-    case UnknownCertExtension
-    case UnknownCRLExtension
-    case CRLNotTrusted
-    case CRLPolicyFailed
-    case IDPFailure
-    case SMIMEEmailAddressesNotFound
-    case SMIMEBadExtendedKeyUsage
-    case SMIMEBadKeyUsage
-    case SMIMEKeyUsageNotCritical
-    case SMIMENoEmailAddress
-    case SMIMESubjAltNameNotCritical
-    case SSLBadExtendedKeyUsage
-    case OCSPBadResponse
-    case OCSPBadRequest
-    case OCSPUnavailable
-    case OCSPStatusUnrecognized
-    case EndOfData
-    case IncompleteCertRevocationCheck
-    case NetworkFailure
-    case OCSPNotTrustedToAnchor
-    case RecordModified
-    case OCSPSignatureError
-    case OCSPNoSigner
-    case OCSPResponderMalformedReq
-    case OCSPResponderInternalError
-    case OCSPResponderTryLater
-    case OCSPResponderSignatureRequired
-    case OCSPResponderUnauthorized
-    case OCSPResponseNonceMismatch
-    case CodeSigningBadCertChainLength
-    case CodeSigningNoBasicConstraints
-    case CodeSigningBadPathLengthConstraint
-    case CodeSigningNoExtendedKeyUsage
-    case CodeSigningDevelopment
-    case ResourceSignBadCertChainLength
-    case ResourceSignBadExtKeyUsage
-    case TrustSettingDeny
-    case InvalidSubjectName
-    case UnknownQualifiedCertStatement
-    case MobileMeRequestQueued
-    case MobileMeRequestRedirected
-    case MobileMeServerError
-    case MobileMeServerNotAvailable
-    case MobileMeServerAlreadyExists
-    case MobileMeServerServiceErr
-    case MobileMeRequestAlreadyPending
-    case MobileMeNoRequestPending
-    case MobileMeCSRVerifyFailure
-    case MobileMeFailedConsistencyCheck
-    case NotInitialized
-    case InvalidHandleUsage
-    case PVCReferentNotFound
-    case FunctionIntegrityFail
-    case InternalError
-    case MemoryError
-    case InvalidData
-    case MDSError
-    case InvalidPointer
-    case SelfCheckFailed
-    case FunctionFailed
-    case ModuleManifestVerifyFailed
-    case InvalidGUID
-    case InvalidHandle
-    case InvalidDBList
-    case InvalidPassthroughID
-    case InvalidNetworkAddress
-    case CRLAlreadySigned
-    case InvalidNumberOfFields
-    case VerificationFailure
-    case UnknownTag
-    case InvalidSignature
-    case InvalidName
-    case InvalidCertificateRef
-    case InvalidCertificateGroup
-    case TagNotFound
-    case InvalidQuery
-    case InvalidValue
-    case CallbackFailed
-    case ACLDeleteFailed
-    case ACLReplaceFailed
-    case ACLAddFailed
-    case ACLChangeFailed
-    case InvalidAccessCredentials
-    case InvalidRecord
-    case InvalidACL
-    case InvalidSampleValue
-    case IncompatibleVersion
-    case PrivilegeNotGranted
-    case InvalidScope
-    case PVCAlreadyConfigured
-    case InvalidPVC
-    case EMMLoadFailed
-    case EMMUnloadFailed
-    case AddinLoadFailed
-    case InvalidKeyRef
-    case InvalidKeyHierarchy
-    case AddinUnloadFailed
-    case LibraryReferenceNotFound
-    case InvalidAddinFunctionTable
-    case InvalidServiceMask
-    case ModuleNotLoaded
-    case InvalidSubServiceID
-    case AttributeNotInContext
-    case ModuleManagerInitializeFailed
-    case ModuleManagerNotFound
-    case EventNotificationCallbackNotFound
-    case InputLengthError
-    case OutputLengthError
-    case PrivilegeNotSupported
-    case DeviceError
-    case AttachHandleBusy
-    case NotLoggedIn
-    case AlgorithmMismatch
-    case KeyUsageIncorrect
-    case KeyBlobTypeIncorrect
-    case KeyHeaderInconsistent
-    case UnsupportedKeyFormat
-    case UnsupportedKeySize
-    case InvalidKeyUsageMask
-    case UnsupportedKeyUsageMask
-    case InvalidKeyAttributeMask
-    case UnsupportedKeyAttributeMask
-    case InvalidKeyLabel
-    case UnsupportedKeyLabel
-    case InvalidKeyFormat
-    case UnsupportedVectorOfBuffers
-    case InvalidInputVector
-    case InvalidOutputVector
-    case InvalidContext
-    case InvalidAlgorithm
-    case InvalidAttributeKey
-    case MissingAttributeKey
-    case InvalidAttributeInitVector
-    case MissingAttributeInitVector
-    case InvalidAttributeSalt
-    case MissingAttributeSalt
-    case InvalidAttributePadding
-    case MissingAttributePadding
-    case InvalidAttributeRandom
-    case MissingAttributeRandom
-    case InvalidAttributeSeed
-    case MissingAttributeSeed
-    case InvalidAttributePassphrase
-    case MissingAttributePassphrase
-    case InvalidAttributeKeyLength
-    case MissingAttributeKeyLength
-    case InvalidAttributeBlockSize
-    case MissingAttributeBlockSize
-    case InvalidAttributeOutputSize
-    case MissingAttributeOutputSize
-    case InvalidAttributeRounds
-    case MissingAttributeRounds
-    case InvalidAlgorithmParms
-    case MissingAlgorithmParms
-    case InvalidAttributeLabel
-    case MissingAttributeLabel
-    case InvalidAttributeKeyType
-    case MissingAttributeKeyType
-    case InvalidAttributeMode
-    case MissingAttributeMode
-    case InvalidAttributeEffectiveBits
-    case MissingAttributeEffectiveBits
-    case InvalidAttributeStartDate
-    case MissingAttributeStartDate
-    case InvalidAttributeEndDate
-    case MissingAttributeEndDate
-    case InvalidAttributeVersion
-    case MissingAttributeVersion
-    case InvalidAttributePrime
-    case MissingAttributePrime
-    case InvalidAttributeBase
-    case MissingAttributeBase
-    case InvalidAttributeSubprime
-    case MissingAttributeSubprime
-    case InvalidAttributeIterationCount
-    case MissingAttributeIterationCount
-    case InvalidAttributeDLDBHandle
-    case MissingAttributeDLDBHandle
-    case InvalidAttributeAccessCredentials
-    case MissingAttributeAccessCredentials
-    case InvalidAttributePublicKeyFormat
-    case MissingAttributePublicKeyFormat
-    case InvalidAttributePrivateKeyFormat
-    case MissingAttributePrivateKeyFormat
-    case InvalidAttributeSymmetricKeyFormat
-    case MissingAttributeSymmetricKeyFormat
-    case InvalidAttributeWrappedKeyFormat
-    case MissingAttributeWrappedKeyFormat
-    case StagedOperationInProgress
-    case StagedOperationNotStarted
-    case VerifyFailed
-    case QuerySizeUnknown
-    case BlockSizeMismatch
-    case PublicKeyInconsistent
-    case DeviceVerifyFailed
-    case InvalidLoginName
-    case AlreadyLoggedIn
-    case InvalidDigestAlgorithm
-    case InvalidCRLGroup
-    case CertificateCannotOperate
-    case CertificateExpired
-    case CertificateNotValidYet
-    case CertificateRevoked
-    case CertificateSuspended
-    case InsufficientCredentials
-    case InvalidAction
-    case InvalidAuthority
-    case VerifyActionFailed
-    case InvalidCertAuthority
-    case InvaldCRLAuthority
-    case InvalidCRLEncoding
-    case InvalidCRLType
-    case InvalidCRL
-    case InvalidFormType
-    case InvalidID
-    case InvalidIdentifier
-    case InvalidIndex
-    case InvalidPolicyIdentifiers
-    case InvalidTimeString
-    case InvalidReason
-    case InvalidRequestInputs
-    case InvalidResponseVector
-    case InvalidStopOnPolicy
-    case InvalidTuple
-    case MultipleValuesUnsupported
-    case NotTrusted
-    case NoDefaultAuthority
-    case RejectedForm
-    case RequestLost
-    case RequestRejected
-    case UnsupportedAddressType
-    case UnsupportedService
-    case InvalidTupleGroup
-    case InvalidBaseACLs
-    case InvalidTupleCredendtials
-    case InvalidEncoding
-    case InvalidValidityPeriod
-    case InvalidRequestor
-    case RequestDescriptor
-    case InvalidBundleInfo
-    case InvalidCRLIndex
-    case NoFieldValues
-    case UnsupportedFieldFormat
-    case UnsupportedIndexInfo
-    case UnsupportedLocality
-    case UnsupportedNumAttributes
-    case UnsupportedNumIndexes
-    case UnsupportedNumRecordTypes
-    case FieldSpecifiedMultiple
-    case IncompatibleFieldFormat
-    case InvalidParsingModule
-    case DatabaseLocked
-    case DatastoreIsOpen
-    case MissingValue
-    case UnsupportedQueryLimits
-    case UnsupportedNumSelectionPreds
-    case UnsupportedOperator
-    case InvalidDBLocation
-    case InvalidAccessRequest
-    case InvalidIndexInfo
-    case InvalidNewOwner
-    case InvalidModifyMode
-    case MissingRequiredExtension
-    case ExtendedKeyUsageNotCritical
-    case TimestampMissing
-    case TimestampInvalid
-    case TimestampNotTrusted
-    case TimestampServiceNotAvailable
-    case TimestampBadAlg
-    case TimestampBadRequest
-    case TimestampBadDataFormat
-    case TimestampTimeNotAvailable
-    case TimestampUnacceptedPolicy
-    case TimestampUnacceptedExtension
-    case TimestampAddInfoNotAvailable
-    case TimestampSystemFailure
-    case SigningTimeMissing
-    case TimestampRejection
-    case TimestampWaiting
-    case TimestampRevocationWarning
-    case TimestampRevocationNotification
-    case UnexpectedError
+    case Success                            = 0
+    case Unimplemented                      = -4
+    case DiskFull                           = -34
+    case IO                                 = -36
+    case OpWr                               = -49
+    case Param                              = -50
+    case WrPerm                             = -61
+    case Allocate                           = -108
+    case UserCanceled                       = -128
+    case BadReq                             = -909
+    case InternalComponent                  = -2070
+    case NotAvailable                       = -25291
+    case ReadOnly                           = -25292
+    case AuthFailed                         = -25293
+    case NoSuchKeychain                     = -25294
+    case InvalidKeychain                    = -25295
+    case DuplicateKeychain                  = -25296
+    case DuplicateCallback                  = -25297
+    case InvalidCallback                    = -25298
+    case DuplicateItem                      = -25299
+    case ItemNotFound                       = -25300
+    case BufferTooSmall                     = -25301
+    case DataTooLarge                       = -25302
+    case NoSuchAttr                         = -25303
+    case InvalidItemRef                     = -25304
+    case InvalidSearchRef                   = -25305
+    case NoSuchClass                        = -25306
+    case NoDefaultKeychain                  = -25307
+    case InteractionNotAllowed              = -25308
+    case ReadOnlyAttr                       = -25309
+    case WrongSecVersion                    = -25310
+    case KeySizeNotAllowed                  = -25311
+    case NoStorageModule                    = -25312
+    case NoCertificateModule                = -25313
+    case NoPolicyModule                     = -25314
+    case InteractionRequired                = -25315
+    case DataNotAvailable                   = -25316
+    case DataNotModifiable                  = -25317
+    case CreateChainFailed                  = -25318
+    case InvalidPrefsDomain                 = -25319
+    case InDarkWake                         = -25320
+    case ACLNotSimple                       = -25240
+    case PolicyNotFound                     = -25241
+    case InvalidTrustSetting                = -25242
+    case NoAccessForItem                    = -25243
+    case InvalidOwnerEdit                   = -25244
+    case TrustNotAvailable                  = -25245
+    case UnsupportedFormat                  = -25256
+    case UnknownFormat                      = -25257
+    case KeyIsSensitive                     = -25258
+    case MultiplePrivKeys                   = -25259
+    case PassphraseRequired                 = -25260
+    case InvalidPasswordRef                 = -25261
+    case InvalidTrustSettings               = -25262
+    case NoTrustSettings                    = -25263
+    case Pkcs12VerifyFailure                = -25264
+    case InvalidCertificate                 = -26265
+    case NotSigner                          = -26267
+    case PolicyDenied                       = -26270
+    case InvalidKey                         = -26274
+    case Decode                             = -26275
+    case Internal                           = -26276
+    case UnsupportedAlgorithm               = -26268
+    case UnsupportedOperation               = -26271
+    case UnsupportedPadding                 = -26273
+    case ItemInvalidKey                     = -34000
+    case ItemInvalidKeyType                 = -34001
+    case ItemInvalidValue                   = -34002
+    case ItemClassMissing                   = -34003
+    case ItemMatchUnsupported               = -34004
+    case UseItemListUnsupported             = -34005
+    case UseKeychainUnsupported             = -34006
+    case UseKeychainListUnsupported         = -34007
+    case ReturnDataUnsupported              = -34008
+    case ReturnAttributesUnsupported        = -34009
+    case ReturnRefUnsupported               = -34010
+    case ReturnPersitentRefUnsupported      = -34011
+    case ValueRefUnsupported                = -34012
+    case ValuePersistentRefUnsupported      = -34013
+    case ReturnMissingPointer               = -34014
+    case MatchLimitUnsupported              = -34015
+    case ItemIllegalQuery                   = -34016
+    case WaitForCallback                    = -34017
+    case MissingEntitlement                 = -34018
+    case UpgradePending                     = -34019
+    case MPSignatureInvalid                 = -25327
+    case OTRTooOld                          = -25328
+    case OTRIDTooNew                        = -25329
+    case ServiceNotAvailable                = -67585
+    case InsufficientClientID               = -67586
+    case DeviceReset                        = -67587
+    case DeviceFailed                       = -67588
+    case AppleAddAppACLSubject              = -67589
+    case ApplePublicKeyIncomplete           = -67590
+    case AppleSignatureMismatch             = -67591
+    case AppleInvalidKeyStartDate           = -67592
+    case AppleInvalidKeyEndDate             = -67593
+    case ConversionError                    = -67594
+    case AppleSSLv2Rollback                 = -67595
+    case QuotaExceeded                      = -67596
+    case FileTooBig                         = -67597
+    case InvalidDatabaseBlob                = -67598
+    case InvalidKeyBlob                     = -67599
+    case IncompatibleDatabaseBlob           = -67600
+    case IncompatibleKeyBlob                = -67601
+    case HostNameMismatch                   = -67602
+    case UnknownCriticalExtensionFlag       = -67603
+    case NoBasicConstraints                 = -67604
+    case NoBasicConstraintsCA               = -67605
+    case InvalidAuthorityKeyID              = -67606
+    case InvalidSubjectKeyID                = -67607
+    case InvalidKeyUsageForPolicy           = -67608
+    case InvalidExtendedKeyUsage            = -67609
+    case InvalidIDLinkage                   = -67610
+    case PathLengthConstraintExceeded       = -67611
+    case InvalidRoot                        = -67612
+    case CRLExpired                         = -67613
+    case CRLNotValidYet                     = -67614
+    case CRLNotFound                        = -67615
+    case CRLServerDown                      = -67616
+    case CRLBadURI                          = -67617
+    case UnknownCertExtension               = -67618
+    case UnknownCRLExtension                = -67619
+    case CRLNotTrusted                      = -67620
+    case CRLPolicyFailed                    = -67621
+    case IDPFailure                         = -67622
+    case SMIMEEmailAddressesNotFound        = -67623
+    case SMIMEBadExtendedKeyUsage           = -67624
+    case SMIMEBadKeyUsage                   = -67625
+    case SMIMEKeyUsageNotCritical           = -67626
+    case SMIMENoEmailAddress                = -67627
+    case SMIMESubjAltNameNotCritical        = -67628
+    case SSLBadExtendedKeyUsage             = -67629
+    case OCSPBadResponse                    = -67630
+    case OCSPBadRequest                     = -67631
+    case OCSPUnavailable                    = -67632
+    case OCSPStatusUnrecognized             = -67633
+    case EndOfData                          = -67634
+    case IncompleteCertRevocationCheck      = -67635
+    case NetworkFailure                     = -67636
+    case OCSPNotTrustedToAnchor             = -67637
+    case RecordModified                     = -67638
+    case OCSPSignatureError                 = -67639
+    case OCSPNoSigner                       = -67640
+    case OCSPResponderMalformedReq          = -67641
+    case OCSPResponderInternalError         = -67642
+    case OCSPResponderTryLater              = -67643
+    case OCSPResponderSignatureRequired     = -67644
+    case OCSPResponderUnauthorized          = -67645
+    case OCSPResponseNonceMismatch          = -67646
+    case CodeSigningBadCertChainLength      = -67647
+    case CodeSigningNoBasicConstraints      = -67648
+    case CodeSigningBadPathLengthConstraint = -67649
+    case CodeSigningNoExtendedKeyUsage      = -67650
+    case CodeSigningDevelopment             = -67651
+    case ResourceSignBadCertChainLength     = -67652
+    case ResourceSignBadExtKeyUsage         = -67653
+    case TrustSettingDeny                   = -67654
+    case InvalidSubjectName                 = -67655
+    case UnknownQualifiedCertStatement      = -67656
+    case MobileMeRequestQueued              = -67657
+    case MobileMeRequestRedirected          = -67658
+    case MobileMeServerError                = -67659
+    case MobileMeServerNotAvailable         = -67660
+    case MobileMeServerAlreadyExists        = -67661
+    case MobileMeServerServiceErr           = -67662
+    case MobileMeRequestAlreadyPending      = -67663
+    case MobileMeNoRequestPending           = -67664
+    case MobileMeCSRVerifyFailure           = -67665
+    case MobileMeFailedConsistencyCheck     = -67666
+    case NotInitialized                     = -67667
+    case InvalidHandleUsage                 = -67668
+    case PVCReferentNotFound                = -67669
+    case FunctionIntegrityFail              = -67670
+    case InternalError                      = -67671
+    case MemoryError                        = -67672
+    case InvalidData                        = -67673
+    case MDSError                           = -67674
+    case InvalidPointer                     = -67675
+    case SelfCheckFailed                    = -67676
+    case FunctionFailed                     = -67677
+    case ModuleManifestVerifyFailed         = -67678
+    case InvalidGUID                        = -67679
+    case InvalidHandle                      = -67680
+    case InvalidDBList                      = -67681
+    case InvalidPassthroughID               = -67682
+    case InvalidNetworkAddress              = -67683
+    case CRLAlreadySigned                   = -67684
+    case InvalidNumberOfFields              = -67685
+    case VerificationFailure                = -67686
+    case UnknownTag                         = -67687
+    case InvalidSignature                   = -67688
+    case InvalidName                        = -67689
+    case InvalidCertificateRef              = -67690
+    case InvalidCertificateGroup            = -67691
+    case TagNotFound                        = -67692
+    case InvalidQuery                       = -67693
+    case InvalidValue                       = -67694
+    case CallbackFailed                     = -67695
+    case ACLDeleteFailed                    = -67696
+    case ACLReplaceFailed                   = -67697
+    case ACLAddFailed                       = -67698
+    case ACLChangeFailed                    = -67699
+    case InvalidAccessCredentials           = -67700
+    case InvalidRecord                      = -67701
+    case InvalidACL                         = -67702
+    case InvalidSampleValue                 = -67703
+    case IncompatibleVersion                = -67704
+    case PrivilegeNotGranted                = -67705
+    case InvalidScope                       = -67706
+    case PVCAlreadyConfigured               = -67707
+    case InvalidPVC                         = -67708
+    case EMMLoadFailed                      = -67709
+    case EMMUnloadFailed                    = -67710
+    case AddinLoadFailed                    = -67711
+    case InvalidKeyRef                      = -67712
+    case InvalidKeyHierarchy                = -67713
+    case AddinUnloadFailed                  = -67714
+    case LibraryReferenceNotFound           = -67715
+    case InvalidAddinFunctionTable          = -67716
+    case InvalidServiceMask                 = -67717
+    case ModuleNotLoaded                    = -67718
+    case InvalidSubServiceID                = -67719
+    case AttributeNotInContext              = -67720
+    case ModuleManagerInitializeFailed      = -67721
+    case ModuleManagerNotFound              = -67722
+    case EventNotificationCallbackNotFound  = -67723
+    case InputLengthError                   = -67724
+    case OutputLengthError                  = -67725
+    case PrivilegeNotSupported              = -67726
+    case DeviceError                        = -67727
+    case AttachHandleBusy                   = -67728
+    case NotLoggedIn                        = -67729
+    case AlgorithmMismatch                  = -67730
+    case KeyUsageIncorrect                  = -67731
+    case KeyBlobTypeIncorrect               = -67732
+    case KeyHeaderInconsistent              = -67733
+    case UnsupportedKeyFormat               = -67734
+    case UnsupportedKeySize                 = -67735
+    case InvalidKeyUsageMask                = -67736
+    case UnsupportedKeyUsageMask            = -67737
+    case InvalidKeyAttributeMask            = -67738
+    case UnsupportedKeyAttributeMask        = -67739
+    case InvalidKeyLabel                    = -67740
+    case UnsupportedKeyLabel                = -67741
+    case InvalidKeyFormat                   = -67742
+    case UnsupportedVectorOfBuffers         = -67743
+    case InvalidInputVector                 = -67744
+    case InvalidOutputVector                = -67745
+    case InvalidContext                     = -67746
+    case InvalidAlgorithm                   = -67747
+    case InvalidAttributeKey                = -67748
+    case MissingAttributeKey                = -67749
+    case InvalidAttributeInitVector         = -67750
+    case MissingAttributeInitVector         = -67751
+    case InvalidAttributeSalt               = -67752
+    case MissingAttributeSalt               = -67753
+    case InvalidAttributePadding            = -67754
+    case MissingAttributePadding            = -67755
+    case InvalidAttributeRandom             = -67756
+    case MissingAttributeRandom             = -67757
+    case InvalidAttributeSeed               = -67758
+    case MissingAttributeSeed               = -67759
+    case InvalidAttributePassphrase         = -67760
+    case MissingAttributePassphrase         = -67761
+    case InvalidAttributeKeyLength          = -67762
+    case MissingAttributeKeyLength          = -67763
+    case InvalidAttributeBlockSize          = -67764
+    case MissingAttributeBlockSize          = -67765
+    case InvalidAttributeOutputSize         = -67766
+    case MissingAttributeOutputSize         = -67767
+    case InvalidAttributeRounds             = -67768
+    case MissingAttributeRounds             = -67769
+    case InvalidAlgorithmParms              = -67770
+    case MissingAlgorithmParms              = -67771
+    case InvalidAttributeLabel              = -67772
+    case MissingAttributeLabel              = -67773
+    case InvalidAttributeKeyType            = -67774
+    case MissingAttributeKeyType            = -67775
+    case InvalidAttributeMode               = -67776
+    case MissingAttributeMode               = -67777
+    case InvalidAttributeEffectiveBits      = -67778
+    case MissingAttributeEffectiveBits      = -67779
+    case InvalidAttributeStartDate          = -67780
+    case MissingAttributeStartDate          = -67781
+    case InvalidAttributeEndDate            = -67782
+    case MissingAttributeEndDate            = -67783
+    case InvalidAttributeVersion            = -67784
+    case MissingAttributeVersion            = -67785
+    case InvalidAttributePrime              = -67786
+    case MissingAttributePrime              = -67787
+    case InvalidAttributeBase               = -67788
+    case MissingAttributeBase               = -67789
+    case InvalidAttributeSubprime           = -67790
+    case MissingAttributeSubprime           = -67791
+    case InvalidAttributeIterationCount     = -67792
+    case MissingAttributeIterationCount     = -67793
+    case InvalidAttributeDLDBHandle         = -67794
+    case MissingAttributeDLDBHandle         = -67795
+    case InvalidAttributeAccessCredentials  = -67796
+    case MissingAttributeAccessCredentials  = -67797
+    case InvalidAttributePublicKeyFormat    = -67798
+    case MissingAttributePublicKeyFormat    = -67799
+    case InvalidAttributePrivateKeyFormat   = -67800
+    case MissingAttributePrivateKeyFormat   = -67801
+    case InvalidAttributeSymmetricKeyFormat = -67802
+    case MissingAttributeSymmetricKeyFormat = -67803
+    case InvalidAttributeWrappedKeyFormat   = -67804
+    case MissingAttributeWrappedKeyFormat   = -67805
+    case StagedOperationInProgress          = -67806
+    case StagedOperationNotStarted          = -67807
+    case VerifyFailed                       = -67808
+    case QuerySizeUnknown                   = -67809
+    case BlockSizeMismatch                  = -67810
+    case PublicKeyInconsistent              = -67811
+    case DeviceVerifyFailed                 = -67812
+    case InvalidLoginName                   = -67813
+    case AlreadyLoggedIn                    = -67814
+    case InvalidDigestAlgorithm             = -67815
+    case InvalidCRLGroup                    = -67816
+    case CertificateCannotOperate           = -67817
+    case CertificateExpired                 = -67818
+    case CertificateNotValidYet             = -67819
+    case CertificateRevoked                 = -67820
+    case CertificateSuspended               = -67821
+    case InsufficientCredentials            = -67822
+    case InvalidAction                      = -67823
+    case InvalidAuthority                   = -67824
+    case VerifyActionFailed                 = -67825
+    case InvalidCertAuthority               = -67826
+    case InvaldCRLAuthority                 = -67827
+    case InvalidCRLEncoding                 = -67828
+    case InvalidCRLType                     = -67829
+    case InvalidCRL                         = -67830
+    case InvalidFormType                    = -67831
+    case InvalidID                          = -67832
+    case InvalidIdentifier                  = -67833
+    case InvalidIndex                       = -67834
+    case InvalidPolicyIdentifiers           = -67835
+    case InvalidTimeString                  = -67836
+    case InvalidReason                      = -67837
+    case InvalidRequestInputs               = -67838
+    case InvalidResponseVector              = -67839
+    case InvalidStopOnPolicy                = -67840
+    case InvalidTuple                       = -67841
+    case MultipleValuesUnsupported          = -67842
+    case NotTrusted                         = -67843
+    case NoDefaultAuthority                 = -67844
+    case RejectedForm                       = -67845
+    case RequestLost                        = -67846
+    case RequestRejected                    = -67847
+    case UnsupportedAddressType             = -67848
+    case UnsupportedService                 = -67849
+    case InvalidTupleGroup                  = -67850
+    case InvalidBaseACLs                    = -67851
+    case InvalidTupleCredendtials           = -67852
+    case InvalidEncoding                    = -67853
+    case InvalidValidityPeriod              = -67854
+    case InvalidRequestor                   = -67855
+    case RequestDescriptor                  = -67856
+    case InvalidBundleInfo                  = -67857
+    case InvalidCRLIndex                    = -67858
+    case NoFieldValues                      = -67859
+    case UnsupportedFieldFormat             = -67860
+    case UnsupportedIndexInfo               = -67861
+    case UnsupportedLocality                = -67862
+    case UnsupportedNumAttributes           = -67863
+    case UnsupportedNumIndexes              = -67864
+    case UnsupportedNumRecordTypes          = -67865
+    case FieldSpecifiedMultiple             = -67866
+    case IncompatibleFieldFormat            = -67867
+    case InvalidParsingModule               = -67868
+    case DatabaseLocked                     = -67869
+    case DatastoreIsOpen                    = -67870
+    case MissingValue                       = -67871
+    case UnsupportedQueryLimits             = -67872
+    case UnsupportedNumSelectionPreds       = -67873
+    case UnsupportedOperator                = -67874
+    case InvalidDBLocation                  = -67875
+    case InvalidAccessRequest               = -67876
+    case InvalidIndexInfo                   = -67877
+    case InvalidNewOwner                    = -67878
+    case InvalidModifyMode                  = -67879
+    case MissingRequiredExtension           = -67880
+    case ExtendedKeyUsageNotCritical        = -67881
+    case TimestampMissing                   = -67882
+    case TimestampInvalid                   = -67883
+    case TimestampNotTrusted                = -67884
+    case TimestampServiceNotAvailable       = -67885
+    case TimestampBadAlg                    = -67886
+    case TimestampBadRequest                = -67887
+    case TimestampBadDataFormat             = -67888
+    case TimestampTimeNotAvailable          = -67889
+    case TimestampUnacceptedPolicy          = -67890
+    case TimestampUnacceptedExtension       = -67891
+    case TimestampAddInfoNotAvailable       = -67892
+    case TimestampSystemFailure             = -67893
+    case SigningTimeMissing                 = -67894
+    case TimestampRejection                 = -67895
+    case TimestampWaiting                   = -67896
+    case TimestampRevocationWarning         = -67897
+    case TimestampRevocationNotification    = -67898
+    case UnexpectedError                    = -99999
 }
 
 extension Status : RawRepresentable, CustomStringConvertible {
     
-    public init?(rawValue: OSStatus) {
-        switch rawValue {
-        case 0:
-            self = Success
-        case -4:
-            self = Unimplemented
-        case -34:
-            self = DiskFull
-        case -36:
-            self = IO
-        case -49:
-            self = OpWr
-        case -50:
-            self = Param
-        case -61:
-            self = WrPerm
-        case -108:
-            self = Allocate
-        case -128:
-            self = UserCanceled
-        case -909:
-            self = BadReq
-        case -2070:
-            self = InternalComponent
-        case -25291:
-            self = NotAvailable
-        case -25292:
-            self = ReadOnly
-        case -25293:
-            self = AuthFailed
-        case -25294:
-            self = NoSuchKeychain
-        case -25295:
-            self = InvalidKeychain
-        case -25296:
-            self = DuplicateKeychain
-        case -25297:
-            self = DuplicateCallback
-        case -25298:
-            self = InvalidCallback
-        case -25299:
-            self = DuplicateItem
-        case -25300:
-            self = ItemNotFound
-        case -25301:
-            self = BufferTooSmall
-        case -25302:
-            self = DataTooLarge
-        case -25303:
-            self = NoSuchAttr
-        case -25304:
-            self = InvalidItemRef
-        case -25305:
-            self = InvalidSearchRef
-        case -25306:
-            self = NoSuchClass
-        case -25307:
-            self = NoDefaultKeychain
-        case -25308:
-            self = InteractionNotAllowed
-        case -25309:
-            self = ReadOnlyAttr
-        case -25310:
-            self = WrongSecVersion
-        case -25311:
-            self = KeySizeNotAllowed
-        case -25312:
-            self = NoStorageModule
-        case -25313:
-            self = NoCertificateModule
-        case -25314:
-            self = NoPolicyModule
-        case -25315:
-            self = InteractionRequired
-        case -25316:
-            self = DataNotAvailable
-        case -25317:
-            self = DataNotModifiable
-        case -25318:
-            self = CreateChainFailed
-        case -25319:
-            self = InvalidPrefsDomain
-        case -25320:
-            self = InDarkWake
-        case -25240:
-            self = ACLNotSimple
-        case -25241:
-            self = PolicyNotFound
-        case -25242:
-            self = InvalidTrustSetting
-        case -25243:
-            self = NoAccessForItem
-        case -25244:
-            self = InvalidOwnerEdit
-        case -25245:
-            self = TrustNotAvailable
-        case -25256:
-            self = UnsupportedFormat
-        case -25257:
-            self = UnknownFormat
-        case -25258:
-            self = KeyIsSensitive
-        case -25259:
-            self = MultiplePrivKeys
-        case -25260:
-            self = PassphraseRequired
-        case -25261:
-            self = InvalidPasswordRef
-        case -25262:
-            self = InvalidTrustSettings
-        case -25263:
-            self = NoTrustSettings
-        case -25264:
-            self = Pkcs12VerifyFailure
-        case -26265:
-            self = InvalidCertificate
-        case -26267:
-            self = NotSigner
-        case -26270:
-            self = PolicyDenied
-        case -26274:
-            self = InvalidKey
-        case -26275:
-            self = Decode
-        case -26276:
-            self = Internal
-        case -26268:
-            self = UnsupportedAlgorithm
-        case -26271:
-            self = UnsupportedOperation
-        case -26273:
-            self = UnsupportedPadding
-        case -34000:
-            self = ItemInvalidKey
-        case -34001:
-            self = ItemInvalidKeyType
-        case -34002:
-            self = ItemInvalidValue
-        case -34003:
-            self = ItemClassMissing
-        case -34004:
-            self = ItemMatchUnsupported
-        case -34005:
-            self = UseItemListUnsupported
-        case -34006:
-            self = UseKeychainUnsupported
-        case -34007:
-            self = UseKeychainListUnsupported
-        case -34008:
-            self = ReturnDataUnsupported
-        case -34009:
-            self = ReturnAttributesUnsupported
-        case -34010:
-            self = ReturnRefUnsupported
-        case -34011:
-            self = ReturnPersitentRefUnsupported
-        case -34012:
-            self = ValueRefUnsupported
-        case -34013:
-            self = ValuePersistentRefUnsupported
-        case -34014:
-            self = ReturnMissingPointer
-        case -34015:
-            self = MatchLimitUnsupported
-        case -34016:
-            self = ItemIllegalQuery
-        case -34017:
-            self = WaitForCallback
-        case -34018:
-            self = MissingEntitlement
-        case -34019:
-            self = UpgradePending
-        case -25327:
-            self = MPSignatureInvalid
-        case -25328:
-            self = OTRTooOld
-        case -25329:
-            self = OTRIDTooNew
-        case -67585:
-            self = ServiceNotAvailable
-        case -67586:
-            self = InsufficientClientID
-        case -67587:
-            self = DeviceReset
-        case -67588:
-            self = DeviceFailed
-        case -67589:
-            self = AppleAddAppACLSubject
-        case -67590:
-            self = ApplePublicKeyIncomplete
-        case -67591:
-            self = AppleSignatureMismatch
-        case -67592:
-            self = AppleInvalidKeyStartDate
-        case -67593:
-            self = AppleInvalidKeyEndDate
-        case -67594:
-            self = ConversionError
-        case -67595:
-            self = AppleSSLv2Rollback
-        case -67596:
-            self = QuotaExceeded
-        case -67597:
-            self = FileTooBig
-        case -67598:
-            self = InvalidDatabaseBlob
-        case -67599:
-            self = InvalidKeyBlob
-        case -67600:
-            self = IncompatibleDatabaseBlob
-        case -67601:
-            self = IncompatibleKeyBlob
-        case -67602:
-            self = HostNameMismatch
-        case -67603:
-            self = UnknownCriticalExtensionFlag
-        case -67604:
-            self = NoBasicConstraints
-        case -67605:
-            self = NoBasicConstraintsCA
-        case -67606:
-            self = InvalidAuthorityKeyID
-        case -67607:
-            self = InvalidSubjectKeyID
-        case -67608:
-            self = InvalidKeyUsageForPolicy
-        case -67609:
-            self = InvalidExtendedKeyUsage
-        case -67610:
-            self = InvalidIDLinkage
-        case -67611:
-            self = PathLengthConstraintExceeded
-        case -67612:
-            self = InvalidRoot
-        case -67613:
-            self = CRLExpired
-        case -67614:
-            self = CRLNotValidYet
-        case -67615:
-            self = CRLNotFound
-        case -67616:
-            self = CRLServerDown
-        case -67617:
-            self = CRLBadURI
-        case -67618:
-            self = UnknownCertExtension
-        case -67619:
-            self = UnknownCRLExtension
-        case -67620:
-            self = CRLNotTrusted
-        case -67621:
-            self = CRLPolicyFailed
-        case -67622:
-            self = IDPFailure
-        case -67623:
-            self = SMIMEEmailAddressesNotFound
-        case -67624:
-            self = SMIMEBadExtendedKeyUsage
-        case -67625:
-            self = SMIMEBadKeyUsage
-        case -67626:
-            self = SMIMEKeyUsageNotCritical
-        case -67627:
-            self = SMIMENoEmailAddress
-        case -67628:
-            self = SMIMESubjAltNameNotCritical
-        case -67629:
-            self = SSLBadExtendedKeyUsage
-        case -67630:
-            self = OCSPBadResponse
-        case -67631:
-            self = OCSPBadRequest
-        case -67632:
-            self = OCSPUnavailable
-        case -67633:
-            self = OCSPStatusUnrecognized
-        case -67634:
-            self = EndOfData
-        case -67635:
-            self = IncompleteCertRevocationCheck
-        case -67636:
-            self = NetworkFailure
-        case -67637:
-            self = OCSPNotTrustedToAnchor
-        case -67638:
-            self = RecordModified
-        case -67639:
-            self = OCSPSignatureError
-        case -67640:
-            self = OCSPNoSigner
-        case -67641:
-            self = OCSPResponderMalformedReq
-        case -67642:
-            self = OCSPResponderInternalError
-        case -67643:
-            self = OCSPResponderTryLater
-        case -67644:
-            self = OCSPResponderSignatureRequired
-        case -67645:
-            self = OCSPResponderUnauthorized
-        case -67646:
-            self = OCSPResponseNonceMismatch
-        case -67647:
-            self = CodeSigningBadCertChainLength
-        case -67648:
-            self = CodeSigningNoBasicConstraints
-        case -67649:
-            self = CodeSigningBadPathLengthConstraint
-        case -67650:
-            self = CodeSigningNoExtendedKeyUsage
-        case -67651:
-            self = CodeSigningDevelopment
-        case -67652:
-            self = ResourceSignBadCertChainLength
-        case -67653:
-            self = ResourceSignBadExtKeyUsage
-        case -67654:
-            self = TrustSettingDeny
-        case -67655:
-            self = InvalidSubjectName
-        case -67656:
-            self = UnknownQualifiedCertStatement
-        case -67657:
-            self = MobileMeRequestQueued
-        case -67658:
-            self = MobileMeRequestRedirected
-        case -67659:
-            self = MobileMeServerError
-        case -67660:
-            self = MobileMeServerNotAvailable
-        case -67661:
-            self = MobileMeServerAlreadyExists
-        case -67662:
-            self = MobileMeServerServiceErr
-        case -67663:
-            self = MobileMeRequestAlreadyPending
-        case -67664:
-            self = MobileMeNoRequestPending
-        case -67665:
-            self = MobileMeCSRVerifyFailure
-        case -67666:
-            self = MobileMeFailedConsistencyCheck
-        case -67667:
-            self = NotInitialized
-        case -67668:
-            self = InvalidHandleUsage
-        case -67669:
-            self = PVCReferentNotFound
-        case -67670:
-            self = FunctionIntegrityFail
-        case -67671:
-            self = InternalError
-        case -67672:
-            self = MemoryError
-        case -67673:
-            self = InvalidData
-        case -67674:
-            self = MDSError
-        case -67675:
-            self = InvalidPointer
-        case -67676:
-            self = SelfCheckFailed
-        case -67677:
-            self = FunctionFailed
-        case -67678:
-            self = ModuleManifestVerifyFailed
-        case -67679:
-            self = InvalidGUID
-        case -67680:
-            self = InvalidHandle
-        case -67681:
-            self = InvalidDBList
-        case -67682:
-            self = InvalidPassthroughID
-        case -67683:
-            self = InvalidNetworkAddress
-        case -67684:
-            self = CRLAlreadySigned
-        case -67685:
-            self = InvalidNumberOfFields
-        case -67686:
-            self = VerificationFailure
-        case -67687:
-            self = UnknownTag
-        case -67688:
-            self = InvalidSignature
-        case -67689:
-            self = InvalidName
-        case -67690:
-            self = InvalidCertificateRef
-        case -67691:
-            self = InvalidCertificateGroup
-        case -67692:
-            self = TagNotFound
-        case -67693:
-            self = InvalidQuery
-        case -67694:
-            self = InvalidValue
-        case -67695:
-            self = CallbackFailed
-        case -67696:
-            self = ACLDeleteFailed
-        case -67697:
-            self = ACLReplaceFailed
-        case -67698:
-            self = ACLAddFailed
-        case -67699:
-            self = ACLChangeFailed
-        case -67700:
-            self = InvalidAccessCredentials
-        case -67701:
-            self = InvalidRecord
-        case -67702:
-            self = InvalidACL
-        case -67703:
-            self = InvalidSampleValue
-        case -67704:
-            self = IncompatibleVersion
-        case -67705:
-            self = PrivilegeNotGranted
-        case -67706:
-            self = InvalidScope
-        case -67707:
-            self = PVCAlreadyConfigured
-        case -67708:
-            self = InvalidPVC
-        case -67709:
-            self = EMMLoadFailed
-        case -67710:
-            self = EMMUnloadFailed
-        case -67711:
-            self = AddinLoadFailed
-        case -67712:
-            self = InvalidKeyRef
-        case -67713:
-            self = InvalidKeyHierarchy
-        case -67714:
-            self = AddinUnloadFailed
-        case -67715:
-            self = LibraryReferenceNotFound
-        case -67716:
-            self = InvalidAddinFunctionTable
-        case -67717:
-            self = InvalidServiceMask
-        case -67718:
-            self = ModuleNotLoaded
-        case -67719:
-            self = InvalidSubServiceID
-        case -67720:
-            self = AttributeNotInContext
-        case -67721:
-            self = ModuleManagerInitializeFailed
-        case -67722:
-            self = ModuleManagerNotFound
-        case -67723:
-            self = EventNotificationCallbackNotFound
-        case -67724:
-            self = InputLengthError
-        case -67725:
-            self = OutputLengthError
-        case -67726:
-            self = PrivilegeNotSupported
-        case -67727:
-            self = DeviceError
-        case -67728:
-            self = AttachHandleBusy
-        case -67729:
-            self = NotLoggedIn
-        case -67730:
-            self = AlgorithmMismatch
-        case -67731:
-            self = KeyUsageIncorrect
-        case -67732:
-            self = KeyBlobTypeIncorrect
-        case -67733:
-            self = KeyHeaderInconsistent
-        case -67734:
-            self = UnsupportedKeyFormat
-        case -67735:
-            self = UnsupportedKeySize
-        case -67736:
-            self = InvalidKeyUsageMask
-        case -67737:
-            self = UnsupportedKeyUsageMask
-        case -67738:
-            self = InvalidKeyAttributeMask
-        case -67739:
-            self = UnsupportedKeyAttributeMask
-        case -67740:
-            self = InvalidKeyLabel
-        case -67741:
-            self = UnsupportedKeyLabel
-        case -67742:
-            self = InvalidKeyFormat
-        case -67743:
-            self = UnsupportedVectorOfBuffers
-        case -67744:
-            self = InvalidInputVector
-        case -67745:
-            self = InvalidOutputVector
-        case -67746:
-            self = InvalidContext
-        case -67747:
-            self = InvalidAlgorithm
-        case -67748:
-            self = InvalidAttributeKey
-        case -67749:
-            self = MissingAttributeKey
-        case -67750:
-            self = InvalidAttributeInitVector
-        case -67751:
-            self = MissingAttributeInitVector
-        case -67752:
-            self = InvalidAttributeSalt
-        case -67753:
-            self = MissingAttributeSalt
-        case -67754:
-            self = InvalidAttributePadding
-        case -67755:
-            self = MissingAttributePadding
-        case -67756:
-            self = InvalidAttributeRandom
-        case -67757:
-            self = MissingAttributeRandom
-        case -67758:
-            self = InvalidAttributeSeed
-        case -67759:
-            self = MissingAttributeSeed
-        case -67760:
-            self = InvalidAttributePassphrase
-        case -67761:
-            self = MissingAttributePassphrase
-        case -67762:
-            self = InvalidAttributeKeyLength
-        case -67763:
-            self = MissingAttributeKeyLength
-        case -67764:
-            self = InvalidAttributeBlockSize
-        case -67765:
-            self = MissingAttributeBlockSize
-        case -67766:
-            self = InvalidAttributeOutputSize
-        case -67767:
-            self = MissingAttributeOutputSize
-        case -67768:
-            self = InvalidAttributeRounds
-        case -67769:
-            self = MissingAttributeRounds
-        case -67770:
-            self = InvalidAlgorithmParms
-        case -67771:
-            self = MissingAlgorithmParms
-        case -67772:
-            self = InvalidAttributeLabel
-        case -67773:
-            self = MissingAttributeLabel
-        case -67774:
-            self = InvalidAttributeKeyType
-        case -67775:
-            self = MissingAttributeKeyType
-        case -67776:
-            self = InvalidAttributeMode
-        case -67777:
-            self = MissingAttributeMode
-        case -67778:
-            self = InvalidAttributeEffectiveBits
-        case -67779:
-            self = MissingAttributeEffectiveBits
-        case -67780:
-            self = InvalidAttributeStartDate
-        case -67781:
-            self = MissingAttributeStartDate
-        case -67782:
-            self = InvalidAttributeEndDate
-        case -67783:
-            self = MissingAttributeEndDate
-        case -67784:
-            self = InvalidAttributeVersion
-        case -67785:
-            self = MissingAttributeVersion
-        case -67786:
-            self = InvalidAttributePrime
-        case -67787:
-            self = MissingAttributePrime
-        case -67788:
-            self = InvalidAttributeBase
-        case -67789:
-            self = MissingAttributeBase
-        case -67790:
-            self = InvalidAttributeSubprime
-        case -67791:
-            self = MissingAttributeSubprime
-        case -67792:
-            self = InvalidAttributeIterationCount
-        case -67793:
-            self = MissingAttributeIterationCount
-        case -67794:
-            self = InvalidAttributeDLDBHandle
-        case -67795:
-            self = MissingAttributeDLDBHandle
-        case -67796:
-            self = InvalidAttributeAccessCredentials
-        case -67797:
-            self = MissingAttributeAccessCredentials
-        case -67798:
-            self = InvalidAttributePublicKeyFormat
-        case -67799:
-            self = MissingAttributePublicKeyFormat
-        case -67800:
-            self = InvalidAttributePrivateKeyFormat
-        case -67801:
-            self = MissingAttributePrivateKeyFormat
-        case -67802:
-            self = InvalidAttributeSymmetricKeyFormat
-        case -67803:
-            self = MissingAttributeSymmetricKeyFormat
-        case -67804:
-            self = InvalidAttributeWrappedKeyFormat
-        case -67805:
-            self = MissingAttributeWrappedKeyFormat
-        case -67806:
-            self = StagedOperationInProgress
-        case -67807:
-            self = StagedOperationNotStarted
-        case -67808:
-            self = VerifyFailed
-        case -67809:
-            self = QuerySizeUnknown
-        case -67810:
-            self = BlockSizeMismatch
-        case -67811:
-            self = PublicKeyInconsistent
-        case -67812:
-            self = DeviceVerifyFailed
-        case -67813:
-            self = InvalidLoginName
-        case -67814:
-            self = AlreadyLoggedIn
-        case -67815:
-            self = InvalidDigestAlgorithm
-        case -67816:
-            self = InvalidCRLGroup
-        case -67817:
-            self = CertificateCannotOperate
-        case -67818:
-            self = CertificateExpired
-        case -67819:
-            self = CertificateNotValidYet
-        case -67820:
-            self = CertificateRevoked
-        case -67821:
-            self = CertificateSuspended
-        case -67822:
-            self = InsufficientCredentials
-        case -67823:
-            self = InvalidAction
-        case -67824:
-            self = InvalidAuthority
-        case -67825:
-            self = VerifyActionFailed
-        case -67826:
-            self = InvalidCertAuthority
-        case -67827:
-            self = InvaldCRLAuthority
-        case -67828:
-            self = InvalidCRLEncoding
-        case -67829:
-            self = InvalidCRLType
-        case -67830:
-            self = InvalidCRL
-        case -67831:
-            self = InvalidFormType
-        case -67832:
-            self = InvalidID
-        case -67833:
-            self = InvalidIdentifier
-        case -67834:
-            self = InvalidIndex
-        case -67835:
-            self = InvalidPolicyIdentifiers
-        case -67836:
-            self = InvalidTimeString
-        case -67837:
-            self = InvalidReason
-        case -67838:
-            self = InvalidRequestInputs
-        case -67839:
-            self = InvalidResponseVector
-        case -67840:
-            self = InvalidStopOnPolicy
-        case -67841:
-            self = InvalidTuple
-        case -67842:
-            self = MultipleValuesUnsupported
-        case -67843:
-            self = NotTrusted
-        case -67844:
-            self = NoDefaultAuthority
-        case -67845:
-            self = RejectedForm
-        case -67846:
-            self = RequestLost
-        case -67847:
-            self = RequestRejected
-        case -67848:
-            self = UnsupportedAddressType
-        case -67849:
-            self = UnsupportedService
-        case -67850:
-            self = InvalidTupleGroup
-        case -67851:
-            self = InvalidBaseACLs
-        case -67852:
-            self = InvalidTupleCredendtials
-        case -67853:
-            self = InvalidEncoding
-        case -67854:
-            self = InvalidValidityPeriod
-        case -67855:
-            self = InvalidRequestor
-        case -67856:
-            self = RequestDescriptor
-        case -67857:
-            self = InvalidBundleInfo
-        case -67858:
-            self = InvalidCRLIndex
-        case -67859:
-            self = NoFieldValues
-        case -67860:
-            self = UnsupportedFieldFormat
-        case -67861:
-            self = UnsupportedIndexInfo
-        case -67862:
-            self = UnsupportedLocality
-        case -67863:
-            self = UnsupportedNumAttributes
-        case -67864:
-            self = UnsupportedNumIndexes
-        case -67865:
-            self = UnsupportedNumRecordTypes
-        case -67866:
-            self = FieldSpecifiedMultiple
-        case -67867:
-            self = IncompatibleFieldFormat
-        case -67868:
-            self = InvalidParsingModule
-        case -67869:
-            self = DatabaseLocked
-        case -67870:
-            self = DatastoreIsOpen
-        case -67871:
-            self = MissingValue
-        case -67872:
-            self = UnsupportedQueryLimits
-        case -67873:
-            self = UnsupportedNumSelectionPreds
-        case -67874:
-            self = UnsupportedOperator
-        case -67875:
-            self = InvalidDBLocation
-        case -67876:
-            self = InvalidAccessRequest
-        case -67877:
-            self = InvalidIndexInfo
-        case -67878:
-            self = InvalidNewOwner
-        case -67879:
-            self = InvalidModifyMode
-        case -67880:
-            self = MissingRequiredExtension
-        case -67881:
-            self = ExtendedKeyUsageNotCritical
-        case -67882:
-            self = TimestampMissing
-        case -67883:
-            self = TimestampInvalid
-        case -67884:
-            self = TimestampNotTrusted
-        case -67885:
-            self = TimestampServiceNotAvailable
-        case -67886:
-            self = TimestampBadAlg
-        case -67887:
-            self = TimestampBadRequest
-        case -67888:
-            self = TimestampBadDataFormat
-        case -67889:
-            self = TimestampTimeNotAvailable
-        case -67890:
-            self = TimestampUnacceptedPolicy
-        case -67891:
-            self = TimestampUnacceptedExtension
-        case -67892:
-            self = TimestampAddInfoNotAvailable
-        case -67893:
-            self = TimestampSystemFailure
-        case -67894:
-            self = SigningTimeMissing
-        case -67895:
-            self = TimestampRejection
-        case -67896:
-            self = TimestampWaiting
-        case -67897:
-            self = TimestampRevocationWarning
-        case -67898:
-            self = TimestampRevocationNotification
-        default:
-            self = UnexpectedError
-        }
-    }
-    
-    public var rawValue: OSStatus {
-        switch self {
-        case Success:
-            return 0
-        case Unimplemented:
-            return -4
-        case DiskFull:
-            return -34
-        case IO:
-            return -36
-        case OpWr:
-            return -49
-        case Param:
-            return -50
-        case WrPerm:
-            return -61
-        case Allocate:
-            return -108
-        case UserCanceled:
-            return -128
-        case BadReq:
-            return -909
-        case InternalComponent:
-            return -2070
-        case NotAvailable:
-            return -25291
-        case ReadOnly:
-            return -25292
-        case AuthFailed:
-            return -25293
-        case NoSuchKeychain:
-            return -25294
-        case InvalidKeychain:
-            return -25295
-        case DuplicateKeychain:
-            return -25296
-        case DuplicateCallback:
-            return -25297
-        case InvalidCallback:
-            return -25298
-        case DuplicateItem:
-            return -25299
-        case ItemNotFound:
-            return -25300
-        case BufferTooSmall:
-            return -25301
-        case DataTooLarge:
-            return -25302
-        case NoSuchAttr:
-            return -25303
-        case InvalidItemRef:
-            return -25304
-        case InvalidSearchRef:
-            return -25305
-        case NoSuchClass:
-            return -25306
-        case NoDefaultKeychain:
-            return -25307
-        case InteractionNotAllowed:
-            return -25308
-        case ReadOnlyAttr:
-            return -25309
-        case WrongSecVersion:
-            return -25310
-        case KeySizeNotAllowed:
-            return -25311
-        case NoStorageModule:
-            return -25312
-        case NoCertificateModule:
-            return -25313
-        case NoPolicyModule:
-            return -25314
-        case InteractionRequired:
-            return -25315
-        case DataNotAvailable:
-            return -25316
-        case DataNotModifiable:
-            return -25317
-        case CreateChainFailed:
-            return -25318
-        case InvalidPrefsDomain:
-            return -25319
-        case InDarkWake:
-            return -25320
-        case ACLNotSimple:
-            return -25240
-        case PolicyNotFound:
-            return -25241
-        case InvalidTrustSetting:
-            return -25242
-        case NoAccessForItem:
-            return -25243
-        case InvalidOwnerEdit:
-            return -25244
-        case TrustNotAvailable:
-            return -25245
-        case UnsupportedFormat:
-            return -25256
-        case UnknownFormat:
-            return -25257
-        case KeyIsSensitive:
-            return -25258
-        case MultiplePrivKeys:
-            return -25259
-        case PassphraseRequired:
-            return -25260
-        case InvalidPasswordRef:
-            return -25261
-        case InvalidTrustSettings:
-            return -25262
-        case NoTrustSettings:
-            return -25263
-        case Pkcs12VerifyFailure:
-            return -25264
-        case InvalidCertificate:
-            return -26265
-        case NotSigner:
-            return -26267
-        case PolicyDenied:
-            return -26270
-        case InvalidKey:
-            return -26274
-        case Decode:
-            return -26275
-        case Internal:
-            return -26276
-        case UnsupportedAlgorithm:
-            return -26268
-        case UnsupportedOperation:
-            return -26271
-        case UnsupportedPadding:
-            return -26273
-        case ItemInvalidKey:
-            return -34000
-        case ItemInvalidKeyType:
-            return -34001
-        case ItemInvalidValue:
-            return -34002
-        case ItemClassMissing:
-            return -34003
-        case ItemMatchUnsupported:
-            return -34004
-        case UseItemListUnsupported:
-            return -34005
-        case UseKeychainUnsupported:
-            return -34006
-        case UseKeychainListUnsupported:
-            return -34007
-        case ReturnDataUnsupported:
-            return -34008
-        case ReturnAttributesUnsupported:
-            return -34009
-        case ReturnRefUnsupported:
-            return -34010
-        case ReturnPersitentRefUnsupported:
-            return -34011
-        case ValueRefUnsupported:
-            return -34012
-        case ValuePersistentRefUnsupported:
-            return -34013
-        case ReturnMissingPointer:
-            return -34014
-        case MatchLimitUnsupported:
-            return -34015
-        case ItemIllegalQuery:
-            return -34016
-        case WaitForCallback:
-            return -34017
-        case MissingEntitlement:
-            return -34018
-        case UpgradePending:
-            return -34019
-        case MPSignatureInvalid:
-            return -25327
-        case OTRTooOld:
-            return -25328
-        case OTRIDTooNew:
-            return -25329
-        case ServiceNotAvailable:
-            return -67585
-        case InsufficientClientID:
-            return -67586
-        case DeviceReset:
-            return -67587
-        case DeviceFailed:
-            return -67588
-        case AppleAddAppACLSubject:
-            return -67589
-        case ApplePublicKeyIncomplete:
-            return -67590
-        case AppleSignatureMismatch:
-            return -67591
-        case AppleInvalidKeyStartDate:
-            return -67592
-        case AppleInvalidKeyEndDate:
-            return -67593
-        case ConversionError:
-            return -67594
-        case AppleSSLv2Rollback:
-            return -67595
-        case QuotaExceeded:
-            return -67596
-        case FileTooBig:
-            return -67597
-        case InvalidDatabaseBlob:
-            return -67598
-        case InvalidKeyBlob:
-            return -67599
-        case IncompatibleDatabaseBlob:
-            return -67600
-        case IncompatibleKeyBlob:
-            return -67601
-        case HostNameMismatch:
-            return -67602
-        case UnknownCriticalExtensionFlag:
-            return -67603
-        case NoBasicConstraints:
-            return -67604
-        case NoBasicConstraintsCA:
-            return -67605
-        case InvalidAuthorityKeyID:
-            return -67606
-        case InvalidSubjectKeyID:
-            return -67607
-        case InvalidKeyUsageForPolicy:
-            return -67608
-        case InvalidExtendedKeyUsage:
-            return -67609
-        case InvalidIDLinkage:
-            return -67610
-        case PathLengthConstraintExceeded:
-            return -67611
-        case InvalidRoot:
-            return -67612
-        case CRLExpired:
-            return -67613
-        case CRLNotValidYet:
-            return -67614
-        case CRLNotFound:
-            return -67615
-        case CRLServerDown:
-            return -67616
-        case CRLBadURI:
-            return -67617
-        case UnknownCertExtension:
-            return -67618
-        case UnknownCRLExtension:
-            return -67619
-        case CRLNotTrusted:
-            return -67620
-        case CRLPolicyFailed:
-            return -67621
-        case IDPFailure:
-            return -67622
-        case SMIMEEmailAddressesNotFound:
-            return -67623
-        case SMIMEBadExtendedKeyUsage:
-            return -67624
-        case SMIMEBadKeyUsage:
-            return -67625
-        case SMIMEKeyUsageNotCritical:
-            return -67626
-        case SMIMENoEmailAddress:
-            return -67627
-        case SMIMESubjAltNameNotCritical:
-            return -67628
-        case SSLBadExtendedKeyUsage:
-            return -67629
-        case OCSPBadResponse:
-            return -67630
-        case OCSPBadRequest:
-            return -67631
-        case OCSPUnavailable:
-            return -67632
-        case OCSPStatusUnrecognized:
-            return -67633
-        case EndOfData:
-            return -67634
-        case IncompleteCertRevocationCheck:
-            return -67635
-        case NetworkFailure:
-            return -67636
-        case OCSPNotTrustedToAnchor:
-            return -67637
-        case RecordModified:
-            return -67638
-        case OCSPSignatureError:
-            return -67639
-        case OCSPNoSigner:
-            return -67640
-        case OCSPResponderMalformedReq:
-            return -67641
-        case OCSPResponderInternalError:
-            return -67642
-        case OCSPResponderTryLater:
-            return -67643
-        case OCSPResponderSignatureRequired:
-            return -67644
-        case OCSPResponderUnauthorized:
-            return -67645
-        case OCSPResponseNonceMismatch:
-            return -67646
-        case CodeSigningBadCertChainLength:
-            return -67647
-        case CodeSigningNoBasicConstraints:
-            return -67648
-        case CodeSigningBadPathLengthConstraint:
-            return -67649
-        case CodeSigningNoExtendedKeyUsage:
-            return -67650
-        case CodeSigningDevelopment:
-            return -67651
-        case ResourceSignBadCertChainLength:
-            return -67652
-        case ResourceSignBadExtKeyUsage:
-            return -67653
-        case TrustSettingDeny:
-            return -67654
-        case InvalidSubjectName:
-            return -67655
-        case UnknownQualifiedCertStatement:
-            return -67656
-        case MobileMeRequestQueued:
-            return -67657
-        case MobileMeRequestRedirected:
-            return -67658
-        case MobileMeServerError:
-            return -67659
-        case MobileMeServerNotAvailable:
-            return -67660
-        case MobileMeServerAlreadyExists:
-            return -67661
-        case MobileMeServerServiceErr:
-            return -67662
-        case MobileMeRequestAlreadyPending:
-            return -67663
-        case MobileMeNoRequestPending:
-            return -67664
-        case MobileMeCSRVerifyFailure:
-            return -67665
-        case MobileMeFailedConsistencyCheck:
-            return -67666
-        case NotInitialized:
-            return -67667
-        case InvalidHandleUsage:
-            return -67668
-        case PVCReferentNotFound:
-            return -67669
-        case FunctionIntegrityFail:
-            return -67670
-        case InternalError:
-            return -67671
-        case MemoryError:
-            return -67672
-        case InvalidData:
-            return -67673
-        case MDSError:
-            return -67674
-        case InvalidPointer:
-            return -67675
-        case SelfCheckFailed:
-            return -67676
-        case FunctionFailed:
-            return -67677
-        case ModuleManifestVerifyFailed:
-            return -67678
-        case InvalidGUID:
-            return -67679
-        case InvalidHandle:
-            return -67680
-        case InvalidDBList:
-            return -67681
-        case InvalidPassthroughID:
-            return -67682
-        case InvalidNetworkAddress:
-            return -67683
-        case CRLAlreadySigned:
-            return -67684
-        case InvalidNumberOfFields:
-            return -67685
-        case VerificationFailure:
-            return -67686
-        case UnknownTag:
-            return -67687
-        case InvalidSignature:
-            return -67688
-        case InvalidName:
-            return -67689
-        case InvalidCertificateRef:
-            return -67690
-        case InvalidCertificateGroup:
-            return -67691
-        case TagNotFound:
-            return -67692
-        case InvalidQuery:
-            return -67693
-        case InvalidValue:
-            return -67694
-        case CallbackFailed:
-            return -67695
-        case ACLDeleteFailed:
-            return -67696
-        case ACLReplaceFailed:
-            return -67697
-        case ACLAddFailed:
-            return -67698
-        case ACLChangeFailed:
-            return -67699
-        case InvalidAccessCredentials:
-            return -67700
-        case InvalidRecord:
-            return -67701
-        case InvalidACL:
-            return -67702
-        case InvalidSampleValue:
-            return -67703
-        case IncompatibleVersion:
-            return -67704
-        case PrivilegeNotGranted:
-            return -67705
-        case InvalidScope:
-            return -67706
-        case PVCAlreadyConfigured:
-            return -67707
-        case InvalidPVC:
-            return -67708
-        case EMMLoadFailed:
-            return -67709
-        case EMMUnloadFailed:
-            return -67710
-        case AddinLoadFailed:
-            return -67711
-        case InvalidKeyRef:
-            return -67712
-        case InvalidKeyHierarchy:
-            return -67713
-        case AddinUnloadFailed:
-            return -67714
-        case LibraryReferenceNotFound:
-            return -67715
-        case InvalidAddinFunctionTable:
-            return -67716
-        case InvalidServiceMask:
-            return -67717
-        case ModuleNotLoaded:
-            return -67718
-        case InvalidSubServiceID:
-            return -67719
-        case AttributeNotInContext:
-            return -67720
-        case ModuleManagerInitializeFailed:
-            return -67721
-        case ModuleManagerNotFound:
-            return -67722
-        case EventNotificationCallbackNotFound:
-            return -67723
-        case InputLengthError:
-            return -67724
-        case OutputLengthError:
-            return -67725
-        case PrivilegeNotSupported:
-            return -67726
-        case DeviceError:
-            return -67727
-        case AttachHandleBusy:
-            return -67728
-        case NotLoggedIn:
-            return -67729
-        case AlgorithmMismatch:
-            return -67730
-        case KeyUsageIncorrect:
-            return -67731
-        case KeyBlobTypeIncorrect:
-            return -67732
-        case KeyHeaderInconsistent:
-            return -67733
-        case UnsupportedKeyFormat:
-            return -67734
-        case UnsupportedKeySize:
-            return -67735
-        case InvalidKeyUsageMask:
-            return -67736
-        case UnsupportedKeyUsageMask:
-            return -67737
-        case InvalidKeyAttributeMask:
-            return -67738
-        case UnsupportedKeyAttributeMask:
-            return -67739
-        case InvalidKeyLabel:
-            return -67740
-        case UnsupportedKeyLabel:
-            return -67741
-        case InvalidKeyFormat:
-            return -67742
-        case UnsupportedVectorOfBuffers:
-            return -67743
-        case InvalidInputVector:
-            return -67744
-        case InvalidOutputVector:
-            return -67745
-        case InvalidContext:
-            return -67746
-        case InvalidAlgorithm:
-            return -67747
-        case InvalidAttributeKey:
-            return -67748
-        case MissingAttributeKey:
-            return -67749
-        case InvalidAttributeInitVector:
-            return -67750
-        case MissingAttributeInitVector:
-            return -67751
-        case InvalidAttributeSalt:
-            return -67752
-        case MissingAttributeSalt:
-            return -67753
-        case InvalidAttributePadding:
-            return -67754
-        case MissingAttributePadding:
-            return -67755
-        case InvalidAttributeRandom:
-            return -67756
-        case MissingAttributeRandom:
-            return -67757
-        case InvalidAttributeSeed:
-            return -67758
-        case MissingAttributeSeed:
-            return -67759
-        case InvalidAttributePassphrase:
-            return -67760
-        case MissingAttributePassphrase:
-            return -67761
-        case InvalidAttributeKeyLength:
-            return -67762
-        case MissingAttributeKeyLength:
-            return -67763
-        case InvalidAttributeBlockSize:
-            return -67764
-        case MissingAttributeBlockSize:
-            return -67765
-        case InvalidAttributeOutputSize:
-            return -67766
-        case MissingAttributeOutputSize:
-            return -67767
-        case InvalidAttributeRounds:
-            return -67768
-        case MissingAttributeRounds:
-            return -67769
-        case InvalidAlgorithmParms:
-            return -67770
-        case MissingAlgorithmParms:
-            return -67771
-        case InvalidAttributeLabel:
-            return -67772
-        case MissingAttributeLabel:
-            return -67773
-        case InvalidAttributeKeyType:
-            return -67774
-        case MissingAttributeKeyType:
-            return -67775
-        case InvalidAttributeMode:
-            return -67776
-        case MissingAttributeMode:
-            return -67777
-        case InvalidAttributeEffectiveBits:
-            return -67778
-        case MissingAttributeEffectiveBits:
-            return -67779
-        case InvalidAttributeStartDate:
-            return -67780
-        case MissingAttributeStartDate:
-            return -67781
-        case InvalidAttributeEndDate:
-            return -67782
-        case MissingAttributeEndDate:
-            return -67783
-        case InvalidAttributeVersion:
-            return -67784
-        case MissingAttributeVersion:
-            return -67785
-        case InvalidAttributePrime:
-            return -67786
-        case MissingAttributePrime:
-            return -67787
-        case InvalidAttributeBase:
-            return -67788
-        case MissingAttributeBase:
-            return -67789
-        case InvalidAttributeSubprime:
-            return -67790
-        case MissingAttributeSubprime:
-            return -67791
-        case InvalidAttributeIterationCount:
-            return -67792
-        case MissingAttributeIterationCount:
-            return -67793
-        case InvalidAttributeDLDBHandle:
-            return -67794
-        case MissingAttributeDLDBHandle:
-            return -67795
-        case InvalidAttributeAccessCredentials:
-            return -67796
-        case MissingAttributeAccessCredentials:
-            return -67797
-        case InvalidAttributePublicKeyFormat:
-            return -67798
-        case MissingAttributePublicKeyFormat:
-            return -67799
-        case InvalidAttributePrivateKeyFormat:
-            return -67800
-        case MissingAttributePrivateKeyFormat:
-            return -67801
-        case InvalidAttributeSymmetricKeyFormat:
-            return -67802
-        case MissingAttributeSymmetricKeyFormat:
-            return -67803
-        case InvalidAttributeWrappedKeyFormat:
-            return -67804
-        case MissingAttributeWrappedKeyFormat:
-            return -67805
-        case StagedOperationInProgress:
-            return -67806
-        case StagedOperationNotStarted:
-            return -67807
-        case VerifyFailed:
-            return -67808
-        case QuerySizeUnknown:
-            return -67809
-        case BlockSizeMismatch:
-            return -67810
-        case PublicKeyInconsistent:
-            return -67811
-        case DeviceVerifyFailed:
-            return -67812
-        case InvalidLoginName:
-            return -67813
-        case AlreadyLoggedIn:
-            return -67814
-        case InvalidDigestAlgorithm:
-            return -67815
-        case InvalidCRLGroup:
-            return -67816
-        case CertificateCannotOperate:
-            return -67817
-        case CertificateExpired:
-            return -67818
-        case CertificateNotValidYet:
-            return -67819
-        case CertificateRevoked:
-            return -67820
-        case CertificateSuspended:
-            return -67821
-        case InsufficientCredentials:
-            return -67822
-        case InvalidAction:
-            return -67823
-        case InvalidAuthority:
-            return -67824
-        case VerifyActionFailed:
-            return -67825
-        case InvalidCertAuthority:
-            return -67826
-        case InvaldCRLAuthority:
-            return -67827
-        case InvalidCRLEncoding:
-            return -67828
-        case InvalidCRLType:
-            return -67829
-        case InvalidCRL:
-            return -67830
-        case InvalidFormType:
-            return -67831
-        case InvalidID:
-            return -67832
-        case InvalidIdentifier:
-            return -67833
-        case InvalidIndex:
-            return -67834
-        case InvalidPolicyIdentifiers:
-            return -67835
-        case InvalidTimeString:
-            return -67836
-        case InvalidReason:
-            return -67837
-        case InvalidRequestInputs:
-            return -67838
-        case InvalidResponseVector:
-            return -67839
-        case InvalidStopOnPolicy:
-            return -67840
-        case InvalidTuple:
-            return -67841
-        case MultipleValuesUnsupported:
-            return -67842
-        case NotTrusted:
-            return -67843
-        case NoDefaultAuthority:
-            return -67844
-        case RejectedForm:
-            return -67845
-        case RequestLost:
-            return -67846
-        case RequestRejected:
-            return -67847
-        case UnsupportedAddressType:
-            return -67848
-        case UnsupportedService:
-            return -67849
-        case InvalidTupleGroup:
-            return -67850
-        case InvalidBaseACLs:
-            return -67851
-        case InvalidTupleCredendtials:
-            return -67852
-        case InvalidEncoding:
-            return -67853
-        case InvalidValidityPeriod:
-            return -67854
-        case InvalidRequestor:
-            return -67855
-        case RequestDescriptor:
-            return -67856
-        case InvalidBundleInfo:
-            return -67857
-        case InvalidCRLIndex:
-            return -67858
-        case NoFieldValues:
-            return -67859
-        case UnsupportedFieldFormat:
-            return -67860
-        case UnsupportedIndexInfo:
-            return -67861
-        case UnsupportedLocality:
-            return -67862
-        case UnsupportedNumAttributes:
-            return -67863
-        case UnsupportedNumIndexes:
-            return -67864
-        case UnsupportedNumRecordTypes:
-            return -67865
-        case FieldSpecifiedMultiple:
-            return -67866
-        case IncompatibleFieldFormat:
-            return -67867
-        case InvalidParsingModule:
-            return -67868
-        case DatabaseLocked:
-            return -67869
-        case DatastoreIsOpen:
-            return -67870
-        case MissingValue:
-            return -67871
-        case UnsupportedQueryLimits:
-            return -67872
-        case UnsupportedNumSelectionPreds:
-            return -67873
-        case UnsupportedOperator:
-            return -67874
-        case InvalidDBLocation:
-            return -67875
-        case InvalidAccessRequest:
-            return -67876
-        case InvalidIndexInfo:
-            return -67877
-        case InvalidNewOwner:
-            return -67878
-        case InvalidModifyMode:
-            return -67879
-        case MissingRequiredExtension:
-            return -67880
-        case ExtendedKeyUsageNotCritical:
-            return -67881
-        case TimestampMissing:
-            return -67882
-        case TimestampInvalid:
-            return -67883
-        case TimestampNotTrusted:
-            return -67884
-        case TimestampServiceNotAvailable:
-            return -67885
-        case TimestampBadAlg:
-            return -67886
-        case TimestampBadRequest:
-            return -67887
-        case TimestampBadDataFormat:
-            return -67888
-        case TimestampTimeNotAvailable:
-            return -67889
-        case TimestampUnacceptedPolicy:
-            return -67890
-        case TimestampUnacceptedExtension:
-            return -67891
-        case TimestampAddInfoNotAvailable:
-            return -67892
-        case TimestampSystemFailure:
-            return -67893
-        case SigningTimeMissing:
-            return -67894
-        case TimestampRejection:
-            return -67895
-        case TimestampWaiting:
-            return -67896
-        case TimestampRevocationWarning:
-            return -67897
-        case TimestampRevocationNotification:
-            return -67898
-        default:
-            return -99999
+    public init(status: OSStatus) {
+        if let mappedStatus = Status(rawValue: status) {
+            self = mappedStatus
+        } else {
+            self = .UnexpectedError
         }
     }
     
@@ -4301,7 +2687,7 @@ extension Status : RawRepresentable, CustomStringConvertible {
             return "A timestamp authority revocation warning was issued."
         case TimestampRevocationNotification:
             return "A timestamp authority revocation notification was issued."
-        default:
+        case UnexpectedError:
             return "Unexpected error has occurred."
         }
     }
