@@ -433,6 +433,12 @@ class ErrorTypeTests: XCTestCase {
             XCTAssertEqual(status?.description, "The caller passed in a kSecReturnRef key to a function which does not support it.")
         }
         do {
+            let errSecReturnPersitentRefUnsupported: OSStatus = -34011
+            let status = Status(rawValue: errSecReturnPersitentRefUnsupported)
+            XCTAssertEqual(status, .ReturnPersitentRefUnsupported)
+            XCTAssertEqual(status?.description, "The caller passed in a kSecReturnPersistentRef key to a function which does not support it.")
+        }
+        do {
             let errSecValueRefUnsupported: OSStatus = -34012
             let status = Status(rawValue: errSecValueRefUnsupported)
             XCTAssertEqual(status, .ValueRefUnsupported)
