@@ -485,8 +485,13 @@ item: [authenticationType: Default, key: honeylemon, server: github.com, class: 
 
 ## Requirements
 
-iOS 7 or later
-OS X 10.9 or later
+|        | OS                               | Swift    |
+|--------|----------------------------------|----------|
+| **v1.1.x** | iOS 7+, OSX 10.9+                | 1.1      |
+| **v1.2.x** | iOS 7+, OSX 10.9+                | 1.2      |
+| **v2.0.x** | iOS 7+, OSX 10.9+, watchOS       | 2.0      |
+| **v2.1.x** | iOS 7+, OSX 10.9+, watchOS       | 2.0      |
+| **v2.2.x** | iOS 8+, OSX 10.9+, watchOS, tvOS | 2.0, 2.1 |
 
 ## Installation
 
