@@ -160,7 +160,7 @@ do {
 }
 ```
 
-### :key: Label and Comment
+### :key: Set Label and Comment
 
 ```swift
 let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
@@ -169,6 +169,47 @@ do {
         .label("github.com (kishikawakatsumi)")
         .comment("github access token")
         .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
+} catch let error {
+    print("error: \(error)")
+}
+```
+
+### :key: Obtaining Other Attributes
+
+#### PersistentRef
+
+```swift
+let keychain = Keychain()
+do {
+    let persistentRef = try keychain.get("kishikawakatsumi") { $0?.persistentRef }
+    ...
+} catch let error {
+    print("error: \(error)")
+}
+```
+
+#### Creation Date
+
+```swift
+let keychain = Keychain()
+do {
+    let creationDate = try keychain.get("kishikawakatsumi") { $0?.creationDate }
+    ...
+} catch let error {
+    print("error: \(error)")
+}
+```
+
+#### All Attributes
+
+```swift
+let keychain = Keychain()
+do {
+    let attributes = try keychain.get("kishikawakatsumi") { $0 }
+    print(attributes.comment)
+    print(attributes.label)
+    print(attributes.creator)
+    ...
 } catch let error {
     print("error: \(error)")
 }
