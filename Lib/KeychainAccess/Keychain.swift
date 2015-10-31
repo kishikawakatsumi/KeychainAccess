@@ -210,73 +210,106 @@ public struct AuthenticationPolicy : OptionSetType {
     }
 }
 
-/** Class Key Constant */
-private let Class = kSecClass as String
+public struct Attributes {
+    public var `class`: String? {
+        return attributes[Class] as? String
+    }
+    public var data: NSData? {
+        return attributes[ValueData] as? NSData
+    }
+    public var ref: NSData? {
+        return attributes[ValueRef] as? NSData
+    }
+    public var persistentRef: NSData? {
+        return attributes[ValuePersistentRef] as? NSData
+    }
 
-/** Attribute Key Constants */
-private let AttributeAccessible = kSecAttrAccessible as String
+    public var accessible: String? {
+        return attributes[AttributeAccessible] as? String
+    }
+    public var accessControl: SecAccessControl? {
+        if #available(OSX 10.10, *) {
+            if let accessControl = attributes[AttributeAccessControl] {
+                return (accessControl as! SecAccessControl)
+            }
+            return nil
+        } else {
+            return nil
+        }
+    }
+    public var accessGroup: String? {
+        return attributes[AttributeAccessGroup] as? String
+    }
+    public var synchronizable: Bool? {
+        return attributes[AttributeSynchronizable] as? Bool
+    }
+    public var creationDate: NSDate? {
+        return attributes[AttributeCreationDate] as? NSDate
+    }
+    public var modificationDate: NSDate? {
+        return attributes[AttributeModificationDate] as? NSDate
+    }
+    public var attributeDescription: String? {
+        return attributes[AttributeDescription] as? String
+    }
+    public var comment: String? {
+        return attributes[AttributeComment] as? String
+    }
+    public var creator: String? {
+        return attributes[AttributeCreator] as? String
+    }
+    public var type: String? {
+        return attributes[AttributeType] as? String
+    }
+    public var label: String? {
+        return attributes[AttributeLabel] as? String
+    }
+    public var isInvisible: Bool? {
+        return attributes[AttributeIsInvisible] as? Bool
+    }
+    public var isNegative: Bool? {
+        return attributes[AttributeIsNegative] as? Bool
+    }
+    public var account: String? {
+        return attributes[AttributeAccount] as? String
+    }
+    public var service: String? {
+        return attributes[AttributeService] as? String
+    }
+    public var generic: NSData? {
+        return attributes[AttributeGeneric] as? NSData
+    }
+    public var securityDomain: String? {
+        return attributes[AttributeSecurityDomain] as? String
+    }
+    public var server: String? {
+        return attributes[AttributeServer] as? String
+    }
+    public var `protocol`: String? {
+        return attributes[AttributeProtocol] as? String
+    }
+    public var authenticationType: String? {
+        return attributes[AttributeAuthenticationType] as? String
+    }
+    public var port: Int? {
+        return attributes[AttributePort] as? Int
+    }
+    public var path: String? {
+        return attributes[AttributePath] as? String
+    }
 
-@available(iOS 8.0, OSX 10.10, *)
-private let AttributeAccessControl = kSecAttrAccessControl as String
+    private let attributes: [String: AnyObject]
 
-private let AttributeAccessGroup = kSecAttrAccessGroup as String
-private let AttributeSynchronizable = kSecAttrSynchronizable as String
-private let AttributeComment = kSecAttrComment as String
-private let AttributeLabel = kSecAttrLabel as String
-private let AttributeAccount = kSecAttrAccount as String
-private let AttributeService = kSecAttrService as String
-private let AttributeServer = kSecAttrServer as String
-private let AttributeProtocol = kSecAttrProtocol as String
-private let AttributeAuthenticationType = kSecAttrAuthenticationType as String
-private let AttributePort = kSecAttrPort as String
+    init(attributes: [String: AnyObject]) {
+        self.attributes = attributes
+    }
 
-private let SynchronizableAny = kSecAttrSynchronizableAny
-
-/** Search Constants */
-private let MatchLimit = kSecMatchLimit as String
-private let MatchLimitOne = kSecMatchLimitOne
-private let MatchLimitAll = kSecMatchLimitAll
-
-/** Return Type Key Constants */
-private let ReturnData = kSecReturnData as String
-private let ReturnAttributes = kSecReturnAttributes as String
-
-/** Value Type Key Constants */
-private let ValueData = kSecValueData as String
-
-/** Other Constants */
-@available(iOS 8.0, OSX 10.10, *)
-private let UseOperationPrompt = kSecUseOperationPrompt as String
-
-#if os(iOS)
-@available(iOS, introduced=8.0, deprecated=9.0, message="Use a UseAuthenticationUI instead.")
-private let UseNoAuthenticationUI = kSecUseNoAuthenticationUI as String
-#endif
-
-@available(iOS 9.0, OSX 10.11, *)
-@available(watchOS, unavailable)
-private let UseAuthenticationUI = kSecUseAuthenticationUI as String
-
-@available(iOS 9.0, OSX 10.11, *)
-@available(watchOS, unavailable)
-private let UseAuthenticationContext = kSecUseAuthenticationContext as String
-
-@available(iOS 9.0, OSX 10.11, *)
-@available(watchOS, unavailable)
-private let UseAuthenticationUIAllow = kSecUseAuthenticationUIAllow as String
-
-@available(iOS 9.0, OSX 10.11, *)
-@available(watchOS, unavailable)
-private let UseAuthenticationUIFail = kSecUseAuthenticationUIFail as String
-
-@available(iOS 9.0, OSX 10.11, *)
-@available(watchOS, unavailable)
-private let UseAuthenticationUISkip = kSecUseAuthenticationUISkip as String
-
-#if os(iOS)
-/** Credential Key Constants */
-private let SharedPassword = kSecSharedPassword as String
-#endif
+    public subscript(key: String) -> AnyObject? {
+        get {
+            return attributes[key]
+        }
+    }
+}
 
 public class Keychain {
     public var itemClass: ItemClass {
@@ -425,6 +458,12 @@ public class Keychain {
         return Keychain(options)
     }
 
+    public func attributes(attributes: [String: AnyObject]) -> Keychain {
+        var options = self.options
+        attributes.forEach { options.attributes.updateValue($1, forKey: $0) }
+        return Keychain(options)
+    }
+
     @available(iOS 8.0, OSX 10.10, *)
     @available(watchOS, unavailable)
     public func authenticationPrompt(authenticationPrompt: String) -> Keychain {
@@ -473,6 +512,34 @@ public class Keychain {
         }
     }
 
+    public func get<T>(key: String, @noescape handler: Attributes? -> T) throws -> T {
+        var query = options.query()
+
+        query[MatchLimit] = MatchLimitOne
+
+        query[ReturnData] = true
+        query[ReturnAttributes] = true
+        query[ReturnRef] = true
+        query[ReturnPersistentRef] = true
+
+        query[AttributeAccount] = key
+
+        var result: AnyObject?
+        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+
+        switch status {
+        case errSecSuccess:
+            guard let attributes = result as? [String: AnyObject] else {
+                throw Status.UnexpectedError
+            }
+            return handler(Attributes(attributes: attributes))
+        case errSecItemNotFound:
+            return handler(nil)
+        default:
+            throw securityError(status: status)
+        }
+    }
+
     // MARK:
     
     public func set(value: String, key: String) throws {
@@ -496,18 +563,20 @@ public class Keychain {
             query[UseAuthenticationUI] = UseAuthenticationUIFail
         }
         #endif
-        
+
         var status = SecItemCopyMatching(query, nil)
         switch status {
         case errSecSuccess, errSecInteractionNotAllowed:
             var query = options.query()
             query[AttributeAccount] = key
-            
-            let (attributes, error) = options.attributes(key: nil, value: value)
+
+            var (attributes, error) = options.attributes(key: nil, value: value)
             if let error = error {
                 print(error.localizedDescription)
                 throw error
             }
+
+            options.attributes.forEach { attributes.updateValue($1, forKey: $0) }
 
             #if os(iOS)
             if status == errSecInteractionNotAllowed && floor(NSFoundationVersionNumber) <= floor(NSFoundationVersionNumber_iOS_8_0) {
@@ -520,17 +589,19 @@ public class Keychain {
                 }
             }
             #else
-                status = SecItemUpdate(query, attributes)
-                if status != errSecSuccess {
-                    throw securityError(status: status)
-                }
+            status = SecItemUpdate(query, attributes)
+            if status != errSecSuccess {
+                throw securityError(status: status)
+            }
             #endif
         case errSecItemNotFound:
-            let (attributes, error) = options.attributes(key: key, value: value)
+            var (attributes, error) = options.attributes(key: key, value: value)
             if let error = error {
                 print(error.localizedDescription)
                 throw error
             }
+
+            options.attributes.forEach { attributes.updateValue($1, forKey: $0) }
 
             status = SecItemAdd(attributes, nil)
             if status != errSecSuccess {
@@ -962,9 +1033,91 @@ struct Options {
     var comment: String?
     
     var authenticationPrompt: String?
-    
-    init() {}
+
+    var attributes = [String: AnyObject]()
 }
+
+/** Class Key Constant */
+private let Class = String(kSecClass)
+
+/** Attribute Key Constants */
+private let AttributeAccessible = String(kSecAttrAccessible)
+
+@available(iOS 8.0, OSX 10.10, *)
+private let AttributeAccessControl = String(kSecAttrAccessControl)
+
+private let AttributeAccessGroup = String(kSecAttrAccessGroup)
+private let AttributeSynchronizable = String(kSecAttrSynchronizable)
+private let AttributeCreationDate = String(kSecAttrCreationDate)
+private let AttributeModificationDate = String(kSecAttrModificationDate)
+private let AttributeDescription = String(kSecAttrDescription)
+private let AttributeComment = String(kSecAttrComment)
+private let AttributeCreator = String(kSecAttrCreator)
+private let AttributeType = String(kSecAttrType)
+private let AttributeLabel = String(kSecAttrLabel)
+private let AttributeIsInvisible = String(kSecAttrIsInvisible)
+private let AttributeIsNegative = String(kSecAttrIsNegative)
+private let AttributeAccount = String(kSecAttrAccount)
+private let AttributeService = String(kSecAttrService)
+private let AttributeGeneric = String(kSecAttrGeneric)
+private let AttributeSecurityDomain = String(kSecAttrSecurityDomain)
+private let AttributeServer = String(kSecAttrServer)
+private let AttributeProtocol = String(kSecAttrProtocol)
+private let AttributeAuthenticationType = String(kSecAttrAuthenticationType)
+private let AttributePort = String(kSecAttrPort)
+private let AttributePath = String(kSecAttrPath)
+
+private let SynchronizableAny = kSecAttrSynchronizableAny
+
+/** Search Constants */
+private let MatchLimit = String(kSecMatchLimit)
+private let MatchLimitOne = kSecMatchLimitOne
+private let MatchLimitAll = kSecMatchLimitAll
+
+/** Return Type Key Constants */
+private let ReturnData = String(kSecReturnData)
+private let ReturnAttributes = String(kSecReturnAttributes)
+private let ReturnRef = String(kSecReturnRef)
+private let ReturnPersistentRef = String(kSecReturnPersistentRef)
+
+/** Value Type Key Constants */
+private let ValueData = String(kSecValueData)
+private let ValueRef = String(kSecValueRef)
+private let ValuePersistentRef = String(kSecValuePersistentRef)
+
+/** Other Constants */
+@available(iOS 8.0, OSX 10.10, *)
+private let UseOperationPrompt = String(kSecUseOperationPrompt)
+
+#if os(iOS)
+    @available(iOS, introduced=8.0, deprecated=9.0, message="Use a UseAuthenticationUI instead.")
+    private let UseNoAuthenticationUI = String(kSecUseNoAuthenticationUI)
+#endif
+
+@available(iOS 9.0, OSX 10.11, *)
+@available(watchOS, unavailable)
+private let UseAuthenticationUI = String(kSecUseAuthenticationUI)
+
+@available(iOS 9.0, OSX 10.11, *)
+@available(watchOS, unavailable)
+private let UseAuthenticationContext = String(kSecUseAuthenticationContext)
+
+@available(iOS 9.0, OSX 10.11, *)
+@available(watchOS, unavailable)
+private let UseAuthenticationUIAllow = String(kSecUseAuthenticationUIAllow)
+
+@available(iOS 9.0, OSX 10.11, *)
+@available(watchOS, unavailable)
+private let UseAuthenticationUIFail = String(kSecUseAuthenticationUIFail)
+
+@available(iOS 9.0, OSX 10.11, *)
+@available(watchOS, unavailable)
+private let UseAuthenticationUISkip = String(kSecUseAuthenticationUISkip)
+
+#if os(iOS)
+    /** Credential Key Constants */
+    private let SharedPassword = String(kSecSharedPassword)
+#endif
 
 extension Keychain : CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
@@ -1063,6 +1216,16 @@ extension Options {
 }
 
 // MARK:
+
+extension Attributes : CustomStringConvertible, CustomDebugStringConvertible {
+    public var description: String {
+        return "\(attributes)"
+    }
+
+    public var debugDescription: String {
+        return description
+    }
+}
 
 extension ItemClass : RawRepresentable, CustomStringConvertible {
     
@@ -1170,67 +1333,67 @@ extension ProtocolType : RawRepresentable, CustomStringConvertible {
     public var rawValue: String {
         switch self {
         case FTP:
-            return kSecAttrProtocolFTP as String
+            return String(kSecAttrProtocolFTP)
         case FTPAccount:
-            return kSecAttrProtocolFTPAccount as String
+            return String(kSecAttrProtocolFTPAccount)
         case HTTP:
-            return kSecAttrProtocolHTTP as String
+            return String(kSecAttrProtocolHTTP)
         case IRC:
-            return kSecAttrProtocolIRC as String
+            return String(kSecAttrProtocolIRC)
         case NNTP:
-            return kSecAttrProtocolNNTP as String
+            return String(kSecAttrProtocolNNTP)
         case POP3:
-            return kSecAttrProtocolPOP3 as String
+            return String(kSecAttrProtocolPOP3)
         case SMTP:
-            return kSecAttrProtocolSMTP as String
+            return String(kSecAttrProtocolSMTP)
         case SOCKS:
-            return kSecAttrProtocolSOCKS as String
+            return String(kSecAttrProtocolSOCKS)
         case IMAP:
-            return kSecAttrProtocolIMAP as String
+            return String(kSecAttrProtocolIMAP)
         case LDAP:
-            return kSecAttrProtocolLDAP as String
+            return String(kSecAttrProtocolLDAP)
         case AppleTalk:
-            return kSecAttrProtocolAppleTalk as String
+            return String(kSecAttrProtocolAppleTalk)
         case AFP:
-            return kSecAttrProtocolAFP as String
+            return String(kSecAttrProtocolAFP)
         case Telnet:
-            return kSecAttrProtocolTelnet as String
+            return String(kSecAttrProtocolTelnet)
         case SSH:
-            return kSecAttrProtocolSSH as String
+            return String(kSecAttrProtocolSSH)
         case FTPS:
-            return kSecAttrProtocolFTPS as String
+            return String(kSecAttrProtocolFTPS)
         case HTTPS:
-            return kSecAttrProtocolHTTPS as String
+            return String(kSecAttrProtocolHTTPS)
         case HTTPProxy:
-            return kSecAttrProtocolHTTPProxy as String
+            return String(kSecAttrProtocolHTTPProxy)
         case HTTPSProxy:
-            return kSecAttrProtocolHTTPSProxy as String
+            return String(kSecAttrProtocolHTTPSProxy)
         case FTPProxy:
-            return kSecAttrProtocolFTPProxy as String
+            return String(kSecAttrProtocolFTPProxy)
         case SMB:
-            return kSecAttrProtocolSMB as String
+            return String(kSecAttrProtocolSMB)
         case RTSP:
-            return kSecAttrProtocolRTSP as String
+            return String(kSecAttrProtocolRTSP)
         case RTSPProxy:
-            return kSecAttrProtocolRTSPProxy as String
+            return String(kSecAttrProtocolRTSPProxy)
         case DAAP:
-            return kSecAttrProtocolDAAP as String
+            return String(kSecAttrProtocolDAAP)
         case EPPC:
-            return kSecAttrProtocolEPPC as String
+            return String(kSecAttrProtocolEPPC)
         case IPP:
-            return kSecAttrProtocolIPP as String
+            return String(kSecAttrProtocolIPP)
         case NNTPS:
-            return kSecAttrProtocolNNTPS as String
+            return String(kSecAttrProtocolNNTPS)
         case LDAPS:
-            return kSecAttrProtocolLDAPS as String
+            return String(kSecAttrProtocolLDAPS)
         case TelnetS:
-            return kSecAttrProtocolTelnetS as String
+            return String(kSecAttrProtocolTelnetS)
         case IMAPS:
-            return kSecAttrProtocolIMAPS as String
+            return String(kSecAttrProtocolIMAPS)
         case IRCS:
-            return kSecAttrProtocolIRCS as String
+            return String(kSecAttrProtocolIRCS)
         case POP3S:
-            return kSecAttrProtocolPOP3S as String
+            return String(kSecAttrProtocolPOP3S)
         }
     }
     
@@ -1330,21 +1493,21 @@ extension AuthenticationType : RawRepresentable, CustomStringConvertible {
     public var rawValue: String {
         switch self {
         case NTLM:
-            return kSecAttrAuthenticationTypeNTLM as String
+            return String(kSecAttrAuthenticationTypeNTLM)
         case MSN:
-            return kSecAttrAuthenticationTypeMSN as String
+            return String(kSecAttrAuthenticationTypeMSN)
         case DPA:
-            return kSecAttrAuthenticationTypeDPA as String
+            return String(kSecAttrAuthenticationTypeDPA)
         case RPA:
-            return kSecAttrAuthenticationTypeRPA as String
+            return String(kSecAttrAuthenticationTypeRPA)
         case HTTPBasic:
-            return kSecAttrAuthenticationTypeHTTPBasic as String
+            return String(kSecAttrAuthenticationTypeHTTPBasic)
         case HTTPDigest:
-            return kSecAttrAuthenticationTypeHTTPDigest as String
+            return String(kSecAttrAuthenticationTypeHTTPDigest)
         case HTMLForm:
-            return kSecAttrAuthenticationTypeHTMLForm as String
+            return String(kSecAttrAuthenticationTypeHTMLForm)
         case Default:
-            return kSecAttrAuthenticationTypeDefault as String
+            return String(kSecAttrAuthenticationTypeDefault)
         }
     }
     
@@ -1415,23 +1578,23 @@ extension Accessibility : RawRepresentable, CustomStringConvertible {
     public var rawValue: String {
         switch self {
         case WhenUnlocked:
-            return kSecAttrAccessibleWhenUnlocked as String
+            return String(kSecAttrAccessibleWhenUnlocked)
         case AfterFirstUnlock:
-            return kSecAttrAccessibleAfterFirstUnlock as String
+            return String(kSecAttrAccessibleAfterFirstUnlock)
         case Always:
-            return kSecAttrAccessibleAlways as String
+            return String(kSecAttrAccessibleAlways)
         case WhenPasscodeSetThisDeviceOnly:
             if #available(OSX 10.10, *) {
-                return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly as String
+                return String(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly)
             } else {
                 fatalError("'Accessibility.WhenPasscodeSetThisDeviceOnly' is not available on this version of OS.")
             }
         case WhenUnlockedThisDeviceOnly:
-            return kSecAttrAccessibleWhenUnlockedThisDeviceOnly as String
+            return String(kSecAttrAccessibleWhenUnlockedThisDeviceOnly)
         case AfterFirstUnlockThisDeviceOnly:
-            return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String
+            return String(kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly)
         case AlwaysThisDeviceOnly:
-            return kSecAttrAccessibleAlwaysThisDeviceOnly as String
+            return String(kSecAttrAccessibleAlwaysThisDeviceOnly)
         }
     }
     
