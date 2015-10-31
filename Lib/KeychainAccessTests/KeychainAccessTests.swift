@@ -288,8 +288,103 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(try! keychain.get("password"), "not stored password")
         
         do { try keychain.set("password1234", key: "password") } catch {}
-        XCTAssertEqual(try! keychain.get("username")!, "kishikawakatsumi", "stored username")
-        XCTAssertEqual(try! keychain.get("password")!, "password1234", "stored password")
+        XCTAssertEqual(try! keychain.get("username"), "kishikawakatsumi", "stored username")
+        XCTAssertEqual(try! keychain.get("password"), "password1234", "stored password")
+    }
+
+    func testSetStringWithLabel() {
+        let keychain = Keychain(service: "Twitter")
+            .label("Twitter Account")
+
+        XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
+
+        do {
+            let label = try keychain.get("kishikawakatsumi") { (results) -> String? in
+                return results?.label
+            }
+            XCTAssertNil(label)
+        } catch {
+            XCTFail("error occurred")
+        }
+
+        keychain["kishikawakatsumi"] = "password1234"
+        XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
+
+        do {
+            let label = try keychain.get("kishikawakatsumi") { (results) -> String? in
+                return results?.label
+            }
+            XCTAssertEqual(label, "Twitter Account")
+        } catch {
+            XCTFail("error occurred")
+        }
+    }
+
+    func testSetStringWithComment() {
+        let keychain = Keychain(service: "Twitter")
+            .comment("Kishikawa Katsumi")
+
+        XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
+
+        do {
+            let comment = try keychain.get("kishikawakatsumi") { (results) -> String? in
+                return results?.comment
+            }
+            XCTAssertNil(comment)
+        } catch {
+            XCTFail("error occurred")
+        }
+
+        keychain["kishikawakatsumi"] = "password1234"
+        XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
+
+        do {
+            let comment = try keychain.get("kishikawakatsumi") { (results) -> String? in
+                return results?.comment
+            }
+            XCTAssertEqual(comment, "Kishikawa Katsumi")
+        } catch {
+            XCTFail("error occurred")
+        }
+    }
+
+    func testSetStringWithLabelAndComment() {
+        let keychain = Keychain(service: "Twitter")
+            .label("Twitter Account")
+            .comment("Kishikawa Katsumi")
+
+        XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
+
+        do {
+            let label = try keychain.get("kishikawakatsumi") { (results) -> String? in
+                return results?.label
+            }
+            XCTAssertNil(label)
+
+            let comment = try keychain.get("kishikawakatsumi") { (results) -> String? in
+                return results?.comment
+            }
+            XCTAssertNil(comment)
+        } catch {
+            XCTFail("error occurred")
+        }
+
+        keychain["kishikawakatsumi"] = "password1234"
+        XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
+
+        do {
+            let label = try keychain.get("kishikawakatsumi") { (results) -> String? in
+                return results?.label
+            }
+            XCTAssertEqual(label, "Twitter Account")
+
+            let comment = try keychain.get("kishikawakatsumi") { (results) -> String? in
+                return results?.comment
+            }
+            XCTAssertEqual(comment, "Kishikawa Katsumi")
+        } catch {
+            XCTFail("error occurred")
+        }
     }
     
     func testSetData() {
