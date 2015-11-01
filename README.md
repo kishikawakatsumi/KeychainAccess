@@ -180,24 +180,16 @@ do {
 
 ```swift
 let keychain = Keychain()
-do {
-    let persistentRef = try keychain.get("kishikawakatsumi") { $0?.persistentRef }
-    ...
-} catch let error {
-    print("error: \(error)")
-}
+let persistentRef = keychain[attributes: "kishikawakatsumi"].persistentRef
+...
 ```
 
 #### Creation Date
 
 ```swift
 let keychain = Keychain()
-do {
-    let creationDate = try keychain.get("kishikawakatsumi") { $0?.creationDate }
-    ...
-} catch let error {
-    print("error: \(error)")
-}
+let creationDate = keychain[attributes: "kishikawakatsumi"].creationDate
+...
 ```
 
 #### All Attributes
@@ -213,6 +205,16 @@ do {
 } catch let error {
     print("error: \(error)")
 }
+```
+
+##### subscripting
+
+```swift
+let keychain = Keychain()
+let attributes = keychain[attributes: "kishikawakatsumi"]
+print(attributes.comment)
+print(attributes.label)
+print(attributes.creator)
 ```
 
 ### :key: Configuration (Accessibility, Sharing, iCould Sync)

@@ -20,6 +20,7 @@ class KeychainAccessTests: XCTestCase {
         do { try Keychain(service: "Twitter").removeAll() } catch {}
         
         do { try Keychain(server: NSURL(string: "https://example.com")!, protocolType: .HTTPS).removeAll() } catch {}
+        do { try Keychain(server: NSURL(string: "https://example.com:443")!, protocolType: .HTTPS).removeAll() } catch {}
         
         do { try Keychain().removeAll() } catch {}
     }
@@ -498,6 +499,7 @@ class KeychainAccessTests: XCTestCase {
                 XCTFail("error occurred")
             }
         }
+
         do {
             var attributes = [String: AnyObject]()
             attributes[String(kSecAttrDescription)] = "Description Test"
@@ -509,9 +511,8 @@ class KeychainAccessTests: XCTestCase {
             attributes[String(kSecAttrIsNegative)] = true
             attributes[String(kSecAttrSecurityDomain)] = "securitydomain"
 
-            let keychain = Keychain(server: NSURL(string: "https://example.com:443//api/login/")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: NSURL(string: "https://example.com:443/api/login/")!, protocolType: .HTTPS)
                 .attributes(attributes)
-                .accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence)
 
             XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
 
@@ -522,17 +523,17 @@ class KeychainAccessTests: XCTestCase {
                 XCTFail("error occurred")
             }
 
-            keychain["kishikawakatsumi"] = "password1234"
-            XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
-
             do {
+                keychain["kishikawakatsumi"] = "password1234"
+                XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
+
                 let attributes = try keychain.get("kishikawakatsumi") { $0 }
                 XCTAssertEqual(attributes?.`class`, ItemClass.InternetPassword.rawValue)
                 XCTAssertEqual(attributes?.data, "password1234".dataUsingEncoding(NSUTF8StringEncoding))
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
-                XCTAssertEqual(attributes?.accessible, Accessibility.WhenPasscodeSetThisDeviceOnly.rawValue)
-                XCTAssertNotNil(attributes?.accessControl)
+                XCTAssertEqual(attributes?.accessible, Accessibility.AfterFirstUnlock.rawValue)
+                XCTAssertNil(attributes?.accessControl)
                 XCTAssertEqual(attributes?.accessGroup, "")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
@@ -556,13 +557,88 @@ class KeychainAccessTests: XCTestCase {
             } catch {
                 XCTFail("error occurred")
             }
+            do {
+                let keychain = Keychain(server: NSURL(string: "https://example.com:443/api/login/")!, protocolType: .HTTPS)
+
+                XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
+
+                keychain["kishikawakatsumi"] = "1234password"
+                XCTAssertEqual(keychain["kishikawakatsumi"], "1234password", "updated password")
+
+                let attributes = try keychain.get("kishikawakatsumi") { $0 }
+                XCTAssertEqual(attributes?.`class`, ItemClass.InternetPassword.rawValue)
+                XCTAssertEqual(attributes?.data, "1234password".dataUsingEncoding(NSUTF8StringEncoding))
+                XCTAssertNil(attributes?.ref)
+                XCTAssertNotNil(attributes?.persistentRef)
+                XCTAssertEqual(attributes?.accessible, Accessibility.AfterFirstUnlock.rawValue)
+                XCTAssertNil(attributes?.accessControl)
+                XCTAssertEqual(attributes?.accessGroup, "")
+                XCTAssertNotNil(attributes?.synchronizable)
+                XCTAssertNotNil(attributes?.creationDate)
+                XCTAssertNotNil(attributes?.modificationDate)
+                XCTAssertEqual(attributes?.attributeDescription, "Description Test")
+                XCTAssertEqual(attributes?.comment, "Comment Test")
+                XCTAssertEqual(attributes?.creator, "Creator Test")
+                XCTAssertEqual(attributes?.type, "Type Test")
+                XCTAssertEqual(attributes?.label, "Label Test")
+                XCTAssertEqual(attributes?.isInvisible, true)
+                XCTAssertEqual(attributes?.isNegative, true)
+                XCTAssertEqual(attributes?.account, "kishikawakatsumi")
+                XCTAssertNil(attributes?.service)
+                XCTAssertNil(attributes?.generic)
+                XCTAssertEqual(attributes?.securityDomain, "securitydomain")
+                XCTAssertEqual(attributes?.server, "example.com")
+                XCTAssertEqual(attributes?.`protocol`, ProtocolType.HTTPS.rawValue)
+                XCTAssertEqual(attributes?.authenticationType, AuthenticationType.Default.rawValue)
+                XCTAssertEqual(attributes?.port, 443)
+                XCTAssertEqual(attributes?.path, "")
+            } catch {
+                XCTFail("error occurred")
+            }
+            do {
+                let keychain = Keychain(server: NSURL(string: "https://example.com:443/api/login/")!, protocolType: .HTTPS)
+                    .attributes([String(kSecAttrDescription): "Updated Description"])
+
+                XCTAssertEqual(keychain["kishikawakatsumi"], "1234password", "stored password")
+
+                keychain["kishikawakatsumi"] = "password1234"
+                XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "updated password")
+
+                let attributes = keychain[attributes: "kishikawakatsumi"]
+                XCTAssertEqual(attributes?.`class`, ItemClass.InternetPassword.rawValue)
+                XCTAssertEqual(attributes?.data, "password1234".dataUsingEncoding(NSUTF8StringEncoding))
+                XCTAssertNil(attributes?.ref)
+                XCTAssertNotNil(attributes?.persistentRef)
+                XCTAssertEqual(attributes?.accessible, Accessibility.AfterFirstUnlock.rawValue)
+                XCTAssertNil(attributes?.accessControl)
+                XCTAssertEqual(attributes?.accessGroup, "")
+                XCTAssertNotNil(attributes?.synchronizable)
+                XCTAssertNotNil(attributes?.creationDate)
+                XCTAssertNotNil(attributes?.modificationDate)
+                XCTAssertEqual(attributes?.attributeDescription, "Updated Description")
+                XCTAssertEqual(attributes?.comment, "Comment Test")
+                XCTAssertEqual(attributes?.creator, "Creator Test")
+                XCTAssertEqual(attributes?.type, "Type Test")
+                XCTAssertEqual(attributes?.label, "Label Test")
+                XCTAssertEqual(attributes?.isInvisible, true)
+                XCTAssertEqual(attributes?.isNegative, true)
+                XCTAssertEqual(attributes?.account, "kishikawakatsumi")
+                XCTAssertNil(attributes?.service)
+                XCTAssertNil(attributes?.generic)
+                XCTAssertEqual(attributes?.securityDomain, "securitydomain")
+                XCTAssertEqual(attributes?.server, "example.com")
+                XCTAssertEqual(attributes?.`protocol`, ProtocolType.HTTPS.rawValue)
+                XCTAssertEqual(attributes?.authenticationType, AuthenticationType.Default.rawValue)
+                XCTAssertEqual(attributes?.port, 443)
+                XCTAssertEqual(attributes?.path, "")
+            }
         }
     }
     #endif
-    
+
     func testRemoveString() {
         let keychain = Keychain(service: "Twitter")
-        
+
         XCTAssertNil(try! keychain.get("username"), "not stored username")
         XCTAssertNil(try! keychain.get("password"), "not stored password")
         

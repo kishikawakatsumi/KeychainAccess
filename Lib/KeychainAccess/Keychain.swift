@@ -657,6 +657,12 @@ public class Keychain {
             }
         }
     }
+
+    public subscript(attributes key: String) -> Attributes? {
+        get {
+            return (try? get(key) { $0 }).flatMap { $0 }
+        }
+    }
     
     // MARK:
     
