@@ -536,7 +536,11 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
                 XCTAssertEqual(attributes?.accessible, Accessibility.AfterFirstUnlock.rawValue)
-                XCTAssertNil(attributes?.accessControl)
+                if #available(iOS 9.0, *) {
+                    XCTAssertNil(attributes?.accessControl)
+                } else {
+                    XCTAssertNotNil(attributes?.accessControl)
+                }
                 XCTAssertEqual(attributes?.accessGroup, "")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
@@ -574,7 +578,11 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
                 XCTAssertEqual(attributes?.accessible, Accessibility.AfterFirstUnlock.rawValue)
-                XCTAssertNil(attributes?.accessControl)
+                if #available(iOS 9.0, *) {
+                    XCTAssertNil(attributes?.accessControl)
+                } else {
+                    XCTAssertNotNil(attributes?.accessControl)
+                }
                 XCTAssertEqual(attributes?.accessGroup, "")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
@@ -613,7 +621,11 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
                 XCTAssertEqual(attributes?.accessible, Accessibility.AfterFirstUnlock.rawValue)
-                XCTAssertNil(attributes?.accessControl)
+                if #available(iOS 9.0, *) {
+                    XCTAssertNil(attributes?.accessControl)
+                } else {
+                    XCTAssertNotNil(attributes?.accessControl)
+                }
                 XCTAssertEqual(attributes?.accessGroup, "")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
