@@ -495,6 +495,9 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.authenticationType)
                 XCTAssertNil(attributes?.port)
                 XCTAssertNil(attributes?.path)
+
+                XCTAssertEqual(attributes![String(kSecClass)] as? String, ItemClass.GenericPassword.rawValue)
+                XCTAssertEqual(attributes![String(kSecValueData)] as? NSData, "password1234".dataUsingEncoding(NSUTF8StringEncoding))
             } catch {
                 XCTFail("error occurred")
             }
