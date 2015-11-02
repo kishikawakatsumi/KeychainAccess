@@ -398,19 +398,11 @@ public class Keychain {
         self.init(options)
     }
     
-    public convenience init(server: String, protocolType: ProtocolType) {
-        self.init(server: NSURL(string: server)!, protocolType: protocolType)
-    }
-    
-    public convenience init(server: String, protocolType: ProtocolType, authenticationType: AuthenticationType) {
+    public convenience init(server: String, protocolType: ProtocolType, authenticationType: AuthenticationType = .Default) {
         self.init(server: NSURL(string: server)!, protocolType: protocolType, authenticationType: authenticationType)
     }
     
-    public convenience init(server: NSURL, protocolType: ProtocolType) {
-        self.init(server: server, protocolType: protocolType, authenticationType: .Default)
-    }
-    
-    public convenience init(server: NSURL, protocolType: ProtocolType, authenticationType: AuthenticationType) {
+    public convenience init(server: NSURL, protocolType: ProtocolType, authenticationType: AuthenticationType = .Default) {
         var options = Options()
         options.itemClass = .InternetPassword
         options.server = server
