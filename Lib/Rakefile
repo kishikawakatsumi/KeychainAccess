@@ -21,93 +21,75 @@ def destinations
   end
 end
 
-XCJobs::Build.new('build:ios:simulator') do |t|
-  t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess'
-  t.sdk = 'iphonesimulator'
-  t.configuration = 'Release'
-  t.build_dir = 'build'
-  t.formatter = 'xcpretty -c'
-  t.add_build_setting('CODE_SIGN_IDENTITY', '')
-  t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
-end
-
-XCJobs::Build.new('build:ios:device') do |t|
-  t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess'
-  t.sdk = 'iphoneos'
-  t.configuration = 'Release'
-  t.build_dir = 'build'
-  t.formatter = 'xcpretty -c'
-  t.add_build_setting('CODE_SIGN_IDENTITY', '')
-  t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
-end
-
-XCJobs::Build.new('build:tvos:simulator') do |t|
-  t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess'
-  t.sdk = 'appletvsimulator'
-  t.configuration = 'Release'
-  t.build_dir = 'build'
-  t.formatter = 'xcpretty -c'
-  t.add_build_setting('CODE_SIGN_IDENTITY', '')
-  t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
-end
-
-XCJobs::Build.new('build:tvos:device') do |t|
-  t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess'
-  t.sdk = 'appletvos'
-  t.configuration = 'Release'
-  t.build_dir = 'build'
-  t.formatter = 'xcpretty -c'
-  t.add_build_setting('CODE_SIGN_IDENTITY', '')
-  t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
-end
-
-XCJobs::Build.new('build:osx') do |t|
-  t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess'
-  t.sdk = 'macosx'
-  t.configuration = 'Release'
-  t.build_dir = 'build'
-  t.formatter = 'xcpretty -c'
-  t.add_build_setting('CODE_SIGN_IDENTITY', '')
-  t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
-end
-
-XCJobs::Test.new('test:ios') do |t|
-  t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess'
-  t.sdk = 'iphonesimulator'
-  t.configuration = 'Release'
-  t.coverage = true
-  destinations.each do |destination|
-    t.add_destination(destination)
+def supportedPlatforms(test: false)
+  if test
+    ['macosx', 'iphoneos', 'iphonesimulator', 'appletvos', 'appletvsimulator']
+  else
+    if ENV['CIRCLECI']
+      ['macosx', 'iphoneos', 'iphonesimulator', 'watchos', 'watchsimulator']
+    else 
+      ['macosx', 'iphoneos', 'iphonesimulator', 'watchos', 'watchsimulator', 'appletvos', 'appletvsimulator']
+    end
   end
-  t.build_dir = 'build'
-  t.formatter = 'xcpretty -c'
 end
 
-XCJobs::Test.new('test:tvos') do |t|
-  t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess'
-  t.sdk = 'appletvsimulator'
-  t.configuration = 'Release'
-  t.coverage = true
-  t.build_dir = 'build'
-  t.formatter = 'xcpretty -c'
+def configurations
+  ['Debug', 'Release']
 end
 
-XCJobs::Test.new('test:osx') do |t|
-  t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess'
-  t.sdk = 'macosx'
-  t.configuration = 'Release'
-  t.coverage = true
-  t.build_dir = 'build'
-  t.formatter = 'xcpretty -c'
+desc "build for all platforms"
+task :build do |t|
+  supportedPlatforms
+    .product(configurations)
+    .map { |platform, configuration| Rake::Task["build:#{platform}:#{configuration.downcase}"] }
+    .map(&:invoke)
 end
 
-XCJobs::Coverage::Coveralls.new() do |t|
+namespace :build do
+  supportedPlatforms.product(configurations).each do |platform, configuration|
+    XCJobs::Build.new("#{platform}:#{configuration.downcase}") do |t|
+      t.project = 'KeychainAccess'
+      t.scheme = 'KeychainAccess'
+      t.sdk = platform
+      t.configuration = configuration
+      t.build_dir = 'build'
+      t.formatter = 'xcpretty -c'
+      if ENV['CI']
+        t.add_build_setting('CODE_SIGN_IDENTITY', '')
+        t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
+      end
+    end
+  end
 end
+
+namespace :test do
+  supportedPlatforms
+    .select { |platform| platform == 'macosx' || platform.end_with?('simulator') }.map do |platform|
+      task platform do |t|
+        configurations
+          .map { |configuration| Rake::Task["test:#{platform}:#{configuration.downcase}"] }
+          .map(&:invoke)
+      end
+    end
+end
+    
+namespace :test do
+  supportedPlatforms.product(configurations).each do |platform, configuration|
+    XCJobs::Test.new("#{platform}:#{configuration.downcase}") do |t|
+      t.project = 'KeychainAccess'
+      t.scheme = 'KeychainAccess'
+      t.sdk = platform
+      t.configuration = configuration
+      t.coverage = true
+      if platform == 'iphonesimulator'
+        destinations.each do |destination|
+          t.add_destination(destination)
+        end
+      end
+      t.build_dir = 'build'
+      t.formatter = 'xcpretty -c'
+    end
+  end
+end
+
+XCJobs::Coverage::Coveralls.new()
