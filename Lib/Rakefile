@@ -23,7 +23,7 @@ end
 
 XCJobs::Build.new('build:ios:simulator') do |t|
   t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess-iOS'
+  t.scheme = 'KeychainAccess'
   t.sdk = 'iphonesimulator'
   t.configuration = 'Release'
   t.build_dir = 'build'
@@ -34,7 +34,7 @@ end
 
 XCJobs::Build.new('build:ios:device') do |t|
   t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess-iOS'
+  t.scheme = 'KeychainAccess'
   t.sdk = 'iphoneos'
   t.configuration = 'Release'
   t.build_dir = 'build'
@@ -45,7 +45,7 @@ end
 
 XCJobs::Build.new('build:tvos:simulator') do |t|
   t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess-tvOS'
+  t.scheme = 'KeychainAccess'
   t.sdk = 'appletvsimulator'
   t.configuration = 'Release'
   t.build_dir = 'build'
@@ -56,7 +56,7 @@ end
 
 XCJobs::Build.new('build:tvos:device') do |t|
   t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess-tvOS'
+  t.scheme = 'KeychainAccess'
   t.sdk = 'appletvos'
   t.configuration = 'Release'
   t.build_dir = 'build'
@@ -67,7 +67,8 @@ end
 
 XCJobs::Build.new('build:osx') do |t|
   t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess-Mac'
+  t.scheme = 'KeychainAccess'
+  t.sdk = 'macosx'
   t.configuration = 'Release'
   t.build_dir = 'build'
   t.formatter = 'xcpretty -c'
@@ -77,7 +78,8 @@ end
 
 XCJobs::Test.new('test:ios') do |t|
   t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess-iOS'
+  t.scheme = 'KeychainAccess'
+  t.sdk = 'iphonesimulator'
   t.configuration = 'Release'
   t.coverage = true
   destinations.each do |destination|
@@ -89,7 +91,7 @@ end
 
 XCJobs::Test.new('test:tvos') do |t|
   t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess-tvOS'
+  t.scheme = 'KeychainAccess'
   t.sdk = 'appletvsimulator'
   t.configuration = 'Release'
   t.coverage = true
@@ -99,7 +101,7 @@ end
 
 XCJobs::Test.new('test:osx') do |t|
   t.project = 'KeychainAccess'
-  t.scheme = 'KeychainAccess-Mac'
+  t.scheme = 'KeychainAccess'
   t.sdk = 'macosx'
   t.configuration = 'Release'
   t.coverage = true
