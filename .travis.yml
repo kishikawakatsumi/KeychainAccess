@@ -6,7 +6,7 @@ cache:
 install:
   - (cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)
 script:
-  - (cd Lib && bundle exec rake test:ios test:tvos test:osx coverage:coveralls)
+  - (cd Lib && bundle exec rake build test:iphonesimulator test:appletvsimulator test:macosx coverage:coveralls)
 branches:
   only:
     - master
