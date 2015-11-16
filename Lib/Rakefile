@@ -90,6 +90,11 @@ namespace :test do
       t.formatter = 'xcpretty -c'
     end
   end
+  
+  task :carthage do
+    sh 'echo "github \"kishikawakatsumi/KeychainAccess\" \"${sha:-master}"\" > Cartfile'
+    sh 'carthage update --no-use-binaries'
+  end
 end
 
 XCJobs::Coverage::Coveralls.new()
