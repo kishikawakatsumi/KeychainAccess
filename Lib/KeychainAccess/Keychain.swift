@@ -1088,8 +1088,8 @@ private let ValuePersistentRef = String(kSecValuePersistentRef)
 private let UseOperationPrompt = String(kSecUseOperationPrompt)
 
 #if os(iOS)
-    @available(iOS, introduced=8.0, deprecated=9.0, message="Use a UseAuthenticationUI instead.")
-    private let UseNoAuthenticationUI = String(kSecUseNoAuthenticationUI)
+@available(iOS, introduced=8.0, deprecated=9.0, message="Use a UseAuthenticationUI instead.")
+private let UseNoAuthenticationUI = String(kSecUseNoAuthenticationUI)
 #endif
 
 @available(iOS 9.0, OSX 10.11, *)
@@ -1113,8 +1113,8 @@ private let UseAuthenticationUIFail = String(kSecUseAuthenticationUIFail)
 private let UseAuthenticationUISkip = String(kSecUseAuthenticationUISkip)
 
 #if os(iOS)
-    /** Credential Key Constants */
-    private let SharedPassword = String(kSecSharedPassword)
+/** Credential Key Constants */
+private let SharedPassword = String(kSecSharedPassword)
 #endif
 
 extension Keychain : CustomStringConvertible, CustomDebugStringConvertible {
