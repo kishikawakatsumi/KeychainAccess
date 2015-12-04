@@ -554,6 +554,27 @@ it, simply add the following line to your Cartfile:
 
 `github "kishikawakatsumi/KeychainAccess"`
 
+### Swift Package Manager
+
+KeychainAccess is also available through [Swift Package Manager](https://github.com/apple/swift-package-manager/).
+First, create `Package.swift` that its package declaration includes:
+
+```swift
+import PackageDescription
+
+let package = Package(
+    dependencies: [
+        .Package(url: "https://github.com/kishikawakatsumi/KeychainAccess.git", majorVersion: 2)
+    ]
+)
+```
+
+Then, type
+
+```shell
+$ swift build
+```
+
 ### To manually add to your project
 
 1. Add `Lib/KeychainAccess.xcodeproj` to your project
