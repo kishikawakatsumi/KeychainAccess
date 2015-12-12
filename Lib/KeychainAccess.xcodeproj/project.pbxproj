@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		140F19621A49D79400B0016A /* KeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 140F19611A49D79400B0016A /* KeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		140F19681A49D79500B0016A /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140F195C1A49D79400B0016A /* KeychainAccess.framework */; };
 		140F196F1A49D79500B0016A /* KeychainAccessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F196E1A49D79500B0016A /* KeychainAccessTests.swift */; };
 		140F197B1A49D89200B0016A /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F197A1A49D89200B0016A /* Keychain.swift */; };
 		142EDA851BCB505F00A32149 /* ErrorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */; };
@@ -56,7 +55,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				140F19681A49D79500B0016A /* KeychainAccess.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,7 +187,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "kishikawa katsumi";
 				TargetAttributes = {
 					140F195B1A49D79400B0016A = {
@@ -270,7 +268,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E61BF9EDCB004FFEC1 /* Debug.xcconfig */;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
 			};
 			name = Debug;
 		};
@@ -278,7 +275,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E71BF9EDCB004FFEC1 /* Release.xcconfig */;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
 			};
 			name = Release;
 		};
