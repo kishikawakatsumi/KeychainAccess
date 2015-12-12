@@ -1,11 +1,10 @@
 SUPPORTED_PLATFORMS = macosx iphoneos iphonesimulator appletvos appletvsimulator;
 
-PRODUCT_BUNDLE_IDENTIFIER = com.kishikawakatsumi.$(PRODUCT_NAME:rfc1034identifier)
-PRODUCT_NAME=$(TARGET_NAME)
+COMBINE_HIDPI_IMAGES = YES;
+PRODUCT_BUNDLE_IDENTIFIER = com.kishikawakatsumi.$(PRODUCT_NAME:rfc1034identifier);
+PRODUCT_NAME = $(TARGET_NAME);
 APPLICATION_EXTENSION_API_ONLY = NO;
 INFOPLIST_FILE = KeychainAccessTests/Info.plist;
-
-FRAMEWORK_SEARCH_PATHS = $(inherited);
 
 LD_RUNPATH_SEARCH_PATHS[sdk=macosx*] = $(inherited) @executable_path/../Frameworks @loader_path/../Frameworks;
 LD_RUNPATH_SEARCH_PATHS[sdk=iphone*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks;
