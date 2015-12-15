@@ -2167,7 +2167,7 @@ extension Status : RawRepresentable, CustomStringConvertible {
         case Decode:
             return "Unable to decode the provided data."
         case Internal:
-            return "An internal error occured in the Security framework."
+            return "An internal error occurred in the Security framework."
         case UnsupportedAlgorithm:
             return "An unsupported algorithm was encountered."
         case UnsupportedOperation:

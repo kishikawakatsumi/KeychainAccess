@@ -346,7 +346,7 @@ class ErrorTypeTests: XCTestCase {
             let errSecInternal: OSStatus = -26276
             let status = Status(rawValue: errSecInternal)
             XCTAssertEqual(status, .Internal)
-            XCTAssertEqual(status?.description, "An internal error occured in the Security framework.")
+            XCTAssertEqual(status?.description, "An internal error occurred in the Security framework.")
         }
         #if os(OSX)
         do {
