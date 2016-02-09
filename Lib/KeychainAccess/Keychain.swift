@@ -870,8 +870,9 @@ public class Keychain {
                     print("error:[\(remoteError!.code)] \(remoteError!.localizedDescription)")
                 }
             }
-            if let credentials = credentials as? [[String: AnyObject]] {
-                let credentials = credentials.map { credentials -> [String: String] in
+            if let credentials = credentials {
+                let casted = credentials as NSArray
+                let credentials = casted.map { credentials -> [String: String] in
                     var credential = [String: String]()
                     if let server = credentials[AttributeServer] as? String {
                         credential["server"] = server
