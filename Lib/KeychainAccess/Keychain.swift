@@ -101,6 +101,7 @@ public enum Accessibility {
     */
     @available(iOS 8.0, OSX 10.10, *)
     case WhenPasscodeSetThisDeviceOnly
+    
 
     /**
     Item data can only
