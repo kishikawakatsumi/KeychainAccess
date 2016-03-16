@@ -871,8 +871,7 @@ public class Keychain {
                 }
             }
             if let credentials = credentials {
-                let casted = credentials as NSArray
-                let credentials = casted.map { credentials -> [String: String] in
+                let credentials = (credentials as NSArray).map { credentials -> [String: String] in
                     var credential = [String: String]()
                     if let server = credentials[AttributeServer] as? String {
                         credential["server"] = server
