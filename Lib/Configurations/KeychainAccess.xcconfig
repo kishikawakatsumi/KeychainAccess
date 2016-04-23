@@ -1,0 +1,23 @@
+SUPPORTED_PLATFORMS = macosx iphoneos iphonesimulator watchos watchsimulator appletvos appletvsimulator;
+TARGETED_DEVICE_FAMILY = 1,2,3,4;
+
+COMBINE_HIDPI_IMAGES = YES;
+PRODUCT_BUNDLE_IDENTIFIER = com.kishikawakatsumi.$(PRODUCT_NAME:rfc1034identifier);
+PRODUCT_NAME = $(PROJECT_NAME);
+APPLICATION_EXTENSION_API_ONLY = YES;
+INFOPLIST_FILE = KeychainAccess/Info.plist;
+SKIP_INSTALL = YES;
+
+DEFINES_MODULE = YES;
+DYLIB_COMPATIBILITY_VERSION = 1;
+DYLIB_CURRENT_VERSION = 1;
+DYLIB_INSTALL_NAME_BASE = @rpath;
+
+ENABLE_BITCODE[sdk=iphone*] = YES;
+ENABLE_BITCODE[sdk=watch*] = YES;
+ENABLE_BITCODE[sdk=appletv*] = YES;
+
+LD_RUNPATH_SEARCH_PATHS[sdk=macosx*] = $(inherited) @executable_path/../Frameworks @loader_path/../Frameworks;
+LD_RUNPATH_SEARCH_PATHS[sdk=iphone*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks;
+LD_RUNPATH_SEARCH_PATHS[sdk=watch*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks;
+LD_RUNPATH_SEARCH_PATHS[sdk=appletv*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks;

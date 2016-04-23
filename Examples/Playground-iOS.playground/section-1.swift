@@ -25,7 +25,7 @@ keychain = Keychain(server: URL, protocolType: .HTTPS)
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 
 /* set method */
-keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
+try! keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 
 
 /*****************
@@ -39,11 +39,11 @@ token = keychain["kishikawakatsumi"]
 /* get method */
 
 // as String
-token = keychain.get("kishikawakatsumi")
-token = keychain.getString("kishikawakatsumi")
+token = try! keychain.get("kishikawakatsumi")
+token = try! keychain.getString("kishikawakatsumi")
 
 // as Data
-let data = keychain.getData("kishikawakatsumi")
+let data = try! keychain.getData("kishikawakatsumi")
 
 /****************
  * Removing items
@@ -53,7 +53,7 @@ let data = keychain.getData("kishikawakatsumi")
 keychain["kishikawakatsumi"] = nil
 
 /* remove method */
-keychain.remove("kishikawakatsumi")
+try! keychain.remove("kishikawakatsumi")
 
 
 /****************
@@ -61,38 +61,24 @@ keychain.remove("kishikawakatsumi")
 *****************/
 
 /* set */
-if let error = keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi") {
+do {
+    try keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
+} catch let error as NSError {
     print("error: \(error.localizedDescription)")
 }
 
 /* get */
 // First, get the failable (value or error) object
-let failable = keychain.getStringOrError("kishikawakatsumi")
-
-// 1. check the enum state
-switch failable {
-case .Success:
-    print("token: \(failable.value)")
-case .Failure:
-    print("error: \(failable.error)")
-}
-
-// 2. check the error object
-if let error = failable.error {
-    print("error: \(failable.error)")
-} else {
-    print("token: \(failable.value)")
-}
-
-// 3. check the failed property
-if failable.failed {
-    print("error: \(failable.error)")
-} else {
-    print("token: \(failable.value)")
+do {
+    let token = try keychain.get("kishikawakatsumi")
+} catch let error as NSError {
+    print("error: \(error.localizedDescription)")
 }
 
 /* remove */
-if let error = keychain.remove("kishikawakatsumi") {
+do {
+    try keychain.remove("kishikawakatsumi")
+} catch let error as NSError {
     print("error: \(error.localizedDescription)")
 }
 
@@ -127,12 +113,12 @@ let iCloud = Keychain(service: "com.example.github-token")
 
 /* One-Shot configuration change */
 
-keychain
+try! keychain
     .accessibility(.AfterFirstUnlock)
     .synchronizable(true)
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 
-keychain
+try! keychain
     .accessibility(.WhenUnlocked)
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 

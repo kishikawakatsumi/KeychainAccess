@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0700"
+   LastUpgradeVersion = "0720"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,30 +14,63 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "14FDD45F1B49B9AD00C39FE8"
+               BlueprintIdentifier = "140F195B1A49D79400B0016A"
                BuildableName = "KeychainAccess.framework"
-               BlueprintName = "KeychainAccess-watchOS"
+               BlueprintName = "KeychainAccess"
+               ReferencedContainer = "container:KeychainAccess.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "140F19661A49D79500B0016A"
+               BuildableName = "KeychainAccessTests.xctest"
+               BlueprintName = "KeychainAccessTests"
                ReferencedContainer = "container:KeychainAccess.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "140F19661A49D79500B0016A"
+               BuildableName = "KeychainAccessTests.xctest"
+               BlueprintName = "KeychainAccessTests"
+               ReferencedContainer = "container:KeychainAccess.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "140F195B1A49D79400B0016A"
+            BuildableName = "KeychainAccess.framework"
+            BlueprintName = "KeychainAccess"
+            ReferencedContainer = "container:KeychainAccess.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
@@ -45,9 +78,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "14FDD45F1B49B9AD00C39FE8"
+            BlueprintIdentifier = "140F195B1A49D79400B0016A"
             BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess-watchOS"
+            BlueprintName = "KeychainAccess"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,17 +88,17 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "14FDD45F1B49B9AD00C39FE8"
+            BlueprintIdentifier = "140F195B1A49D79400B0016A"
             BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess-watchOS"
+            BlueprintName = "KeychainAccess"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
