@@ -23,3 +23,6 @@ DerivedData
 # Bundler
 .bundle
 vendor/
+
+# Carthage
+Carthage/Build
