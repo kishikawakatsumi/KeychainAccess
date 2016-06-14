@@ -1257,6 +1257,12 @@ extension ItemClass : RawRepresentable, CustomStringConvertible {
     }
 }
 
+extension SecAccessControlCreateFlags {
+    public init(rawValue: Int) {
+        self.rawValue = UInt(bitPattern: rawValue)
+    }
+}
+
 extension ProtocolType : RawRepresentable, CustomStringConvertible {
     
     public init?(rawValue: String) {
