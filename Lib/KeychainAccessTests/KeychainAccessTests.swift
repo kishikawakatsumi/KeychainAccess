@@ -550,12 +550,7 @@ class KeychainAccessTests: XCTestCase {
                 } else {
                     XCTAssertNotNil(attributes?.accessControl)
                 }
-                if #available(iOS 10.0, OSX 10.11, *) {
-                    XCTAssertEqual(attributes?.accessGroup, "com.apple.token")
-                }
-                else {
-                    XCTAssertEqual(attributes?.accessGroup, "")
-                }
+                XCTAssertEqual(attributes?.accessGroup, expectedAccessGroup)
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
                 XCTAssertNotNil(attributes?.modificationDate)
