@@ -1257,6 +1257,17 @@ extension ItemClass : RawRepresentable, CustomStringConvertible {
     }
 }
 
+#if swift(>=2.3)
+    
+@available(OSX 10.10, *)
+extension SecAccessControlCreateFlags {
+    public init(rawValue: Int) {
+        self.rawValue = UInt(bitPattern: rawValue)
+    }
+}
+    
+#endif
+
 extension ProtocolType : RawRepresentable, CustomStringConvertible {
     
     public init?(rawValue: String) {
