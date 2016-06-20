@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "140F195B1A49D79400B0016A"
                BuildableName = "KeychainAccess.framework"
-               BlueprintName = "KeychainAccess"
+               BlueprintName = "KeychainAccess OSX"
                ReferencedContainer = "container:KeychainAccess.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,8 +29,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "140F19661A49D79500B0016A"
-               BuildableName = "KeychainAccessTests.xctest"
-               BlueprintName = "KeychainAccessTests"
+               BuildableName = "KeychainAccessTests OSX.xctest"
+               BlueprintName = "KeychainAccessTests OSX"
                ReferencedContainer = "container:KeychainAccess.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,8 +47,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "140F19661A49D79500B0016A"
-               BuildableName = "KeychainAccessTests.xctest"
-               BlueprintName = "KeychainAccessTests"
+               BuildableName = "KeychainAccessTests OSX.xctest"
+               BlueprintName = "KeychainAccessTests OSX"
                ReferencedContainer = "container:KeychainAccess.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -58,7 +58,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "140F195B1A49D79400B0016A"
             BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess"
+            BlueprintName = "KeychainAccess OSX"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -80,7 +80,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "140F195B1A49D79400B0016A"
             BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess"
+            BlueprintName = "KeychainAccess OSX"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -98,7 +98,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "140F195B1A49D79400B0016A"
             BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess"
+            BlueprintName = "KeychainAccess OSX"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

@@ -13,32 +13,11 @@
 		14DAEEA01A51E1BE0070B77E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14DAEE9E1A51E1BE0070B77E /* LaunchScreen.xib */; };
 		14DAEEB71A51E2690070B77E /* AccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DAEEB51A51E2690070B77E /* AccountsViewController.swift */; };
 		14DAEEB81A51E2690070B77E /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DAEEB61A51E2690070B77E /* InputViewController.swift */; };
-		14DAEEC91A51E2D00070B77E /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14DAEEC11A51E2A60070B77E /* KeychainAccess.framework */; };
-		14DAEECB1A51E2E10070B77E /* KeychainAccess.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 14DAEEC11A51E2A60070B77E /* KeychainAccess.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5506E4A91D187016000F03AF /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5506E4A01D186FC7000F03AF /* KeychainAccess.framework */; };
+		5506E4AA1D187016000F03AF /* KeychainAccess.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5506E4A01D186FC7000F03AF /* KeychainAccess.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		14B1A52C1BE5395100005DBB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 14FDD4601B49B9AD00C39FE8;
-			remoteInfo = "KeychainAccess-watchOS";
-		};
-		14B1A52E1BE5395100005DBB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 145EEB8F1BCBEBC0001341DE;
-			remoteInfo = "KeychainAccess-tvOS";
-		};
-		14B1A5301BE5395100005DBB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 145EEB981BCBEBC0001341DE;
-			remoteInfo = "KeychainAccess-tvOSTests";
-		};
 		14DAEEC01A51E2A60070B77E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
@@ -53,31 +32,39 @@
 			remoteGlobalIDString = 140F19671A49D79500B0016A;
 			remoteInfo = "KeychainAccess-iOSTests";
 		};
-		14DAEEC41A51E2A60070B77E /* PBXContainerItemProxy */ = {
+		5506E49F1D186FC7000F03AF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 140C8F0A1A4EBE3100F85556;
-			remoteInfo = "KeychainAccess-Mac";
+			remoteGlobalIDString = 5506E4891D186DA6000F03AF;
+			remoteInfo = "KeychainAccess iOS";
 		};
-		14DAEEC61A51E2A60070B77E /* PBXContainerItemProxy */ = {
+		5506E4A11D186FC7000F03AF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 140C8F141A4EBE3100F85556;
-			remoteInfo = "KeychainAccess-MacTests";
+			remoteGlobalIDString = 5506E4981D186E12000F03AF;
+			remoteInfo = "KeychainAccessTests iOS";
+		};
+		5506E4AB1D187016000F03AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5506E47F1D186DA6000F03AF;
+			remoteInfo = "KeychainAccess iOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		14DAEECA1A51E2D70070B77E /* CopyFiles */ = {
+		5506E4AD1D187017000F03AF /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				14DAEECB1A51E2E10070B77E /* KeychainAccess.framework in CopyFiles */,
+				5506E4AA1D187016000F03AF /* KeychainAccess.framework in Embed Frameworks */,
 			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -99,7 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14DAEEC91A51E2D00070B77E /* KeychainAccess.framework in Frameworks */,
+				5506E4A91D187016000F03AF /* KeychainAccess.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,12 +136,9 @@
 			isa = PBXGroup;
 			children = (
 				14DAEEC11A51E2A60070B77E /* KeychainAccess.framework */,
-				14DAEEC31A51E2A60070B77E /* KeychainAccess-iOSTests.xctest */,
-				14DAEEC51A51E2A60070B77E /* KeychainAccess.framework */,
-				14DAEEC71A51E2A60070B77E /* KeychainAccess-MacTests.xctest */,
-				14B1A52D1BE5395100005DBB /* KeychainAccess.framework */,
-				14B1A52F1BE5395100005DBB /* KeychainAccess.framework */,
-				14B1A5311BE5395100005DBB /* KeychainAccess-tvOSTests.xctest */,
+				14DAEEC31A51E2A60070B77E /* KeychainAccessTests OSX.xctest */,
+				5506E4A01D186FC7000F03AF /* KeychainAccess.framework */,
+				5506E4A21D186FC7000F03AF /* KeychainAccessTests iOS.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,11 +153,12 @@
 				14DAEE8C1A51E1BE0070B77E /* Sources */,
 				14DAEE8D1A51E1BE0070B77E /* Frameworks */,
 				14DAEE8E1A51E1BE0070B77E /* Resources */,
-				14DAEECA1A51E2D70070B77E /* CopyFiles */,
+				5506E4AD1D187017000F03AF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				5506E4AC1D187016000F03AF /* PBXTargetDependency */,
 			);
 			name = "Example-iOS";
 			productName = "Example-iOS";
@@ -220,27 +205,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		14B1A52D1BE5395100005DBB /* KeychainAccess.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KeychainAccess.framework;
-			remoteRef = 14B1A52C1BE5395100005DBB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		14B1A52F1BE5395100005DBB /* KeychainAccess.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KeychainAccess.framework;
-			remoteRef = 14B1A52E1BE5395100005DBB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		14B1A5311BE5395100005DBB /* KeychainAccess-tvOSTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "KeychainAccess-tvOSTests.xctest";
-			remoteRef = 14B1A5301BE5395100005DBB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		14DAEEC11A51E2A60070B77E /* KeychainAccess.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -248,25 +212,25 @@
 			remoteRef = 14DAEEC01A51E2A60070B77E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		14DAEEC31A51E2A60070B77E /* KeychainAccess-iOSTests.xctest */ = {
+		14DAEEC31A51E2A60070B77E /* KeychainAccessTests OSX.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "KeychainAccess-iOSTests.xctest";
+			path = "KeychainAccessTests OSX.xctest";
 			remoteRef = 14DAEEC21A51E2A60070B77E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		14DAEEC51A51E2A60070B77E /* KeychainAccess.framework */ = {
+		5506E4A01D186FC7000F03AF /* KeychainAccess.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = KeychainAccess.framework;
-			remoteRef = 14DAEEC41A51E2A60070B77E /* PBXContainerItemProxy */;
+			remoteRef = 5506E49F1D186FC7000F03AF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		14DAEEC71A51E2A60070B77E /* KeychainAccess-MacTests.xctest */ = {
+		5506E4A21D186FC7000F03AF /* KeychainAccessTests iOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "KeychainAccess-MacTests.xctest";
-			remoteRef = 14DAEEC61A51E2A60070B77E /* PBXContainerItemProxy */;
+			path = "KeychainAccessTests iOS.xctest";
+			remoteRef = 5506E4A11D186FC7000F03AF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -296,6 +260,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5506E4AC1D187016000F03AF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "KeychainAccess iOS";
+			targetProxy = 5506E4AB1D187016000F03AF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		14DAEE991A51E1BE0070B77E /* Main.storyboard */ = {
@@ -399,6 +371,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "Example-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kishikawakatsumi.$(PRODUCT_NAME:rfc1034identifier)";
@@ -410,6 +383,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "Example-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kishikawakatsumi.$(PRODUCT_NAME:rfc1034identifier)";

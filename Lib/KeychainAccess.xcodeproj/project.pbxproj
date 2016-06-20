@@ -13,10 +13,23 @@
 		142EDA851BCB505F00A32149 /* ErrorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */; };
 		142EDB041BCBB0DD00A32149 /* SharedCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDB031BCBB0DD00A32149 /* SharedCredentialTests.swift */; };
 		148F9D4A1BCB4118006EDF48 /* EnumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148F9D491BCB4118006EDF48 /* EnumTests.swift */; };
+		5506E4811D186DA6000F03AF /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F197A1A49D89200B0016A /* Keychain.swift */; };
+		5506E4841D186DA6000F03AF /* KeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 140F19611A49D79400B0016A /* KeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5506E48F1D186E12000F03AF /* KeychainAccessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F196E1A49D79500B0016A /* KeychainAccessTests.swift */; };
+		5506E4901D186E12000F03AF /* EnumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148F9D491BCB4118006EDF48 /* EnumTests.swift */; };
+		5506E4911D186E12000F03AF /* ErrorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */; };
+		5506E4921D186E12000F03AF /* SharedCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDB031BCBB0DD00A32149 /* SharedCredentialTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		140F19691A49D79500B0016A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 140F19531A49D79400B0016A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 140F195B1A49D79400B0016A;
+			remoteInfo = KeychainAccess;
+		};
+		5506E48D1D186E12000F03AF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 140F19531A49D79400B0016A /* Project object */;
 			proxyType = 1;
@@ -29,7 +42,7 @@
 		140F195C1A49D79400B0016A /* KeychainAccess.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeychainAccess.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		140F19601A49D79400B0016A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		140F19611A49D79400B0016A /* KeychainAccess.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeychainAccess.h; sourceTree = "<group>"; };
-		140F19671A49D79500B0016A /* KeychainAccessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KeychainAccessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		140F19671A49D79500B0016A /* KeychainAccessTests OSX.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KeychainAccessTests OSX.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		140F196D1A49D79500B0016A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		140F196E1A49D79500B0016A /* KeychainAccessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainAccessTests.swift; sourceTree = "<group>"; };
 		140F197A1A49D89200B0016A /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
@@ -41,6 +54,8 @@
 		148E44E91BF9EDE4004FFEC1 /* Tests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Tests.xcconfig; path = Configurations/Tests.xcconfig; sourceTree = "<group>"; };
 		148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = KeychainAccess.xcconfig; path = Configurations/KeychainAccess.xcconfig; sourceTree = "<group>"; };
 		148F9D491BCB4118006EDF48 /* EnumTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumTests.swift; sourceTree = "<group>"; };
+		5506E4891D186DA6000F03AF /* KeychainAccess.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeychainAccess.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5506E4981D186E12000F03AF /* KeychainAccessTests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KeychainAccessTests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +67,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		140F19641A49D79500B0016A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5506E4821D186DA6000F03AF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5506E4931D186E12000F03AF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -75,7 +104,9 @@
 			isa = PBXGroup;
 			children = (
 				140F195C1A49D79400B0016A /* KeychainAccess.framework */,
-				140F19671A49D79500B0016A /* KeychainAccessTests.xctest */,
+				140F19671A49D79500B0016A /* KeychainAccessTests OSX.xctest */,
+				5506E4891D186DA6000F03AF /* KeychainAccess.framework */,
+				5506E4981D186E12000F03AF /* KeychainAccessTests iOS.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -141,12 +172,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5506E4831D186DA6000F03AF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5506E4841D186DA6000F03AF /* KeychainAccess.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		140F195B1A49D79400B0016A /* KeychainAccess */ = {
+		140F195B1A49D79400B0016A /* KeychainAccess OSX */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 140F19721A49D79500B0016A /* Build configuration list for PBXNativeTarget "KeychainAccess" */;
+			buildConfigurationList = 140F19721A49D79500B0016A /* Build configuration list for PBXNativeTarget "KeychainAccess OSX" */;
 			buildPhases = (
 				140F19571A49D79400B0016A /* Sources */,
 				140F19581A49D79400B0016A /* Frameworks */,
@@ -157,14 +196,14 @@
 			);
 			dependencies = (
 			);
-			name = KeychainAccess;
+			name = "KeychainAccess OSX";
 			productName = KeychainAccess;
 			productReference = 140F195C1A49D79400B0016A /* KeychainAccess.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		140F19661A49D79500B0016A /* KeychainAccessTests */ = {
+		140F19661A49D79500B0016A /* KeychainAccessTests OSX */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 140F19751A49D79500B0016A /* Build configuration list for PBXNativeTarget "KeychainAccessTests" */;
+			buildConfigurationList = 140F19751A49D79500B0016A /* Build configuration list for PBXNativeTarget "KeychainAccessTests OSX" */;
 			buildPhases = (
 				140F19631A49D79500B0016A /* Sources */,
 				140F19641A49D79500B0016A /* Frameworks */,
@@ -175,9 +214,45 @@
 			dependencies = (
 				140F196A1A49D79500B0016A /* PBXTargetDependency */,
 			);
-			name = KeychainAccessTests;
+			name = "KeychainAccessTests OSX";
 			productName = KeychainAccessTests;
-			productReference = 140F19671A49D79500B0016A /* KeychainAccessTests.xctest */;
+			productReference = 140F19671A49D79500B0016A /* KeychainAccessTests OSX.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		5506E47F1D186DA6000F03AF /* KeychainAccess iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5506E4861D186DA6000F03AF /* Build configuration list for PBXNativeTarget "KeychainAccess iOS" */;
+			buildPhases = (
+				5506E4801D186DA6000F03AF /* Sources */,
+				5506E4821D186DA6000F03AF /* Frameworks */,
+				5506E4831D186DA6000F03AF /* Headers */,
+				5506E4851D186DA6000F03AF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "KeychainAccess iOS";
+			productName = KeychainAccess;
+			productReference = 5506E4891D186DA6000F03AF /* KeychainAccess.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		5506E48B1D186E12000F03AF /* KeychainAccessTests iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5506E4951D186E12000F03AF /* Build configuration list for PBXNativeTarget "KeychainAccessTests iOS" */;
+			buildPhases = (
+				5506E48E1D186E12000F03AF /* Sources */,
+				5506E4931D186E12000F03AF /* Frameworks */,
+				5506E4941D186E12000F03AF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5506E48C1D186E12000F03AF /* PBXTargetDependency */,
+			);
+			name = "KeychainAccessTests iOS";
+			productName = KeychainAccessTests;
+			productReference = 5506E4981D186E12000F03AF /* KeychainAccessTests iOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -210,8 +285,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				140F195B1A49D79400B0016A /* KeychainAccess */,
-				140F19661A49D79500B0016A /* KeychainAccessTests */,
+				140F195B1A49D79400B0016A /* KeychainAccess OSX */,
+				140F19661A49D79500B0016A /* KeychainAccessTests OSX */,
+				5506E47F1D186DA6000F03AF /* KeychainAccess iOS */,
+				5506E48B1D186E12000F03AF /* KeychainAccessTests iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -225,6 +302,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		140F19651A49D79500B0016A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5506E4851D186DA6000F03AF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5506E4941D186E12000F03AF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,13 +344,37 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5506E4801D186DA6000F03AF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5506E4811D186DA6000F03AF /* Keychain.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5506E48E1D186E12000F03AF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5506E48F1D186E12000F03AF /* KeychainAccessTests.swift in Sources */,
+				5506E4901D186E12000F03AF /* EnumTests.swift in Sources */,
+				5506E4911D186E12000F03AF /* ErrorTypeTests.swift in Sources */,
+				5506E4921D186E12000F03AF /* SharedCredentialTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		140F196A1A49D79500B0016A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 140F195B1A49D79400B0016A /* KeychainAccess */;
+			target = 140F195B1A49D79400B0016A /* KeychainAccess OSX */;
 			targetProxy = 140F19691A49D79500B0016A /* PBXContainerItemProxy */;
+		};
+		5506E48C1D186E12000F03AF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 140F195B1A49D79400B0016A /* KeychainAccess OSX */;
+			targetProxy = 5506E48D1D186E12000F03AF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -268,6 +383,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E61BF9EDCB004FFEC1 /* Debug.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -275,6 +391,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E71BF9EDCB004FFEC1 /* Release.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -282,6 +399,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
 			};
 			name = Debug;
 		};
@@ -289,6 +408,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
 			};
 			name = Release;
 		};
@@ -296,6 +417,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E91BF9EDE4004FFEC1 /* Tests.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -303,6 +425,51 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E91BF9EDE4004FFEC1 /* Tests.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5506E4871D186DA6000F03AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = KeychainAccess/Info.plist;
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+			};
+			name = Debug;
+		};
+		5506E4881D186DA6000F03AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = KeychainAccess/Info.plist;
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+			};
+			name = Release;
+		};
+		5506E4961D186E12000F03AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 148E44E91BF9EDE4004FFEC1 /* Tests.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = KeychainAccessTests/Info.plist;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+			};
+			name = Debug;
+		};
+		5506E4971D186E12000F03AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 148E44E91BF9EDE4004FFEC1 /* Tests.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = KeychainAccessTests/Info.plist;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Release;
 		};
@@ -318,7 +485,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		140F19721A49D79500B0016A /* Build configuration list for PBXNativeTarget "KeychainAccess" */ = {
+		140F19721A49D79500B0016A /* Build configuration list for PBXNativeTarget "KeychainAccess OSX" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				140F19731A49D79500B0016A /* Debug */,
@@ -327,11 +494,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		140F19751A49D79500B0016A /* Build configuration list for PBXNativeTarget "KeychainAccessTests" */ = {
+		140F19751A49D79500B0016A /* Build configuration list for PBXNativeTarget "KeychainAccessTests OSX" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				140F19761A49D79500B0016A /* Debug */,
 				140F19771A49D79500B0016A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5506E4861D186DA6000F03AF /* Build configuration list for PBXNativeTarget "KeychainAccess iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5506E4871D186DA6000F03AF /* Debug */,
+				5506E4881D186DA6000F03AF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5506E4951D186E12000F03AF /* Build configuration list for PBXNativeTarget "KeychainAccessTests iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5506E4961D186E12000F03AF /* Debug */,
+				5506E4971D186E12000F03AF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
