@@ -36,8 +36,8 @@ class KeychainAccessTests: XCTestCase {
         do { try Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared").removeAll() } catch {}
         do { try Keychain(service: "Twitter").removeAll() } catch {}
         
-        do { try Keychain(server: NSURL(string: "https://example.com")!, protocolType: .HTTPS).removeAll() } catch {}
-        do { try Keychain(server: NSURL(string: "https://example.com:443")!, protocolType: .HTTPS).removeAll() } catch {}
+        do { try Keychain(server: URL(string: "https://example.com")!, protocolType: .https).removeAll() } catch {}
+        do { try Keychain(server: URL(string: "https://example.com:443")!, protocolType: .https).removeAll() } catch {}
         
         do { try Keychain().removeAll() } catch {}
     }
@@ -53,13 +53,13 @@ class KeychainAccessTests: XCTestCase {
             // Add Keychain items
             let keychain = Keychain(service: "Twitter")
             
-            do { try keychain.set("kishikawa_katsumi", key: "username") } catch {}
-            do { try keychain.set("password_1234", key: "password") } catch {}
+            do { try keychain.set(value: "kishikawa_katsumi", key: "username") } catch {}
+            do { try keychain.set(value: "password_1234", key: "password") } catch {}
             
-            let username = try! keychain.get("username")
+            let username = try! keychain.get(key: "username")
             XCTAssertEqual(username, "kishikawa_katsumi")
             
-            let password = try! keychain.get("password")
+            let password = try! keychain.get(key: "password")
             XCTAssertEqual(password, "password_1234")
         }
         
@@ -67,13 +67,13 @@ class KeychainAccessTests: XCTestCase {
             // Update Keychain items
             let keychain = Keychain(service: "Twitter")
             
-            do { try keychain.set("katsumi_kishikawa", key: "username") } catch {}
-            do { try keychain.set("1234_password", key: "password") } catch {}
+            do { try keychain.set(value: "katsumi_kishikawa", key: "username") } catch {}
+            do { try keychain.set(value: "1234_password", key: "password") } catch {}
             
-            let username = try! keychain.get("username")
+            let username = try! keychain.get(key: "username")
             XCTAssertEqual(username, "katsumi_kishikawa")
             
-            let password = try! keychain.get("password")
+            let password = try! keychain.get(key: "password")
             XCTAssertEqual(password, "1234_password")
         }
         
@@ -81,11 +81,11 @@ class KeychainAccessTests: XCTestCase {
             // Remove Keychain items
             let keychain = Keychain(service: "Twitter")
             
-            do { try keychain.remove("username") } catch {}
-            do { try keychain.remove("password") } catch {}
+            do { try keychain.remove(key: "username") } catch {}
+            do { try keychain.remove(key: "password") } catch {}
             
-            XCTAssertNil(try! keychain.get("username"))
-            XCTAssertNil(try! keychain.get("password"))
+            XCTAssertNil(try! keychain.get(key: "username"))
+            XCTAssertNil(try! keychain.get(key: "password"))
         }
     }
     
@@ -135,48 +135,48 @@ class KeychainAccessTests: XCTestCase {
     func testInternetPassword() {
         do {
             // Add Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .https)
             
-            do { try keychain.set("kishikawa_katsumi", key: "username") } catch {}
-            do { try keychain.set("password_1234", key: "password") } catch {}
+            do { try keychain.set(value: "kishikawa_katsumi", key: "username") } catch {}
+            do { try keychain.set(value: "password_1234", key: "password") } catch {}
             
-            let username = try! keychain.get("username")
+            let username = try! keychain.get(key: "username")
             XCTAssertEqual(username, "kishikawa_katsumi")
             
-            let password = try! keychain.get("password")
+            let password = try! keychain.get(key: "password")
             XCTAssertEqual(password, "password_1234")
         }
         
         do {
             // Update Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .https)
             
-            do { try keychain.set("katsumi_kishikawa", key: "username") } catch {}
-            do { try keychain.set("1234_password", key: "password") } catch {}
+            do { try keychain.set(value: "katsumi_kishikawa", key: "username") } catch {}
+            do { try keychain.set(value: "1234_password", key: "password") } catch {}
             
-            let username = try! keychain.get("username")
+            let username = try! keychain.get(key: "username")
             XCTAssertEqual(username, "katsumi_kishikawa")
             
-            let password = try! keychain.get("password")
+            let password = try! keychain.get(key: "password")
             XCTAssertEqual(password, "1234_password")
         }
         
         do {
             // Remove Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .https)
             
-            do { try keychain.remove("username") } catch {}
-            do { try keychain.remove("password") } catch {}
+            do { try keychain.remove(key: "username") } catch {}
+            do { try keychain.remove(key: "password") } catch {}
             
-            XCTAssertNil(try! keychain.get("username"))
-            XCTAssertNil(try! keychain.get("password"))
+            XCTAssertNil(try! keychain.get(key: "username"))
+            XCTAssertNil(try! keychain.get(key: "password"))
         }
     }
     
     func testInternetPasswordSubscripting() {
         do {
             // Add Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .https)
             
             keychain["username"] = "kishikawa_katsumi"
             keychain["password"] = "password_1234"
@@ -190,7 +190,7 @@ class KeychainAccessTests: XCTestCase {
         
         do {
             // Update Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .https)
             
             keychain["username"] = "katsumi_kishikawa"
             keychain["password"] = "1234_password"
@@ -204,7 +204,7 @@ class KeychainAccessTests: XCTestCase {
         
         do {
             // Remove Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .https)
             
             keychain["username"] = nil
             keychain["password"] = nil
@@ -242,37 +242,37 @@ class KeychainAccessTests: XCTestCase {
     
     func testInitializerWithServer() {
         let server = "https://kishikawakatsumi.com"
-        let URL = NSURL(string: server)!
+        let url = URL(string: server)!
 
         do {
-            let keychain = Keychain(server: server, protocolType: .HTTPS)
-            XCTAssertEqual(keychain.server, URL)
-            XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
-            XCTAssertEqual(keychain.authenticationType, AuthenticationType.Default)
+            let keychain = Keychain(server: server, protocolType: .https)
+            XCTAssertEqual(keychain.server, url)
+            XCTAssertEqual(keychain.protocolType, ProtocolType.https)
+            XCTAssertEqual(keychain.authenticationType, AuthenticationType.default)
         }
         do {
-            let keychain = Keychain(server: URL, protocolType: .HTTPS)
-            XCTAssertEqual(keychain.server, URL)
-            XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
-            XCTAssertEqual(keychain.authenticationType, AuthenticationType.Default)
+            let keychain = Keychain(server: url, protocolType: .https)
+            XCTAssertEqual(keychain.server, url)
+            XCTAssertEqual(keychain.protocolType, ProtocolType.https)
+            XCTAssertEqual(keychain.authenticationType, AuthenticationType.default)
         }
     }
     
     func testInitializerWithServerAndAuthenticationType() {
         let server = "https://kishikawakatsumi.com"
-        let URL = NSURL(string: server)!
+        let url = URL(string: server)!
 
         do {
-            let keychain = Keychain(server: server, protocolType: .HTTPS, authenticationType: .HTMLForm)
-            XCTAssertEqual(keychain.server, URL)
-            XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
-            XCTAssertEqual(keychain.authenticationType, AuthenticationType.HTMLForm)
+            let keychain = Keychain(server: server, protocolType: .https, authenticationType: .htmlForm)
+            XCTAssertEqual(keychain.server, url)
+            XCTAssertEqual(keychain.protocolType, ProtocolType.https)
+            XCTAssertEqual(keychain.authenticationType, AuthenticationType.htmlForm)
         }
         do {
-            let keychain = Keychain(server: URL, protocolType: .HTTPS, authenticationType: .HTMLForm)
-            XCTAssertEqual(keychain.server, URL)
-            XCTAssertEqual(keychain.protocolType, ProtocolType.HTTPS)
-            XCTAssertEqual(keychain.authenticationType, AuthenticationType.HTMLForm)
+            let keychain = Keychain(server: url, protocolType: .https, authenticationType: .htmlForm)
+            XCTAssertEqual(keychain.server, url)
+            XCTAssertEqual(keychain.protocolType, ProtocolType.https)
+            XCTAssertEqual(keychain.authenticationType, AuthenticationType.htmlForm)
         }
     }
     
@@ -281,16 +281,16 @@ class KeychainAccessTests: XCTestCase {
     func testContains() {
         let keychain = Keychain(service: "Twitter")
         
-        XCTAssertFalse(try! keychain.contains("username"), "not stored username")
-        XCTAssertFalse(try! keychain.contains("password"), "not stored password")
+        XCTAssertFalse(try! keychain.contains(key: "username"), "not stored username")
+        XCTAssertFalse(try! keychain.contains(key: "password"), "not stored password")
         
-        do { try keychain.set("kishikawakatsumi", key: "username") } catch {}
-        XCTAssertTrue(try! keychain.contains("username"), "stored username")
-        XCTAssertFalse(try! keychain.contains("password"), "not stored password")
+        do { try keychain.set(value: "kishikawakatsumi", key: "username") } catch {}
+        XCTAssertTrue(try! keychain.contains(key: "username"), "stored username")
+        XCTAssertFalse(try! keychain.contains(key: "password"), "not stored password")
         
-        do { try keychain.set("password1234", key: "password") } catch {}
-        XCTAssertTrue(try! keychain.contains("username"), "stored username")
-        XCTAssertTrue(try! keychain.contains("password"), "stored password")
+        do { try keychain.set(value: "password1234", key: "password") } catch {}
+        XCTAssertTrue(try! keychain.contains(key: "username"), "stored username")
+        XCTAssertTrue(try! keychain.contains(key: "password"), "stored password")
     }
     
     // MARK:
@@ -298,16 +298,16 @@ class KeychainAccessTests: XCTestCase {
     func testSetString() {
         let keychain = Keychain(service: "Twitter")
         
-        XCTAssertNil(try! keychain.get("username"), "not stored username")
-        XCTAssertNil(try! keychain.get("password"), "not stored password")
+        XCTAssertNil(try! keychain.get(key: "username"), "not stored username")
+        XCTAssertNil(try! keychain.get(key: "password"), "not stored password")
         
-        do { try keychain.set("kishikawakatsumi", key: "username") } catch {}
-        XCTAssertEqual(try! keychain.get("username"), "kishikawakatsumi", "stored username")
-        XCTAssertNil(try! keychain.get("password"), "not stored password")
+        do { try keychain.set(value: "kishikawakatsumi", key: "username") } catch {}
+        XCTAssertEqual(try! keychain.get(key: "username"), "kishikawakatsumi", "stored username")
+        XCTAssertNil(try! keychain.get(key: "password"), "not stored password")
         
-        do { try keychain.set("password1234", key: "password") } catch {}
-        XCTAssertEqual(try! keychain.get("username"), "kishikawakatsumi", "stored username")
-        XCTAssertEqual(try! keychain.get("password"), "password1234", "stored password")
+        do { try keychain.set(value: "password1234", key: "password") } catch {}
+        XCTAssertEqual(try! keychain.get(key: "username"), "kishikawakatsumi", "stored username")
+        XCTAssertEqual(try! keychain.get(key: "password"), "password1234", "stored password")
     }
 
     func testSetStringWithLabel() {
@@ -317,7 +317,7 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
 
         do {
-            let label = try keychain.get("kishikawakatsumi") { (attributes) -> String? in
+            let label = try keychain.get(key: "kishikawakatsumi") { (attributes) -> String? in
                 return attributes?.label
             }
             XCTAssertNil(label)
@@ -329,7 +329,7 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
 
         do {
-            let label = try keychain.get("kishikawakatsumi") { (attributes) -> String? in
+            let label = try keychain.get(key: "kishikawakatsumi") { (attributes) -> String? in
                 return attributes?.label
             }
             XCTAssertEqual(label, "Twitter Account")
@@ -345,7 +345,7 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
 
         do {
-            let comment = try keychain.get("kishikawakatsumi") { (attributes) -> String? in
+            let comment = try keychain.get(key: "kishikawakatsumi") { (attributes) -> String? in
                 return attributes?.comment
             }
             XCTAssertNil(comment)
@@ -357,7 +357,7 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
 
         do {
-            let comment = try keychain.get("kishikawakatsumi") { (attributes) -> String? in
+            let comment = try keychain.get(key: "kishikawakatsumi") { (attributes) -> String? in
                 return attributes?.comment
             }
             XCTAssertEqual(comment, "Kishikawa Katsumi")
@@ -374,12 +374,12 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
 
         do {
-            let label = try keychain.get("kishikawakatsumi") { (attributes) -> String? in
+            let label = try keychain.get(key: "kishikawakatsumi") { (attributes) -> String? in
                 return attributes?.label
             }
             XCTAssertNil(label)
 
-            let comment = try keychain.get("kishikawakatsumi") { (attributes) -> String? in
+            let comment = try keychain.get(key: "kishikawakatsumi") { (attributes) -> String? in
                 return attributes?.comment
             }
             XCTAssertNil(comment)
@@ -391,12 +391,12 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
 
         do {
-            let label = try keychain.get("kishikawakatsumi") { (attributes) -> String? in
+            let label = try keychain.get(key: "kishikawakatsumi") { (attributes) -> String? in
                 return attributes?.label
             }
             XCTAssertEqual(label, "Twitter Account")
 
-            let comment = try keychain.get("kishikawakatsumi") { (attributes) -> String? in
+            let comment = try keychain.get(key: "kishikawakatsumi") { (attributes) -> String? in
                 return attributes?.comment
             }
             XCTAssertEqual(comment, "Kishikawa Katsumi")
@@ -407,14 +407,14 @@ class KeychainAccessTests: XCTestCase {
     
     func testSetData() {
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
-        let JSONData = try! NSJSONSerialization.dataWithJSONObject(JSONObject, options: [])
+        let JSONData = try! JSONSerialization.data(withJSONObject: JSONObject, options: [])
         
         let keychain = Keychain(service: "Twitter")
         
-        XCTAssertNil(try! keychain.getData("JSONData"), "not stored JSON data")
+        XCTAssertNil(try! keychain.getData(key: "JSONData"), "not stored JSON data")
         
-        do { try keychain.set(JSONData, key: "JSONData") } catch {}
-        XCTAssertEqual(try! keychain.getData("JSONData"), JSONData, "stored JSON data")
+        do { try keychain.set(value: JSONData, key: "JSONData") } catch {}
+        XCTAssertEqual(try! keychain.getData(key: "JSONData"), JSONData, "stored JSON data")
     }
 
     func testStringConversionError() {
@@ -422,14 +422,14 @@ class KeychainAccessTests: XCTestCase {
 
         let length = 256
         let data = NSMutableData(length: length)!
-        SecRandomCopyBytes(kSecRandomDefault, length, UnsafeMutablePointer<UInt8>(data.mutableBytes))
+        _ = SecRandomCopyBytes(kSecRandomDefault, length, UnsafeMutablePointer<UInt8>(data.mutableBytes))
 
         do {
-            try keychain.set(data, key: "RandomData")
-            let _ = try keychain.getString("RandomData")
+            try keychain.set(value: data as Data, key: "RandomData")
+            _ = try keychain.getString(key: "RandomData")
         } catch let error as NSError {
             XCTAssertEqual(error.domain, KeychainAccessErrorDomain)
-            XCTAssertEqual(error.code, Int(Status.ConversionError.rawValue))
+            XCTAssertEqual(error.code, Int(Status.conversionError.rawValue))
         }
     }
 
@@ -439,7 +439,7 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
 
         do {
-            let persistentRef = try keychain.get("kishikawakatsumi") { $0?.persistentRef }
+            let persistentRef = try keychain.get(key: "kishikawakatsumi") { $0?.persistentRef }
             XCTAssertNil(persistentRef)
         } catch {
             XCTFail("error occurred")
@@ -449,7 +449,7 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
 
         do {
-            let persistentRef = try keychain.get("kishikawakatsumi") { $0?.persistentRef }
+            let persistentRef = try keychain.get(key: "kishikawakatsumi") { $0?.persistentRef }
             XCTAssertNotNil(persistentRef)
         } catch {
             XCTFail("error occurred")
@@ -470,12 +470,12 @@ class KeychainAccessTests: XCTestCase {
 
             let keychain = Keychain(service: "Twitter")
                 .attributes(attributes)
-                .accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence)
+                .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence)
 
             XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
 
             do {
-                let attributes = try keychain.get("kishikawakatsumi") { $0 }
+                let attributes = try keychain.get(key: "kishikawakatsumi") { $0 }
                 XCTAssertNil(attributes)
             } catch {
                 XCTFail("error occurred")
@@ -485,14 +485,14 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
 
             do {
-                let attributes = try keychain.get("kishikawakatsumi") { $0 }
-                XCTAssertEqual(attributes?.`class`, ItemClass.GenericPassword.rawValue)
-                XCTAssertEqual(attributes?.data, "password1234".dataUsingEncoding(NSUTF8StringEncoding))
+                let attributes = try keychain.get(key: "kishikawakatsumi") { $0 }
+                XCTAssertEqual(attributes?.`class`, ItemClass.genericPassword.rawValue)
+                XCTAssertEqual(attributes?.data, "password1234".data(using: .utf8))
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
-                XCTAssertEqual(attributes?.accessible, Accessibility.WhenPasscodeSetThisDeviceOnly.rawValue)
+                XCTAssertEqual(attributes?.accessible, Accessibility.whenPasscodeSetThisDeviceOnly.rawValue)
                 XCTAssertNotNil(attributes?.accessControl)
-                XCTAssertEqual(attributes?.accessGroup, "")
+                XCTAssertEqual(attributes?.accessGroup, "com.apple.token")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
                 XCTAssertNotNil(attributes?.modificationDate)
@@ -513,8 +513,8 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.port)
                 XCTAssertNil(attributes?.path)
 
-                XCTAssertEqual(attributes![String(kSecClass)] as? String, ItemClass.GenericPassword.rawValue)
-                XCTAssertEqual(attributes![String(kSecValueData)] as? NSData, "password1234".dataUsingEncoding(NSUTF8StringEncoding))
+                XCTAssertEqual(attributes![String(kSecClass)] as? String, ItemClass.genericPassword.rawValue)
+                XCTAssertEqual(attributes![String(kSecValueData)] as? Data, "password1234".data(using: .utf8))
             } catch {
                 XCTFail("error occurred")
             }
@@ -531,13 +531,13 @@ class KeychainAccessTests: XCTestCase {
             attributes[String(kSecAttrIsNegative)] = true
             attributes[String(kSecAttrSecurityDomain)] = "securitydomain"
 
-            let keychain = Keychain(server: NSURL(string: "https://example.com:443/api/login/")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://example.com:443/api/login/")!, protocolType: .https)
                 .attributes(attributes)
 
             XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
 
             do {
-                let attributes = try keychain.get("kishikawakatsumi") { $0 }
+                let attributes = try keychain.get(key: "kishikawakatsumi") { $0 }
                 XCTAssertNil(attributes)
             } catch {
                 XCTFail("error occurred")
@@ -547,18 +547,18 @@ class KeychainAccessTests: XCTestCase {
                 keychain["kishikawakatsumi"] = "password1234"
                 XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
 
-                let attributes = try keychain.get("kishikawakatsumi") { $0 }
-                XCTAssertEqual(attributes?.`class`, ItemClass.InternetPassword.rawValue)
-                XCTAssertEqual(attributes?.data, "password1234".dataUsingEncoding(NSUTF8StringEncoding))
+                let attributes = try keychain.get(key: "kishikawakatsumi") { $0 }
+                XCTAssertEqual(attributes?.`class`, ItemClass.internetPassword.rawValue)
+                XCTAssertEqual(attributes?.data, "password1234".data(using: .utf8))
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
-                XCTAssertEqual(attributes?.accessible, Accessibility.AfterFirstUnlock.rawValue)
+                XCTAssertEqual(attributes?.accessible, Accessibility.afterFirstUnlock.rawValue)
                 if #available(iOS 9.0, *) {
                     XCTAssertNil(attributes?.accessControl)
                 } else {
                     XCTAssertNotNil(attributes?.accessControl)
                 }
-                XCTAssertEqual(attributes?.accessGroup, "")
+                XCTAssertEqual(attributes?.accessGroup, "com.apple.token")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
                 XCTAssertNotNil(attributes?.modificationDate)
@@ -574,33 +574,33 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.generic)
                 XCTAssertEqual(attributes?.securityDomain, "securitydomain")
                 XCTAssertEqual(attributes?.server, "example.com")
-                XCTAssertEqual(attributes?.`protocol`, ProtocolType.HTTPS.rawValue)
-                XCTAssertEqual(attributes?.authenticationType, AuthenticationType.Default.rawValue)
+                XCTAssertEqual(attributes?.`protocol`, ProtocolType.https.rawValue)
+                XCTAssertEqual(attributes?.authenticationType, AuthenticationType.default.rawValue)
                 XCTAssertEqual(attributes?.port, 443)
                 XCTAssertEqual(attributes?.path, "")
             } catch {
                 XCTFail("error occurred")
             }
             do {
-                let keychain = Keychain(server: NSURL(string: "https://example.com:443/api/login/")!, protocolType: .HTTPS)
+                let keychain = Keychain(server: URL(string: "https://example.com:443/api/login/")!, protocolType: .https)
 
                 XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "stored password")
 
                 keychain["kishikawakatsumi"] = "1234password"
                 XCTAssertEqual(keychain["kishikawakatsumi"], "1234password", "updated password")
 
-                let attributes = try keychain.get("kishikawakatsumi") { $0 }
-                XCTAssertEqual(attributes?.`class`, ItemClass.InternetPassword.rawValue)
-                XCTAssertEqual(attributes?.data, "1234password".dataUsingEncoding(NSUTF8StringEncoding))
+                let attributes = try keychain.get(key: "kishikawakatsumi") { $0 }
+                XCTAssertEqual(attributes?.`class`, ItemClass.internetPassword.rawValue)
+                XCTAssertEqual(attributes?.data, "1234password".data(using: .utf8))
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
-                XCTAssertEqual(attributes?.accessible, Accessibility.AfterFirstUnlock.rawValue)
+                XCTAssertEqual(attributes?.accessible, Accessibility.afterFirstUnlock.rawValue)
                 if #available(iOS 9.0, *) {
                     XCTAssertNil(attributes?.accessControl)
                 } else {
                     XCTAssertNotNil(attributes?.accessControl)
                 }
-                XCTAssertEqual(attributes?.accessGroup, "")
+                XCTAssertEqual(attributes?.accessGroup, "com.apple.token")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
                 XCTAssertNotNil(attributes?.modificationDate)
@@ -616,15 +616,15 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.generic)
                 XCTAssertEqual(attributes?.securityDomain, "securitydomain")
                 XCTAssertEqual(attributes?.server, "example.com")
-                XCTAssertEqual(attributes?.`protocol`, ProtocolType.HTTPS.rawValue)
-                XCTAssertEqual(attributes?.authenticationType, AuthenticationType.Default.rawValue)
+                XCTAssertEqual(attributes?.`protocol`, ProtocolType.https.rawValue)
+                XCTAssertEqual(attributes?.authenticationType, AuthenticationType.default.rawValue)
                 XCTAssertEqual(attributes?.port, 443)
                 XCTAssertEqual(attributes?.path, "")
             } catch {
                 XCTFail("error occurred")
             }
             do {
-                let keychain = Keychain(server: NSURL(string: "https://example.com:443/api/login/")!, protocolType: .HTTPS)
+                let keychain = Keychain(server: URL(string: "https://example.com:443/api/login/")!, protocolType: .https)
                     .attributes([String(kSecAttrDescription): "Updated Description"])
 
                 XCTAssertEqual(keychain["kishikawakatsumi"], "1234password", "stored password")
@@ -633,17 +633,17 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertEqual(keychain["kishikawakatsumi"], "password1234", "updated password")
 
                 let attributes = keychain[attributes: "kishikawakatsumi"]
-                XCTAssertEqual(attributes?.`class`, ItemClass.InternetPassword.rawValue)
-                XCTAssertEqual(attributes?.data, "password1234".dataUsingEncoding(NSUTF8StringEncoding))
+                XCTAssertEqual(attributes?.`class`, ItemClass.internetPassword.rawValue)
+                XCTAssertEqual(attributes?.data, "password1234".data(using: .utf8))
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
-                XCTAssertEqual(attributes?.accessible, Accessibility.AfterFirstUnlock.rawValue)
+                XCTAssertEqual(attributes?.accessible, Accessibility.afterFirstUnlock.rawValue)
                 if #available(iOS 9.0, *) {
                     XCTAssertNil(attributes?.accessControl)
                 } else {
                     XCTAssertNotNil(attributes?.accessControl)
                 }
-                XCTAssertEqual(attributes?.accessGroup, "")
+                XCTAssertEqual(attributes?.accessGroup, "com.apple.token")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
                 XCTAssertNotNil(attributes?.modificationDate)
@@ -659,8 +659,8 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.generic)
                 XCTAssertEqual(attributes?.securityDomain, "securitydomain")
                 XCTAssertEqual(attributes?.server, "example.com")
-                XCTAssertEqual(attributes?.`protocol`, ProtocolType.HTTPS.rawValue)
-                XCTAssertEqual(attributes?.authenticationType, AuthenticationType.Default.rawValue)
+                XCTAssertEqual(attributes?.`protocol`, ProtocolType.https.rawValue)
+                XCTAssertEqual(attributes?.authenticationType, AuthenticationType.default.rawValue)
                 XCTAssertEqual(attributes?.port, 443)
                 XCTAssertEqual(attributes?.path, "")
             }
@@ -671,37 +671,37 @@ class KeychainAccessTests: XCTestCase {
     func testRemoveString() {
         let keychain = Keychain(service: "Twitter")
 
-        XCTAssertNil(try! keychain.get("username"), "not stored username")
-        XCTAssertNil(try! keychain.get("password"), "not stored password")
+        XCTAssertNil(try! keychain.get(key: "username"), "not stored username")
+        XCTAssertNil(try! keychain.get(key: "password"), "not stored password")
         
-        do { try keychain.set("kishikawakatsumi", key: "username") } catch {}
-        XCTAssertEqual(try! keychain.get("username"), "kishikawakatsumi", "stored username")
+        do { try keychain.set(value: "kishikawakatsumi", key: "username") } catch {}
+        XCTAssertEqual(try! keychain.get(key: "username"), "kishikawakatsumi", "stored username")
         
-        do { try keychain.set("password1234", key: "password") } catch {}
-        XCTAssertEqual(try! keychain.get("password"), "password1234", "stored password")
+        do { try keychain.set(value: "password1234", key: "password") } catch {}
+        XCTAssertEqual(try! keychain.get(key: "password"), "password1234", "stored password")
         
-        do { try keychain.remove("username") } catch {}
-        XCTAssertNil(try! keychain.get("username"), "removed username")
-        XCTAssertEqual(try! keychain.get("password"), "password1234", "left password")
+        do { try keychain.remove(key: "username") } catch {}
+        XCTAssertNil(try! keychain.get(key: "username"), "removed username")
+        XCTAssertEqual(try! keychain.get(key: "password"), "password1234", "left password")
         
-        do { try keychain.remove("password") } catch {}
-        XCTAssertNil(try! keychain.get("username"), "removed username")
-        XCTAssertNil(try! keychain.get("password"), "removed password")
+        do { try keychain.remove(key: "password") } catch {}
+        XCTAssertNil(try! keychain.get(key: "username"), "removed username")
+        XCTAssertNil(try! keychain.get(key: "password"), "removed password")
     }
     
     func testRemoveData() {
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
-        let JSONData = try! NSJSONSerialization.dataWithJSONObject(JSONObject, options: [])
+        let JSONData = try! JSONSerialization.data(withJSONObject: JSONObject, options: [])
         
         let keychain = Keychain(service: "Twitter")
         
-        XCTAssertNil(try! keychain.getData("JSONData"), "not stored JSON data")
+        XCTAssertNil(try! keychain.getData(key: "JSONData"), "not stored JSON data")
         
-        do { try keychain.set(JSONData, key: "JSONData") } catch {}
-        XCTAssertEqual(try! keychain.getData("JSONData"), JSONData, "stored JSON data")
+        do { try keychain.set(value: JSONData, key: "JSONData") } catch {}
+        XCTAssertEqual(try! keychain.getData(key: "JSONData"), JSONData, "stored JSON data")
         
-        do { try keychain.remove("JSONData") } catch {}
-        XCTAssertNil(try! keychain.getData("JSONData"), "removed JSON data")
+        do { try keychain.remove(key: "JSONData") } catch {}
+        XCTAssertNil(try! keychain.getData(key: "JSONData"), "removed JSON data")
     }
     
     // MARK:
@@ -735,7 +735,7 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(keychain[string: "password"], "removed password")
 
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
-        let JSONData = try! NSJSONSerialization.dataWithJSONObject(JSONObject, options: [])
+        let JSONData = try! JSONSerialization.data(withJSONObject: JSONObject, options: [])
 
         XCTAssertNil(keychain[data:"JSONData"], "not stored JSON data")
 
@@ -767,7 +767,7 @@ class KeychainAccessTests: XCTestCase {
         }
 
         do {
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .https)
             try keychain.removeAll()
             XCTAssertTrue(true, "no error occurred")
         } catch {
@@ -787,26 +787,26 @@ class KeychainAccessTests: XCTestCase {
             let keychain = Keychain(service: "Twitter")
 
             do {
-                try keychain.set("kishikawa_katsumi", key: "username")
+                try keychain.set(value: "kishikawa_katsumi", key: "username")
                 XCTAssertTrue(true, "no error occurred")
             } catch {
                 XCTFail("error occurred")
             }
             do {
-                try keychain.set("password_1234", key: "password")
+                try keychain.set(value: "password_1234", key: "password")
                 XCTAssertTrue(true, "no error occurred")
             } catch {
                 XCTFail("error occurred")
             }
 
             do {
-                let username = try keychain.get("username")
+                let username = try keychain.get(key: "username")
                 XCTAssertEqual(username, "kishikawa_katsumi")
             } catch {
                 XCTFail("error occurred")
             }
             do {
-                let password = try keychain.get("password")
+                let password = try keychain.get(key: "password")
                 XCTAssertEqual(password, "password_1234")
             } catch {
                 XCTFail("error occurred")
@@ -818,26 +818,26 @@ class KeychainAccessTests: XCTestCase {
             let keychain = Keychain(service: "Twitter")
 
             do {
-                try keychain.set("katsumi_kishikawa", key: "username")
+                try keychain.set(value: "katsumi_kishikawa", key: "username")
                 XCTAssertTrue(true, "no error occurred")
             } catch {
                 XCTFail("error occurred")
             }
             do {
-                try keychain.set("1234_password", key: "password")
+                try keychain.set(value: "1234_password", key: "password")
                 XCTAssertTrue(true, "no error occurred")
             } catch {
                 XCTFail("error occurred")
             }
 
             do {
-                let username = try keychain.get("username")
+                let username = try keychain.get(key: "username")
                 XCTAssertEqual(username, "katsumi_kishikawa")
             } catch {
                 XCTFail("error occurred")
             }
             do {
-                let password = try keychain.get("password")
+                let password = try keychain.get(key: "password")
                 XCTAssertEqual(password, "1234_password")
             } catch {
                 XCTFail("error occurred")
@@ -849,14 +849,14 @@ class KeychainAccessTests: XCTestCase {
             let keychain = Keychain(service: "Twitter")
 
             do {
-                try keychain.remove("username")
-                XCTAssertNil(try! keychain.get("username"))
+                try keychain.remove(key: "username")
+                XCTAssertNil(try! keychain.get(key: "username"))
             } catch {
                 XCTFail("error occurred")
             }
             do {
-                try keychain.remove("password")
-                XCTAssertNil(try! keychain.get("username"))
+                try keychain.remove(key: "password")
+                XCTAssertNil(try! keychain.get(key: "username"))
             } catch {
                 XCTFail("error occurred")
             }
@@ -883,110 +883,110 @@ class KeychainAccessTests: XCTestCase {
         do { try Keychain(service: service_2).removeAll() } catch {}
         do { try Keychain(service: service_3).removeAll() } catch {}
         
-        XCTAssertNil(try! Keychain().get("username"), "not stored username")
-        XCTAssertNil(try! Keychain().get("password"), "not stored password")
-        XCTAssertNil(try! Keychain(service: service_1).get("username"), "not stored username")
-        XCTAssertNil(try! Keychain(service: service_1).get("password"), "not stored password")
-        XCTAssertNil(try! Keychain(service: service_2).get("username"), "not stored username")
-        XCTAssertNil(try! Keychain(service: service_2).get("password"), "not stored password")
-        XCTAssertNil(try! Keychain(service: service_3).get("username"), "not stored username")
-        XCTAssertNil(try! Keychain(service: service_3).get("password"), "not stored password")
+        XCTAssertNil(try! Keychain().get(key: "username"), "not stored username")
+        XCTAssertNil(try! Keychain().get(key: "password"), "not stored password")
+        XCTAssertNil(try! Keychain(service: service_1).get(key: "username"), "not stored username")
+        XCTAssertNil(try! Keychain(service: service_1).get(key: "password"), "not stored password")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "username"), "not stored username")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "password"), "not stored password")
+        XCTAssertNil(try! Keychain(service: service_3).get(key: "username"), "not stored username")
+        XCTAssertNil(try! Keychain(service: service_3).get(key: "password"), "not stored password")
         
-        do { try Keychain().set(username_1, key: "username") } catch {}
-        XCTAssertEqual(try! Keychain().get("username"), username_1, "stored username")
-        XCTAssertEqual(try! Keychain(service: service_1).get("username"), username_1, "stored username")
-        XCTAssertNil(try! Keychain(service: service_2).get("username"), "not stored username")
-        XCTAssertNil(try! Keychain(service: service_3).get("username"), "not stored username")
+        do { try Keychain().set(value: username_1, key: "username") } catch {}
+        XCTAssertEqual(try! Keychain().get(key: "username"), username_1, "stored username")
+        XCTAssertEqual(try! Keychain(service: service_1).get(key: "username"), username_1, "stored username")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "username"), "not stored username")
+        XCTAssertNil(try! Keychain(service: service_3).get(key: "username"), "not stored username")
         
-        do { try Keychain(service: service_1).set(username_1, key: "username") } catch {}
-        XCTAssertEqual(try! Keychain().get("username"), username_1, "stored username")
-        XCTAssertEqual(try! Keychain(service: service_1).get("username"), username_1, "stored username")
-        XCTAssertNil(try! Keychain(service: service_2).get("username"), "not stored username")
-        XCTAssertNil(try! Keychain(service: service_3).get("username"), "not stored username")
+        do { try Keychain(service: service_1).set(value: username_1, key: "username") } catch {}
+        XCTAssertEqual(try! Keychain().get(key: "username"), username_1, "stored username")
+        XCTAssertEqual(try! Keychain(service: service_1).get(key: "username"), username_1, "stored username")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "username"), "not stored username")
+        XCTAssertNil(try! Keychain(service: service_3).get(key: "username"), "not stored username")
         
-        do { try Keychain(service: service_2).set(username_2, key: "username") } catch {}
-        XCTAssertEqual(try! Keychain().get("username"), username_1, "stored username")
-        XCTAssertEqual(try! Keychain(service: service_1).get("username"), username_1, "stored username")
-        XCTAssertEqual(try! Keychain(service: service_2).get("username"), username_2, "stored username")
-        XCTAssertNil(try! Keychain(service: service_3).get("username"), "not stored username")
+        do { try Keychain(service: service_2).set(value: username_2, key: "username") } catch {}
+        XCTAssertEqual(try! Keychain().get(key: "username"), username_1, "stored username")
+        XCTAssertEqual(try! Keychain(service: service_1).get(key: "username"), username_1, "stored username")
+        XCTAssertEqual(try! Keychain(service: service_2).get(key: "username"), username_2, "stored username")
+        XCTAssertNil(try! Keychain(service: service_3).get(key: "username"), "not stored username")
         
-        do { try Keychain(service: service_3).set(username_3, key: "username") } catch {}
-        XCTAssertEqual(try! Keychain().get("username"), username_1, "stored username")
-        XCTAssertEqual(try! Keychain(service: service_1).get("username"), username_1, "stored username")
-        XCTAssertEqual(try! Keychain(service: service_2).get("username"), username_2, "stored username")
-        XCTAssertEqual(try! Keychain(service: service_3).get("username"), username_3, "stored username")
+        do { try Keychain(service: service_3).set(value: username_3, key: "username") } catch {}
+        XCTAssertEqual(try! Keychain().get(key: "username"), username_1, "stored username")
+        XCTAssertEqual(try! Keychain(service: service_1).get(key: "username"), username_1, "stored username")
+        XCTAssertEqual(try! Keychain(service: service_2).get(key: "username"), username_2, "stored username")
+        XCTAssertEqual(try! Keychain(service: service_3).get(key: "username"), username_3, "stored username")
 
-        do { try Keychain().set(password_1, key: "password") } catch {}
-        XCTAssertEqual(try! Keychain().get("password"), password_1, "stored password")
-        XCTAssertEqual(try! Keychain(service: service_1).get("password"), password_1, "stored password")
-        XCTAssertNil(try! Keychain(service: service_2).get("password"), "not stored password")
-        XCTAssertNil(try! Keychain(service: service_3).get("password"), "not stored password")
+        do { try Keychain().set(value: password_1, key: "password") } catch {}
+        XCTAssertEqual(try! Keychain().get(key: "password"), password_1, "stored password")
+        XCTAssertEqual(try! Keychain(service: service_1).get(key: "password"), password_1, "stored password")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "password"), "not stored password")
+        XCTAssertNil(try! Keychain(service: service_3).get(key: "password"), "not stored password")
         
-        do { try Keychain(service: service_1).set(password_1, key: "password") } catch {}
-        XCTAssertEqual(try! Keychain().get("password"), password_1, "stored password")
-        XCTAssertEqual(try! Keychain(service: service_1).get("password"), password_1, "stored password")
-        XCTAssertNil(try! Keychain(service: service_2).get("password"), "not stored password")
-        XCTAssertNil(try! Keychain(service: service_3).get("password"), "not stored password")
+        do { try Keychain(service: service_1).set(value: password_1, key: "password") } catch {}
+        XCTAssertEqual(try! Keychain().get(key: "password"), password_1, "stored password")
+        XCTAssertEqual(try! Keychain(service: service_1).get(key: "password"), password_1, "stored password")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "password"), "not stored password")
+        XCTAssertNil(try! Keychain(service: service_3).get(key: "password"), "not stored password")
         
-        do { try Keychain(service: service_2).set(password_2, key: "password") } catch {}
-        XCTAssertEqual(try! Keychain().get("password"), password_1, "stored password")
-        XCTAssertEqual(try! Keychain(service: service_1).get("password"), password_1, "stored password")
-        XCTAssertEqual(try! Keychain(service: service_2).get("password"), password_2, "stored password")
-        XCTAssertNil(try! Keychain(service: service_3).get("password"), "not stored password")
+        do { try Keychain(service: service_2).set(value: password_2, key: "password") } catch {}
+        XCTAssertEqual(try! Keychain().get(key: "password"), password_1, "stored password")
+        XCTAssertEqual(try! Keychain(service: service_1).get(key: "password"), password_1, "stored password")
+        XCTAssertEqual(try! Keychain(service: service_2).get(key: "password"), password_2, "stored password")
+        XCTAssertNil(try! Keychain(service: service_3).get(key: "password"), "not stored password")
         
-        do { try Keychain(service: service_3).set(password_3, key: "password") } catch {}
-        XCTAssertEqual(try! Keychain().get("password"), password_1, "stored password")
-        XCTAssertEqual(try! Keychain(service: service_1).get("password"), password_1, "stored password")
-        XCTAssertEqual(try! Keychain(service: service_2).get("password"), password_2, "stored password")
-        XCTAssertEqual(try! Keychain(service: service_3).get("password"), password_3, "stored password")
+        do { try Keychain(service: service_3).set(value: password_3, key: "password") } catch {}
+        XCTAssertEqual(try! Keychain().get(key: "password"), password_1, "stored password")
+        XCTAssertEqual(try! Keychain(service: service_1).get(key: "password"), password_1, "stored password")
+        XCTAssertEqual(try! Keychain(service: service_2).get(key: "password"), password_2, "stored password")
+        XCTAssertEqual(try! Keychain(service: service_3).get(key: "password"), password_3, "stored password")
         
-        do { try Keychain().remove("username") } catch {}
-        XCTAssertNil(try! Keychain().get("username"), "removed username")
-        XCTAssertNil(try! Keychain(service: service_1).get("username"), "removed username")
-        XCTAssertEqual(try! Keychain(service: service_2).get("username"), username_2, "left username")
-        XCTAssertEqual(try! Keychain(service: service_3).get("username"), username_3, "left username")
+        do { try Keychain().remove(key: "username") } catch {}
+        XCTAssertNil(try! Keychain().get(key: "username"), "removed username")
+        XCTAssertNil(try! Keychain(service: service_1).get(key: "username"), "removed username")
+        XCTAssertEqual(try! Keychain(service: service_2).get(key: "username"), username_2, "left username")
+        XCTAssertEqual(try! Keychain(service: service_3).get(key: "username"), username_3, "left username")
         
-        do { try Keychain(service: service_1).remove("username") } catch {}
-        XCTAssertNil(try! Keychain().get("username"), "removed username")
-        XCTAssertNil(try! Keychain(service: service_1).get("username"), "removed username")
-        XCTAssertEqual(try! Keychain(service: service_2).get("username"), username_2, "left username")
-        XCTAssertEqual(try! Keychain(service: service_3).get("username"), username_3, "left username")
+        do { try Keychain(service: service_1).remove(key: "username") } catch {}
+        XCTAssertNil(try! Keychain().get(key: "username"), "removed username")
+        XCTAssertNil(try! Keychain(service: service_1).get(key: "username"), "removed username")
+        XCTAssertEqual(try! Keychain(service: service_2).get(key: "username"), username_2, "left username")
+        XCTAssertEqual(try! Keychain(service: service_3).get(key: "username"), username_3, "left username")
         
-        do { try Keychain(service: service_2).remove("username") } catch {}
-        XCTAssertNil(try! Keychain().get("username"), "removed username")
-        XCTAssertNil(try! Keychain(service: service_1).get("username"), "removed username")
-        XCTAssertNil(try! Keychain(service: service_2).get("username"), "removed username")
-        XCTAssertEqual(try! Keychain(service: service_3).get("username"), username_3, "left username")
+        do { try Keychain(service: service_2).remove(key: "username") } catch {}
+        XCTAssertNil(try! Keychain().get(key: "username"), "removed username")
+        XCTAssertNil(try! Keychain(service: service_1).get(key: "username"), "removed username")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "username"), "removed username")
+        XCTAssertEqual(try! Keychain(service: service_3).get(key: "username"), username_3, "left username")
         
-        do { try Keychain(service: service_3).remove("username") } catch {}
-        XCTAssertNil(try! Keychain().get("username"), "removed username")
-        XCTAssertNil(try! Keychain(service: service_1).get("username"), "removed username")
-        XCTAssertNil(try! Keychain(service: service_2).get("username"), "removed username")
-        XCTAssertNil(try! Keychain(service: service_3).get("username"), "removed username")
+        do { try Keychain(service: service_3).remove(key: "username") } catch {}
+        XCTAssertNil(try! Keychain().get(key: "username"), "removed username")
+        XCTAssertNil(try! Keychain(service: service_1).get(key: "username"), "removed username")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "username"), "removed username")
+        XCTAssertNil(try! Keychain(service: service_3).get(key: "username"), "removed username")
         
-        do { try Keychain().remove("password") } catch {}
-        XCTAssertNil(try! Keychain().get("password"), "removed password")
-        XCTAssertNil(try! Keychain(service: service_1).get("password"), "removed password")
-        XCTAssertEqual(try! Keychain(service: service_2).get("password"), password_2, "left password")
-        XCTAssertEqual(try! Keychain(service: service_3).get("password"), password_3, "left password")
+        do { try Keychain().remove(key: "password") } catch {}
+        XCTAssertNil(try! Keychain().get(key: "password"), "removed password")
+        XCTAssertNil(try! Keychain(service: service_1).get(key: "password"), "removed password")
+        XCTAssertEqual(try! Keychain(service: service_2).get(key: "password"), password_2, "left password")
+        XCTAssertEqual(try! Keychain(service: service_3).get(key: "password"), password_3, "left password")
         
-        do { try Keychain(service: service_1).remove("password") } catch {}
-        XCTAssertNil(try! Keychain().get("password"), "removed password")
-        XCTAssertNil(try! Keychain(service: service_1).get("password"), "removed password")
-        XCTAssertEqual(try! Keychain(service: service_2).get("password"), password_2, "left password")
-        XCTAssertEqual(try! Keychain(service: service_3).get("password"), password_3, "left password")
+        do { try Keychain(service: service_1).remove(key: "password") } catch {}
+        XCTAssertNil(try! Keychain().get(key: "password"), "removed password")
+        XCTAssertNil(try! Keychain(service: service_1).get(key: "password"), "removed password")
+        XCTAssertEqual(try! Keychain(service: service_2).get(key: "password"), password_2, "left password")
+        XCTAssertEqual(try! Keychain(service: service_3).get(key: "password"), password_3, "left password")
         
-        do { try Keychain(service: service_2).remove("password") } catch {}
-        XCTAssertNil(try! Keychain().get("password"), "removed password")
-        XCTAssertNil(try! Keychain(service: service_1).get("password"), "removed password")
-        XCTAssertNil(try! Keychain(service: service_2).get("password"), "removed password")
-        XCTAssertEqual(try! Keychain(service: service_3).get("password"), password_3, "left password")
+        do { try Keychain(service: service_2).remove(key: "password") } catch {}
+        XCTAssertNil(try! Keychain().get(key: "password"), "removed password")
+        XCTAssertNil(try! Keychain(service: service_1).get(key: "password"), "removed password")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "password"), "removed password")
+        XCTAssertEqual(try! Keychain(service: service_3).get(key: "password"), password_3, "left password")
         
-        do { try Keychain(service: service_3).remove("password") } catch {}
-        XCTAssertNil(try! Keychain().get("password"), "removed password")
-        XCTAssertNil(try! Keychain(service: service_2).get("password"), "removed password")
-        XCTAssertNil(try! Keychain(service: service_2).get("password"), "removed password")
-        XCTAssertNil(try! Keychain(service: service_2).get("password"), "removed password")
+        do { try Keychain(service: service_3).remove(key: "password") } catch {}
+        XCTAssertNil(try! Keychain().get(key: "password"), "removed password")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "password"), "removed password")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "password"), "removed password")
+        XCTAssertNil(try! Keychain(service: service_2).get(key: "password"), "removed password")
     }
 
     // MARK:
@@ -1001,9 +1001,9 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertEqual(keychain.synchronizable, false)
         XCTAssertEqual(keychain.synchronizable(true).synchronizable, true)
         XCTAssertEqual(keychain.synchronizable(false).synchronizable, false)
-        XCTAssertEqual(keychain.accessibility(.AfterFirstUnlock).accessibility, Accessibility.AfterFirstUnlock)
-        XCTAssertEqual(keychain.accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence).accessibility, Accessibility.WhenPasscodeSetThisDeviceOnly)
-        XCTAssertEqual(keychain.accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence).authenticationPolicy, AuthenticationPolicy.UserPresence)
+        XCTAssertEqual(keychain.accessibility(.afterFirstUnlock).accessibility, Accessibility.afterFirstUnlock)
+        XCTAssertEqual(keychain.accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence).accessibility, Accessibility.whenPasscodeSetThisDeviceOnly)
+        XCTAssertEqual(keychain.accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence).authenticationPolicy, AuthenticationPolicy.userPresence)
         XCTAssertNil(keychain.label)
         XCTAssertEqual(keychain.label("Label").label, "Label")
         XCTAssertNil(keychain.comment)
@@ -1023,18 +1023,18 @@ class KeychainAccessTests: XCTestCase {
 
             let allKeys = keychain.allKeys()
             XCTAssertEqual(allKeys.count, 3)
-            XCTAssertEqual(allKeys.sort(), ["key1", "key2", "key3"])
+            XCTAssertEqual(allKeys.sorted(), ["key1", "key2", "key3"])
 
             let allItems = keychain.allItems()
             XCTAssertEqual(allItems.count, 3)
 
-            let sortedItems = allItems.sort { (item1, item2) -> Bool in
+            let sortedItems = allItems.sorted { (item1, item2) -> Bool in
                 let value1 = item1["value"] as! String
                 let value2 = item2["value"] as! String
-                return value1.compare(value2) == NSComparisonResult.OrderedAscending || value1.compare(value2) == NSComparisonResult.OrderedSame
+                return value1.compare(value2) == .orderedAscending || value1.compare(value2) == .orderedSame
             }
 
-            XCTAssertEqual(sortedItems[0]["accessGroup"] as? String, "")
+            XCTAssertEqual(sortedItems[0]["accessGroup"] as? String, "com.apple.token")
             XCTAssertEqual(sortedItems[0]["synchronizable"] as? String, "false")
             XCTAssertEqual(sortedItems[0]["service"] as? String, "")
             XCTAssertEqual(sortedItems[0]["value"] as? String, "value1")
@@ -1042,7 +1042,7 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(sortedItems[0]["class"] as? String, "GenericPassword")
             XCTAssertEqual(sortedItems[0]["accessibility"] as? String, "AfterFirstUnlock")
 
-            XCTAssertEqual(sortedItems[1]["accessGroup"] as? String, "")
+            XCTAssertEqual(sortedItems[1]["accessGroup"] as? String, "com.apple.token")
             XCTAssertEqual(sortedItems[1]["synchronizable"] as? String, "false")
             XCTAssertEqual(sortedItems[1]["service"] as? String, "")
             XCTAssertEqual(sortedItems[1]["value"] as? String, "value2")
@@ -1050,7 +1050,7 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(sortedItems[1]["class"] as? String, "GenericPassword")
             XCTAssertEqual(sortedItems[1]["accessibility"] as? String, "AfterFirstUnlock")
 
-            XCTAssertEqual(sortedItems[2]["accessGroup"] as? String, "")
+            XCTAssertEqual(sortedItems[2]["accessGroup"] as? String, "com.apple.token")
             XCTAssertEqual(sortedItems[2]["synchronizable"] as? String, "false")
             XCTAssertEqual(sortedItems[2]["service"] as? String, "")
             XCTAssertEqual(sortedItems[2]["value"] as? String, "value3")
@@ -1062,28 +1062,28 @@ class KeychainAccessTests: XCTestCase {
             let keychain = Keychain(service: "service1")
             try! keychain
                 .synchronizable(true)
-                .accessibility(.WhenUnlockedThisDeviceOnly)
-                .set("service1_value1", key: "service1_key1")
+                .accessibility(.whenUnlockedThisDeviceOnly)
+                .set(value: "service1_value1", key: "service1_key1")
 
             try! keychain
                 .synchronizable(false)
-                .accessibility(.AfterFirstUnlockThisDeviceOnly)
-                .set("service1_value2", key: "service1_key2")
+                .accessibility(.afterFirstUnlockThisDeviceOnly)
+                .set(value: "service1_value2", key: "service1_key2")
 
             let allKeys = keychain.allKeys()
             XCTAssertEqual(allKeys.count, 2)
-            XCTAssertEqual(allKeys.sort(), ["service1_key1", "service1_key2"])
+            XCTAssertEqual(allKeys.sorted(), ["service1_key1", "service1_key2"])
 
             let allItems = keychain.allItems()
             XCTAssertEqual(allItems.count, 2)
 
-            let sortedItems = allItems.sort { (item1, item2) -> Bool in
+            let sortedItems = allItems.sorted { (item1, item2) -> Bool in
                 let value1 = item1["value"] as! String
                 let value2 = item2["value"] as! String
-                return value1.compare(value2) == NSComparisonResult.OrderedAscending || value1.compare(value2) == NSComparisonResult.OrderedSame
+                return value1.compare(value2) == .orderedAscending || value1.compare(value2) == .orderedSame
             }
 
-            XCTAssertEqual(sortedItems[0]["accessGroup"] as? String, "")
+            XCTAssertEqual(sortedItems[0]["accessGroup"] as? String, "com.apple.token")
             XCTAssertEqual(sortedItems[0]["synchronizable"] as? String, "true")
             XCTAssertEqual(sortedItems[0]["service"] as? String, "service1")
             XCTAssertEqual(sortedItems[0]["value"] as? String, "service1_value1")
@@ -1091,7 +1091,7 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(sortedItems[0]["class"] as? String, "GenericPassword")
             XCTAssertEqual(sortedItems[0]["accessibility"] as? String, "WhenUnlockedThisDeviceOnly")
 
-            XCTAssertEqual(sortedItems[1]["accessGroup"] as? String, "")
+            XCTAssertEqual(sortedItems[1]["accessGroup"] as? String, "com.apple.token")
             XCTAssertEqual(sortedItems[1]["synchronizable"] as? String, "false")
             XCTAssertEqual(sortedItems[1]["service"] as? String, "service1")
             XCTAssertEqual(sortedItems[1]["value"] as? String, "service1_value2")
@@ -1100,28 +1100,28 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(sortedItems[1]["accessibility"] as? String, "AfterFirstUnlockThisDeviceOnly")
         }
         do {
-            let keychain = Keychain(server: "https://google.com", protocolType: .HTTPS)
+            let keychain = Keychain(server: "https://google.com", protocolType: .https)
             try! keychain
                 .synchronizable(false)
-                .accessibility(.AlwaysThisDeviceOnly)
-                .set("google.com_value1", key: "google.com_key1")
+                .accessibility(.alwaysThisDeviceOnly)
+                .set(value: "google.com_value1", key: "google.com_key1")
 
             try! keychain
                 .synchronizable(true)
-                .accessibility(.Always)
-                .set("google.com_value2", key: "google.com_key2")
+                .accessibility(.always)
+                .set(value: "google.com_value2", key: "google.com_key2")
 
             let allKeys = keychain.allKeys()
             XCTAssertEqual(allKeys.count, 2)
-            XCTAssertEqual(allKeys.sort(), ["google.com_key1", "google.com_key2"])
+            XCTAssertEqual(allKeys.sorted(), ["google.com_key1", "google.com_key2"])
 
             let allItems = keychain.allItems()
             XCTAssertEqual(allItems.count, 2)
 
-            let sortedItems = allItems.sort { (item1, item2) -> Bool in
+            let sortedItems = allItems.sorted { (item1, item2) -> Bool in
                 let value1 = item1["value"] as! String
                 let value2 = item2["value"] as! String
-                return value1.compare(value2) == NSComparisonResult.OrderedAscending || value1.compare(value2) == NSComparisonResult.OrderedSame
+                return value1.compare(value2) == .orderedAscending || value1.compare(value2) == .orderedSame
             }
 
             XCTAssertEqual(sortedItems[0]["synchronizable"] as? String, "false")
@@ -1143,11 +1143,11 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(sortedItems[1]["accessibility"] as? String, "Always")
         }
         do {
-            let allKeys = Keychain.allKeys(.GenericPassword)
+            let allKeys = Keychain.allKeys(itemClass: .genericPassword)
             XCTAssertEqual(allKeys.count, 5)
 
-            let sortedKeys = allKeys.sort { (key1, key2) -> Bool in
-                return key1.1.compare(key2.1) == NSComparisonResult.OrderedAscending || key1.1.compare(key2.1) == NSComparisonResult.OrderedSame
+            let sortedKeys = allKeys.sorted { (key1, key2) -> Bool in
+                return key1.1.compare(key2.1) == .orderedAscending || key1.1.compare(key2.1) == .orderedSame
             }
             XCTAssertEqual(sortedKeys[0].0, "")
             XCTAssertEqual(sortedKeys[0].1, "key1")
@@ -1161,11 +1161,11 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(sortedKeys[4].1, "service1_key2")
         }
         do {
-            let allKeys = Keychain.allKeys(.InternetPassword)
+            let allKeys = Keychain.allKeys(itemClass: .internetPassword)
             XCTAssertEqual(allKeys.count, 2)
 
-            let sortedKeys = allKeys.sort { (key1, key2) -> Bool in
-                return key1.1.compare(key2.1) == NSComparisonResult.OrderedAscending || key1.1.compare(key2.1) == NSComparisonResult.OrderedSame
+            let sortedKeys = allKeys.sorted { (key1, key2) -> Bool in
+                return key1.1.compare(key2.1) == .orderedAscending || key1.1.compare(key2.1) == .orderedSame
             }
             XCTAssertEqual(sortedKeys[0].0, "google.com")
             XCTAssertEqual(sortedKeys[0].1, "google.com_key1")
@@ -1192,9 +1192,9 @@ class KeychainAccessTests: XCTestCase {
         }
 
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.UserPresence]
+            let policy: AuthenticationPolicy = [.userPresence]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1205,9 +1205,9 @@ class KeychainAccessTests: XCTestCase {
         }
         #if os(iOS)
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.UserPresence, .ApplicationPassword]
+            let policy: AuthenticationPolicy = [.userPresence, .applicationPassword]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1217,9 +1217,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.UserPresence, .ApplicationPassword, .PrivateKeyUsage]
+            let policy: AuthenticationPolicy = [.userPresence, .applicationPassword, .privateKeyUsage]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1229,9 +1229,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.ApplicationPassword]
+            let policy: AuthenticationPolicy = [.applicationPassword]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1241,9 +1241,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.ApplicationPassword, .PrivateKeyUsage]
+            let policy: AuthenticationPolicy = [.applicationPassword, .privateKeyUsage]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1253,9 +1253,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.PrivateKeyUsage]
+            let policy: AuthenticationPolicy = [.privateKeyUsage]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1265,9 +1265,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDAny]
+            let policy: AuthenticationPolicy = [.touchIDAny]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1277,9 +1277,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDAny, .DevicePasscode]
+            let policy: AuthenticationPolicy = [.touchIDAny, .devicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1289,9 +1289,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDAny, .ApplicationPassword]
+            let policy: AuthenticationPolicy = [.touchIDAny, .applicationPassword]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1301,9 +1301,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDAny, .ApplicationPassword, .PrivateKeyUsage]
+            let policy: AuthenticationPolicy = [.touchIDAny, .applicationPassword, .privateKeyUsage]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1313,9 +1313,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDCurrentSet]
+            let policy: AuthenticationPolicy = [.touchIDCurrentSet]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1325,9 +1325,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDCurrentSet, .DevicePasscode]
+            let policy: AuthenticationPolicy = [.touchIDCurrentSet, .devicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1337,9 +1337,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDCurrentSet, .ApplicationPassword]
+            let policy: AuthenticationPolicy = [.touchIDCurrentSet, .applicationPassword]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1349,9 +1349,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDCurrentSet, .ApplicationPassword, .PrivateKeyUsage]
+            let policy: AuthenticationPolicy = [.touchIDCurrentSet, .applicationPassword, .privateKeyUsage]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1361,9 +1361,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
             
-            let policy: AuthenticationPolicy = [.TouchIDAny, .Or, .DevicePasscode]
+            let policy: AuthenticationPolicy = [.touchIDAny, .or, .devicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
             
             var error: Unmanaged<CFError>?
@@ -1373,9 +1373,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
             
-            let policy: AuthenticationPolicy = [.TouchIDAny, .And, .DevicePasscode]
+            let policy: AuthenticationPolicy = [.touchIDAny, .and, .devicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
             
             var error: Unmanaged<CFError>?
@@ -1387,9 +1387,9 @@ class KeychainAccessTests: XCTestCase {
         #endif
         #if os(OSX)
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.UserPresence]
+            let policy: AuthenticationPolicy = [.userPresence]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1399,9 +1399,9 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertNotNil(accessControl)
         }
         do {
-            let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
+            let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.DevicePasscode]
+            let policy: AuthenticationPolicy = [.devicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
