@@ -26,6 +26,18 @@ def destinations(platform: 'iphonesimulator')
   end
 end
 
+def schemes(platform)
+  if platform == 'iphonesimulator' || platform == 'iphoneos'
+    'KeychainAccess iOS'
+  elsif platform == 'watchsimulator' || platform == 'watchos'
+    'KeychainAccess watchOS'
+  elsif platform == 'appletvsimulator' || platform == 'appletvos'
+    'KeychainAccess tvOS'
+  else
+    'KeychainAccess OSX'
+  end
+end
+
 def supportedPlatforms
   ['macosx', 'iphoneos', 'iphonesimulator', 'watchos', 'watchsimulator', 'appletvos', 'appletvsimulator']
 end
@@ -46,7 +58,7 @@ namespace :build do
   supportedPlatforms.product(configurations).each do |platform, configuration|
     XCJobs::Build.new("#{platform}:#{configuration.downcase}") do |t|
       t.project = 'KeychainAccess'
-      t.scheme = 'KeychainAccess'
+      t.scheme = schemes(platform)
       t.sdk = platform
       if platform == 'iphonesimulator'
         t.add_destination('name=iPhone 6,OS=9.1')
@@ -81,7 +93,7 @@ namespace :test do
   supportedPlatforms.product(configurations).each do |platform, configuration|
     XCJobs::Test.new("#{platform}:#{configuration.downcase}") do |t|
       t.project = 'KeychainAccess'
-      t.scheme = 'KeychainAccess'
+      t.scheme = schemes(platform)
       t.sdk = platform
       destinations(platform: platform).each do |destination|
         t.add_destination(destination)
