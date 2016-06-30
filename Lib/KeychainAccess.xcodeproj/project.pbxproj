@@ -27,10 +27,6 @@
 		559642071D2451BA00CB6448 /* SharedCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDB031BCBB0DD00A32149 /* SharedCredentialTests.swift */; };
 		559642111D2451C100CB6448 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F197A1A49D89200B0016A /* Keychain.swift */; };
 		559642141D2451C100CB6448 /* KeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 140F19611A49D79400B0016A /* KeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5596421F1D2451C800CB6448 /* KeychainAccessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140F196E1A49D79500B0016A /* KeychainAccessTests.swift */; };
-		559642201D2451C800CB6448 /* EnumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148F9D491BCB4118006EDF48 /* EnumTests.swift */; };
-		559642211D2451C800CB6448 /* ErrorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDA841BCB505F00A32149 /* ErrorTypeTests.swift */; };
-		559642221D2451C800CB6448 /* SharedCredentialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142EDB031BCBB0DD00A32149 /* SharedCredentialTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,13 +51,6 @@
 			remoteGlobalIDString = 559641F41D2451B200CB6448;
 			remoteInfo = "KeychainAccess tvOS";
 		};
-		5596422E1D2452E300CB6448 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 140F19531A49D79400B0016A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 5596420F1D2451C100CB6448;
-			remoteInfo = "KeychainAccess watchOS";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -85,7 +74,6 @@
 		559641FE1D2451B200CB6448 /* KeychainAccess.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeychainAccess.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5596420D1D2451BA00CB6448 /* KeychainAccessTests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KeychainAccessTests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		559642191D2451C100CB6448 /* KeychainAccess.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeychainAccess.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		559642281D2451C800CB6448 /* KeychainAccessTests watchOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KeychainAccessTests watchOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,13 +126,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		559642231D2451C800CB6448 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -168,7 +149,6 @@
 				559641FE1D2451B200CB6448 /* KeychainAccess.framework */,
 				5596420D1D2451BA00CB6448 /* KeychainAccessTests tvOS.xctest */,
 				559642191D2451C100CB6448 /* KeychainAccess.framework */,
-				559642281D2451C800CB6448 /* KeychainAccessTests watchOS.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -387,24 +367,6 @@
 			productReference = 559642191D2451C100CB6448 /* KeychainAccess.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		5596421B1D2451C800CB6448 /* KeychainAccessTests watchOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 559642251D2451C800CB6448 /* Build configuration list for PBXNativeTarget "KeychainAccessTests watchOS" */;
-			buildPhases = (
-				5596421E1D2451C800CB6448 /* Sources */,
-				559642231D2451C800CB6448 /* Frameworks */,
-				559642241D2451C800CB6448 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				5596422F1D2452E300CB6448 /* PBXTargetDependency */,
-			);
-			name = "KeychainAccessTests watchOS";
-			productName = KeychainAccessTests;
-			productReference = 559642281D2451C800CB6448 /* KeychainAccessTests watchOS.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -442,7 +404,6 @@
 				559641F41D2451B200CB6448 /* KeychainAccess tvOS */,
 				559642001D2451BA00CB6448 /* KeychainAccessTests tvOS */,
 				5596420F1D2451C100CB6448 /* KeychainAccess watchOS */,
-				5596421B1D2451C800CB6448 /* KeychainAccessTests watchOS */,
 			);
 		};
 /* End PBXProject section */
@@ -491,13 +452,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		559642151D2451C100CB6448 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		559642241D2451C800CB6448 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -572,17 +526,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5596421E1D2451C800CB6448 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5596421F1D2451C800CB6448 /* KeychainAccessTests.swift in Sources */,
-				559642201D2451C800CB6448 /* EnumTests.swift in Sources */,
-				559642211D2451C800CB6448 /* ErrorTypeTests.swift in Sources */,
-				559642221D2451C800CB6448 /* SharedCredentialTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -600,11 +543,6 @@
 			isa = PBXTargetDependency;
 			target = 559641F41D2451B200CB6448 /* KeychainAccess tvOS */;
 			targetProxy = 5596422C1D2452DF00CB6448 /* PBXContainerItemProxy */;
-		};
-		5596422F1D2452E300CB6448 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 5596420F1D2451C100CB6448 /* KeychainAccess watchOS */;
-			targetProxy = 5596422E1D2452E300CB6448 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -769,28 +707,6 @@
 			};
 			name = Release;
 		};
-		559642261D2451C800CB6448 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 148E44E91BF9EDE4004FFEC1 /* Tests.xcconfig */;
-			buildSettings = {
-				INFOPLIST_FILE = KeychainAccessTests/Info.plist;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SUPPORTED_PLATFORMS = "watchsimulator watchos";
-			};
-			name = Debug;
-		};
-		559642271D2451C800CB6448 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 148E44E91BF9EDE4004FFEC1 /* Tests.xcconfig */;
-			buildSettings = {
-				INFOPLIST_FILE = KeychainAccessTests/Info.plist;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SUPPORTED_PLATFORMS = "watchsimulator watchos";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -862,15 +778,6 @@
 			buildConfigurations = (
 				559642171D2451C100CB6448 /* Debug */,
 				559642181D2451C100CB6448 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		559642251D2451C800CB6448 /* Build configuration list for PBXNativeTarget "KeychainAccessTests watchOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				559642261D2451C800CB6448 /* Debug */,
-				559642271D2451C800CB6448 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

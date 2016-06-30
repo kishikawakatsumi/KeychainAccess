@@ -15,22 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5596420F1D2451C100CB6448"
-               BuildableName = "KeychainAccess watchOS.framework"
+               BuildableName = "KeychainAccess.framework"
                BlueprintName = "KeychainAccess watchOS"
-               ReferencedContainer = "container:KeychainAccess.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5596421B1D2451C800CB6448"
-               BuildableName = "KeychainAccessTests watchOS.xctest"
-               BlueprintName = "KeychainAccessTests watchOS"
                ReferencedContainer = "container:KeychainAccess.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5596420F1D2451C100CB6448"
-            BuildableName = "KeychainAccess watchOS.framework"
+            BuildableName = "KeychainAccess.framework"
             BlueprintName = "KeychainAccess watchOS"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
@@ -69,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5596420F1D2451C100CB6448"
-            BuildableName = "KeychainAccess watchOS.framework"
+            BuildableName = "KeychainAccess.framework"
             BlueprintName = "KeychainAccess watchOS"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
@@ -87,7 +73,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5596420F1D2451C100CB6448"
-            BuildableName = "KeychainAccess watchOS.framework"
+            BuildableName = "KeychainAccess.framework"
             BlueprintName = "KeychainAccess watchOS"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>

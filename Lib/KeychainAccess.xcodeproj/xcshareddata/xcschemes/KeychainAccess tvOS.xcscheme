@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "559641F41D2451B200CB6448"
-               BuildableName = "KeychainAccess tvOS.framework"
+               BuildableName = "KeychainAccess.framework"
                BlueprintName = "KeychainAccess tvOS"
                ReferencedContainer = "container:KeychainAccess.xcodeproj">
             </BuildableReference>
@@ -42,12 +42,22 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "559642001D2451BA00CB6448"
+               BuildableName = "KeychainAccessTests tvOS.xctest"
+               BlueprintName = "KeychainAccessTests tvOS"
+               ReferencedContainer = "container:KeychainAccess.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "559641F41D2451B200CB6448"
-            BuildableName = "KeychainAccess tvOS.framework"
+            BuildableName = "KeychainAccess.framework"
             BlueprintName = "KeychainAccess tvOS"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
@@ -69,7 +79,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "559641F41D2451B200CB6448"
-            BuildableName = "KeychainAccess tvOS.framework"
+            BuildableName = "KeychainAccess.framework"
             BlueprintName = "KeychainAccess tvOS"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
@@ -87,7 +97,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "559641F41D2451B200CB6448"
-            BuildableName = "KeychainAccess tvOS.framework"
+            BuildableName = "KeychainAccess.framework"
             BlueprintName = "KeychainAccess tvOS"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
