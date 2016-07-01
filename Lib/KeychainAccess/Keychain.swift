@@ -370,7 +370,7 @@ public class Keychain {
     
     public convenience init() {
         var options = Options()
-        if let bundleIdentifier = NSBundle.main().bundleIdentifier {
+        if let bundleIdentifier = Bundle.main().bundleIdentifier {
             options.service = bundleIdentifier
         }
         self.init(options)
@@ -384,7 +384,7 @@ public class Keychain {
     
     public convenience init(accessGroup: String) {
         var options = Options()
-        if let bundleIdentifier = NSBundle.main().bundleIdentifier {
+        if let bundleIdentifier = Bundle.main().bundleIdentifier {
             options.service = bundleIdentifier
         }
         options.accessGroup = accessGroup
@@ -474,7 +474,7 @@ public class Keychain {
         guard let data = try getData(key: key) else  {
             return nil
         }
-        guard let string = NSString(data: data, encoding: NSUTF8StringEncoding) as? String else {
+        guard let string = NSString(data: data as Data, encoding: String.Encoding.utf8.rawValue) as? String else {
             throw conversionError(message: "failed to convert data to string")
         }
         return string
@@ -504,7 +504,7 @@ public class Keychain {
         }
     }
 
-    public func get<T>(key: String, @noescape handler: Attributes? -> T) throws -> T {
+    public func get<T>(key: String, handler: @noescape(Attributes?) -> T) throws -> T {
         var query = options.query()
 
         query[MatchLimit] = MatchLimitOne
@@ -535,7 +535,7 @@ public class Keychain {
     // MARK:
     
     public func set(value: String, key: String) throws {
-        guard let data = value.data(using: NSUTF8StringEncoding, allowLossyConversion: false) else {
+        guard let data = value.data(using: String.Encoding.utf8, allowLossyConversion: false) else {
             throw conversionError(message: "failed to convert string to data")
         }
         try set(value: data, key: key)
@@ -726,7 +726,7 @@ public class Keychain {
         default: ()
         }
         
-        securityError(status: status)
+        let _ = securityError(status: status)
         return []
     }
     
@@ -756,7 +756,7 @@ public class Keychain {
         default: ()
         }
         
-        securityError(status: status)
+        let _ = securityError(status: status)
         return []
     }
     
@@ -926,7 +926,7 @@ public class Keychain {
         default: ()
         }
         
-        securityError(status: status)
+        let _ = securityError(status: status)
         return []
     }
     
@@ -964,7 +964,7 @@ public class Keychain {
                 item["key"] = key
             }
             if let data = attributes[ValueData] as? NSData {
-                if let text = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
+                if let text = NSString(data: data as Data, encoding: String.Encoding.utf8.rawValue) as? String {
                     item["value"] = text
                 } else  {
                     item["value"] = data
@@ -1192,7 +1192,7 @@ extension Options {
         if let policy = authenticationPolicy {
             if #available(OSX 10.10, *) {
                 var error: Unmanaged<CFError>?
-                guard let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, SecAccessControlCreateFlags(rawValue: policy.rawValue), &error) else {
+                guard let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, SecAccessControlCreateFlags(rawValue: CFOptionFlags(policy.rawValue)), &error) else {
                     if let error = error?.takeUnretainedValue() {
                         return (attributes, error.error)
                     }

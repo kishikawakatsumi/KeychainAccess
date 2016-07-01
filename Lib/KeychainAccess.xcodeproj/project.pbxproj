@@ -187,7 +187,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "kishikawa katsumi";
 				TargetAttributes = {
 					140F195B1A49D79400B0016A = {
@@ -268,6 +268,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E61BF9EDCB004FFEC1 /* Debug.xcconfig */;
 			buildSettings = {
+				GCC_NO_COMMON_BLOCKS = YES;
 			};
 			name = Debug;
 		};
@@ -275,6 +276,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E71BF9EDCB004FFEC1 /* Release.xcconfig */;
 			buildSettings = {
+				GCC_NO_COMMON_BLOCKS = YES;
 			};
 			name = Release;
 		};
@@ -289,6 +291,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
 			buildSettings = {
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -303,6 +306,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E91BF9EDE4004FFEC1 /* Tests.xcconfig */;
 			buildSettings = {
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
