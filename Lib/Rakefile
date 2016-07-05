@@ -93,9 +93,19 @@ namespace :test do
     end
   end
   
+  def branch_name
+    if ENV['CI']
+      pull_req = %[https://api.github.com/repos/#{ENV['TRAVIS_REPO_SLUG']}/pulls/#{ENV['TRAVIS_PULL_REQUEST']}]
+      auth_token = 'kishikawakatsumi:209558699492df7782fbe62dda1891d6a6ba010f'
+      (ENV['TRAVIS_PULL_REQUEST'] == 'false' ? ENV['TRAVIS_BRANCH'] : `curl -u #{auth_token} -s #{pull_req} | jq -r .head.ref`).strip
+    else
+      %x[git rev-parse --abbrev-ref HEAD]
+    end
+  end
+  
   task :carthage do
-    sh 'echo "github \"kishikawakatsumi/KeychainAccess\" \"${sha:-master}"\" > Cartfile'
-    sh 'carthage update --no-use-binaries'
+    sh %[echo 'github \"kishikawakatsumi/KeychainAccess\" \"#{branch_name}\"' > Cartfile]
+    sh %[carthage update --no-use-binaries]
   end
 end
 
