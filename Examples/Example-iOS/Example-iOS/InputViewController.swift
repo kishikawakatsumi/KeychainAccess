@@ -49,7 +49,7 @@ class InputViewController: UITableViewController {
     // MARK:
     
     @IBAction func cancelAction(sender: UIBarButtonItem) {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 
     @IBAction func saveAction(sender: UIBarButtonItem) {
@@ -61,19 +61,19 @@ class InputViewController: UITableViewController {
         }
         keychain[usernameField.text!] = passwordField.text
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func editingChanged(sender: UITextField) {
         switch (usernameField.text, passwordField.text) {
         case let (username?, password?):
-            saveButton.enabled = !username.isEmpty && !password.isEmpty
+            saveButton.isEnabled = !username.isEmpty && !password.isEmpty
         case (_?, nil):
-            saveButton.enabled = false
+            saveButton.isEnabled = false
         case (nil, _?):
-            saveButton.enabled = false
+            saveButton.isEnabled = false
         case (nil, nil):
-            saveButton.enabled = false
+            saveButton.isEnabled = false
         }
     }
 

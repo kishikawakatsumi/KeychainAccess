@@ -18,27 +18,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		14B1A52C1BE5395100005DBB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 14FDD4601B49B9AD00C39FE8;
-			remoteInfo = "KeychainAccess-watchOS";
-		};
-		14B1A52E1BE5395100005DBB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 145EEB8F1BCBEBC0001341DE;
-			remoteInfo = "KeychainAccess-tvOS";
-		};
-		14B1A5301BE5395100005DBB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 145EEB981BCBEBC0001341DE;
-			remoteInfo = "KeychainAccess-tvOSTests";
-		};
 		14DAEEC01A51E2A60070B77E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
@@ -52,20 +31,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 140F19671A49D79500B0016A;
 			remoteInfo = "KeychainAccess-iOSTests";
-		};
-		14DAEEC41A51E2A60070B77E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 140C8F0A1A4EBE3100F85556;
-			remoteInfo = "KeychainAccess-Mac";
-		};
-		14DAEEC61A51E2A60070B77E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 14DAEEB91A51E2A60070B77E /* KeychainAccess.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 140C8F141A4EBE3100F85556;
-			remoteInfo = "KeychainAccess-MacTests";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -149,12 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				14DAEEC11A51E2A60070B77E /* KeychainAccess.framework */,
-				14DAEEC31A51E2A60070B77E /* KeychainAccess-iOSTests.xctest */,
-				14DAEEC51A51E2A60070B77E /* KeychainAccess.framework */,
-				14DAEEC71A51E2A60070B77E /* KeychainAccess-MacTests.xctest */,
-				14B1A52D1BE5395100005DBB /* KeychainAccess.framework */,
-				14B1A52F1BE5395100005DBB /* KeychainAccess.framework */,
-				14B1A5311BE5395100005DBB /* KeychainAccess-tvOSTests.xctest */,
+				14DAEEC31A51E2A60070B77E /* KeychainAccessTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -187,11 +147,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "kishikawa katsumi";
 				TargetAttributes = {
 					14DAEE8F1A51E1BE0070B77E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 27AEDK3C9F;
+						DevelopmentTeamName = "Katsumi Kishikawa";
 					};
 				};
 			};
@@ -220,27 +182,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		14B1A52D1BE5395100005DBB /* KeychainAccess.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KeychainAccess.framework;
-			remoteRef = 14B1A52C1BE5395100005DBB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		14B1A52F1BE5395100005DBB /* KeychainAccess.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KeychainAccess.framework;
-			remoteRef = 14B1A52E1BE5395100005DBB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		14B1A5311BE5395100005DBB /* KeychainAccess-tvOSTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "KeychainAccess-tvOSTests.xctest";
-			remoteRef = 14B1A5301BE5395100005DBB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		14DAEEC11A51E2A60070B77E /* KeychainAccess.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -248,25 +189,11 @@
 			remoteRef = 14DAEEC01A51E2A60070B77E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		14DAEEC31A51E2A60070B77E /* KeychainAccess-iOSTests.xctest */ = {
+		14DAEEC31A51E2A60070B77E /* KeychainAccessTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "KeychainAccess-iOSTests.xctest";
+			path = KeychainAccessTests.xctest;
 			remoteRef = 14DAEEC21A51E2A60070B77E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		14DAEEC51A51E2A60070B77E /* KeychainAccess.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KeychainAccess.framework;
-			remoteRef = 14DAEEC41A51E2A60070B77E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		14DAEEC71A51E2A60070B77E /* KeychainAccess-MacTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "KeychainAccess-MacTests.xctest";
-			remoteRef = 14DAEEC61A51E2A60070B77E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -340,6 +267,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -382,6 +310,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -391,6 +320,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

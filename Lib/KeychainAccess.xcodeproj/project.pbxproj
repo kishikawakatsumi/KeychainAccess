@@ -192,9 +192,13 @@
 				TargetAttributes = {
 					140F195B1A49D79400B0016A = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = 27AEDK3C9F;
+						DevelopmentTeamName = "Katsumi Kishikawa";
+						ProvisioningStyle = Manual;
 					};
 					140F19661A49D79500B0016A = {
 						CreatedOnToolsVersion = 6.1.1;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -282,6 +286,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				PROVISIONING_PROFILE_SPECIFIER = 27AEDK3C9F/;
 			};
 			name = Debug;
 		};
@@ -289,6 +295,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				PROVISIONING_PROFILE_SPECIFIER = 27AEDK3C9F/;
 			};
 			name = Release;
 		};
@@ -296,6 +304,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E91BF9EDE4004FFEC1 /* Tests.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				PROVISIONING_PROFILE_SPECIFIER = 27AEDK3C9F/;
 			};
 			name = Debug;
 		};
@@ -303,6 +313,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E91BF9EDE4004FFEC1 /* Tests.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				PROVISIONING_PROFILE_SPECIFIER = 27AEDK3C9F/;
 			};
 			name = Release;
 		};
