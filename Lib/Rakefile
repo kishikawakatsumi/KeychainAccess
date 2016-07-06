@@ -1,8 +1,19 @@
 require 'xcjobs'
-
+  
 def destinations(platform: 'iphonesimulator')
   if platform == 'iphonesimulator'
-    [ 'name=iPhone SE,OS=10.0'
+    [ 'name=iPhone 5,OS=10.0',
+      'name=iPhone 5s,OS=10.0',
+      'name=iPhone 6,OS=10.0',
+      'name=iPhone 6 Plus,OS=10.0',
+      'name=iPhone 6s,OS=10.0',
+      'name=iPhone 6s Plus,OS=10.0',
+      'name=iPhone SE,OS=10.0',
+      'name=iPad Air,OS=10.0',
+      'name=iPad Air 2,OS=10.0',
+      'name=iPad Pro (9.7 inch),OS=10.0',
+      'name=iPad Pro (12.9 inch),OS=10.0',
+      'name=iPad Retina,OS=10.0'
     ]
   elsif platform == 'watchsimulator'
     [ 'name=Apple Watch - 38mm,OS=3.0',
@@ -73,8 +84,15 @@ namespace :test do
       t.project = 'KeychainAccess'
       t.scheme = 'KeychainAccess'
       t.sdk = platform
+      instruments_simulator_names = []
       destinations(platform: platform).each do |destination|
         t.add_destination(destination)
+        name = destination.match(%r[name=(.*),OS=([0-9.]+)])[1]
+        os = destination.match(%r[name=(.*),OS=([0-9.]+)])[2]
+        instruments_simulator_names << "#{name} (#{os})"
+      end
+      t.before_action do |out, status|
+        instruments_simulator_names.each { |simulator_name| system %[xcrun instruments -t 'Blank' -l 1 -w "#{simulator_name})"] }
       end
       t.configuration = configuration
       t.coverage = true
