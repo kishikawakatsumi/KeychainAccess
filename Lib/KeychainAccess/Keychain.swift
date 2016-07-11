@@ -568,6 +568,7 @@ public class Keychain {
             query[UseNoAuthenticationUI] = true
         }
         #elseif os(OSX)
+        query[ReturnData] = true
         if #available(OSX 10.11, *) {
             query[UseAuthenticationUI] = UseAuthenticationUIFail
         }
