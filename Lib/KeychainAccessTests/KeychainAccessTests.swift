@@ -423,7 +423,7 @@ class KeychainAccessTests: XCTestCase {
 
         let length = 256
         let data = NSMutableData(length: length)!
-        SecRandomCopyBytes(kSecRandomDefault, length, UnsafeMutablePointer<UInt8>(data.mutableBytes))
+        _ = SecRandomCopyBytes(kSecRandomDefault, length, UnsafeMutablePointer<UInt8>(data.mutableBytes))
 
         do {
             try keychain.set(data, key: "RandomData")
