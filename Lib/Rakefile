@@ -58,10 +58,6 @@ namespace :build do
       t.configuration = configuration
       t.build_dir = 'build'
       t.formatter = 'xcpretty -c'
-      if ENV['CI']
-        t.add_build_setting('CODE_SIGN_IDENTITY', '')
-        t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
-      end
     end
   end
 end
