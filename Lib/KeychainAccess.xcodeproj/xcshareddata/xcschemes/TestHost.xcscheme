@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "140F195B1A49D79400B0016A"
-               BuildableName = "KeychainAccess.framework"
-               BlueprintName = "KeychainAccess"
-               ReferencedContainer = "container:KeychainAccess.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "140F19661A49D79500B0016A"
-               BuildableName = "KeychainAccessTests.xctest"
-               BlueprintName = "KeychainAccessTests"
+               BlueprintIdentifier = "14A630141D3293C700809B3F"
+               BuildableName = "TestHost.app"
+               BlueprintName = "TestHost"
                ReferencedContainer = "container:KeychainAccess.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,23 +28,13 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "140F19661A49D79500B0016A"
-               BuildableName = "KeychainAccessTests.xctest"
-               BlueprintName = "KeychainAccessTests"
-               ReferencedContainer = "container:KeychainAccess.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "140F195B1A49D79400B0016A"
-            BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess"
+            BlueprintIdentifier = "14A630141D3293C700809B3F"
+            BuildableName = "TestHost.app"
+            BlueprintName = "TestHost"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -75,15 +51,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "140F195B1A49D79400B0016A"
-            BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess"
+            BlueprintIdentifier = "14A630141D3293C700809B3F"
+            BuildableName = "TestHost.app"
+            BlueprintName = "TestHost"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -93,15 +70,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "140F195B1A49D79400B0016A"
-            BuildableName = "KeychainAccess.framework"
-            BlueprintName = "KeychainAccess"
+            BlueprintIdentifier = "14A630141D3293C700809B3F"
+            BuildableName = "TestHost.app"
+            BlueprintName = "TestHost"
             ReferencedContainer = "container:KeychainAccess.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

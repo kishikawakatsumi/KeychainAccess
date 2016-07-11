@@ -11,6 +11,10 @@ LD_RUNPATH_SEARCH_PATHS[sdk=iphone*] = $(inherited) @executable_path/Frameworks 
 LD_RUNPATH_SEARCH_PATHS[sdk=watch*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks;
 LD_RUNPATH_SEARCH_PATHS[sdk=appletv*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks;
 
+TEST_HOST[sdk=iphone*] = $(BUILT_PRODUCTS_DIR)/TestHost.app/TestHost;
+TEST_HOST[sdk=appletv*] = $(BUILT_PRODUCTS_DIR)/TestHost.app/TestHost;
+TEST_HOST[sdk=macosx*] = $(BUILT_PRODUCTS_DIR)/TestHost.app/Contents/MacOS/TestHost;
+
 EXCLUDED_SOURCE_FILE_NAMES[sdk=macosx*] = SharedCredentialTests.swift;
 EXCLUDED_SOURCE_FILE_NAMES[sdk=watch*] = *;
 EXCLUDED_SOURCE_FILE_NAMES[sdk=appletv*] = SharedCredentialTests.swift;
