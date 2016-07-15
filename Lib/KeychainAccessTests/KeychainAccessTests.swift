@@ -19,8 +19,8 @@ class KeychainAccessTests: XCTestCase {
         do { try Keychain(service: "Twitter", accessGroup: "12ABCD3E4F.shared").removeAll() } catch {}
         do { try Keychain(service: "Twitter").removeAll() } catch {}
         
-        do { try Keychain(server: NSURL(string: "https://example.com")!, protocolType: .HTTPS).removeAll() } catch {}
-        do { try Keychain(server: NSURL(string: "https://example.com:443")!, protocolType: .HTTPS).removeAll() } catch {}
+        do { try Keychain(server: URL(string: "https://example.com")!, protocolType: .HTTPS).removeAll() } catch {}
+        do { try Keychain(server: URL(string: "https://example.com:443")!, protocolType: .HTTPS).removeAll() } catch {}
         
         do { try Keychain().removeAll() } catch {}
     }
@@ -118,7 +118,7 @@ class KeychainAccessTests: XCTestCase {
     func testInternetPassword() {
         do {
             // Add Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
             
             do { try keychain.set("kishikawa_katsumi", key: "username") } catch {}
             do { try keychain.set("password_1234", key: "password") } catch {}
@@ -132,7 +132,7 @@ class KeychainAccessTests: XCTestCase {
         
         do {
             // Update Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
             
             do { try keychain.set("katsumi_kishikawa", key: "username") } catch {}
             do { try keychain.set("1234_password", key: "password") } catch {}
@@ -146,7 +146,7 @@ class KeychainAccessTests: XCTestCase {
         
         do {
             // Remove Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
             
             do { try keychain.remove("username") } catch {}
             do { try keychain.remove("password") } catch {}
@@ -159,7 +159,7 @@ class KeychainAccessTests: XCTestCase {
     func testInternetPasswordSubscripting() {
         do {
             // Add Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
             
             keychain["username"] = "kishikawa_katsumi"
             keychain["password"] = "password_1234"
@@ -173,7 +173,7 @@ class KeychainAccessTests: XCTestCase {
         
         do {
             // Update Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
             
             keychain["username"] = "katsumi_kishikawa"
             keychain["password"] = "1234_password"
@@ -187,7 +187,7 @@ class KeychainAccessTests: XCTestCase {
         
         do {
             // Remove Keychain items
-            let keychain = Keychain(server: NSURL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
+            let keychain = Keychain(server: URL(string: "https://kishikawakatsumi.com")!, protocolType: .HTTPS)
             
             keychain["username"] = nil
             keychain["password"] = nil
@@ -225,7 +225,7 @@ class KeychainAccessTests: XCTestCase {
     
     func testInitializerWithServer() {
         let server = "https://kishikawakatsumi.com"
-        let URL = NSURL(string: server)!
+        let URL = Foundation.URL(string: server)!
 
         do {
             let keychain = Keychain(server: server, protocolType: .HTTPS)
@@ -243,7 +243,7 @@ class KeychainAccessTests: XCTestCase {
     
     func testInitializerWithServerAndAuthenticationType() {
         let server = "https://kishikawakatsumi.com"
-        let URL = NSURL(string: server)!
+        let URL = Foundation.URL(string: server)!
 
         do {
             let keychain = Keychain(server: server, protocolType: .HTTPS, authenticationType: .HTMLForm)
@@ -390,7 +390,7 @@ class KeychainAccessTests: XCTestCase {
     
     func testSetData() {
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
-        let JSONData = try! NSJSONSerialization.dataWithJSONObject(JSONObject, options: [])
+        let JSONData = try! JSONSerialization.data(withJSONObject: JSONObject, options: [])
         
         let keychain = Keychain(service: "Twitter")
         
@@ -674,7 +674,7 @@ class KeychainAccessTests: XCTestCase {
     
     func testRemoveData() {
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
-        let JSONData = try! NSJSONSerialization.dataWithJSONObject(JSONObject, options: [])
+        let JSONData = try! JSONSerialization.data(withJSONObject: JSONObject, options: [])
         
         let keychain = Keychain(service: "Twitter")
         
@@ -718,7 +718,7 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertNil(keychain[string: "password"], "removed password")
 
         let JSONObject = ["username": "kishikawakatsumi", "password": "password1234"]
-        let JSONData = try! NSJSONSerialization.dataWithJSONObject(JSONObject, options: [])
+        let JSONData = try! JSONSerialization.data(withJSONObject: JSONObject, options: [])
 
         XCTAssertNil(keychain[data:"JSONData"], "not stored JSON data")
 
