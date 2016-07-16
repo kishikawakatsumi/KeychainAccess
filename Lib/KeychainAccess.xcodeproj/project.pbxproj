@@ -270,6 +270,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E61BF9EDCB004FFEC1 /* Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGNING_REQUIRED = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 			};
 			name = Debug;
@@ -278,6 +279,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44E71BF9EDCB004FFEC1 /* Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGNING_REQUIRED = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 			};
 			name = Release;
@@ -286,6 +288,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -294,6 +297,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};
