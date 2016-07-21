@@ -459,7 +459,7 @@ class KeychainAccessTests: XCTestCase {
 
     #if os(iOS) || os(tvOS)
     func testSetAttributes() {
-        let expectation = self.expectation(withDescription: "Touch ID authentication")
+        let expectation = self.expectation(description: "Touch ID authentication")
 
         DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault).async {
             do {
@@ -526,7 +526,7 @@ class KeychainAccessTests: XCTestCase {
                 }
             }
         }
-        waitForExpectations(withTimeout: 10.0, handler: nil)
+        waitForExpectations(timeout: 10.0, handler: nil)
 
         do {
             var attributes = [String: AnyObject]()
