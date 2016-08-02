@@ -1248,9 +1248,9 @@ extension ItemClass: RawRepresentable, CustomStringConvertible {
     public init?(rawValue: String) {
         switch rawValue {
         case String(kSecClassGenericPassword):
-            self = ItemClass.genericPassword
+            self = .genericPassword
         case String(kSecClassInternetPassword):
-            self = ItemClass.internetPassword
+            self = .internetPassword
         default:
             return nil
         }
@@ -1258,18 +1258,18 @@ extension ItemClass: RawRepresentable, CustomStringConvertible {
     
     public var rawValue: String {
         switch self {
-        case ItemClass.genericPassword:
+        case .genericPassword:
             return String(kSecClassGenericPassword)
-        case ItemClass.internetPassword:
+        case .internetPassword:
             return String(kSecClassInternetPassword)
         }
     }
     
     public var description: String {
         switch self {
-        case ItemClass.genericPassword:
+        case .genericPassword:
             return "GenericPassword"
-        case ItemClass.internetPassword:
+        case .internetPassword:
             return "InternetPassword"
         }
     }
