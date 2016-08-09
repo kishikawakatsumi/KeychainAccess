@@ -461,7 +461,7 @@ class KeychainAccessTests: XCTestCase {
     func testSetAttributes() {
         let expectation = self.expectation(description: "Touch ID authentication")
 
-        DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault).async {
+        DispatchQueue.global(qos: .default).async {
             do {
                 var attributes = [String: AnyObject]()
                 attributes[String(kSecAttrDescription)] = "Description Test"
