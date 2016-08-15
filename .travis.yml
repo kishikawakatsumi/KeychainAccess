@@ -16,11 +16,18 @@ before_script:
   - openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/tvOS_Development.mobileprovision.enc -d -a -out ./Lib/Certificates/tvOS_Development.mobileprovision || true
   - ./Lib/Scripts/add_key.sh || true
 script:
-  - "(cd Lib && bundle exec rake build test:iphonesimulator test:appletvsimulator test:macosx coverage:coveralls test:carthage)"
+  - "(cd Lib && bundle exec rake $ACTION)"
 branches:
   only:
     - master
 env:
+  matrix:
+    - ACTION=build
+    - ACTION='build:carthage'
+    - ACTION='test:iphonesimulator:debug coverage:coveralls'
+    - ACTION='test:iphonesimulator:release coverage:coveralls'
+    - ACTION='test:appletvsimulator coverage:coveralls'
+    - ACTION='test:macosx coverage:coveralls'
   global:
     - LANG=en_US.UTF-8
     - LC_ALL=en_US.UTF-8
