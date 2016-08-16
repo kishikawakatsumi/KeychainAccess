@@ -54,7 +54,7 @@ class InputViewController: UITableViewController {
 
     @IBAction func saveAction(sender: UIBarButtonItem) {
         let keychain: Keychain
-        if let service = serviceField.text where !service.isEmpty {
+        if let service = serviceField.text, !service.isEmpty {
             keychain = Keychain(service: service)
         } else {
             keychain = Keychain()

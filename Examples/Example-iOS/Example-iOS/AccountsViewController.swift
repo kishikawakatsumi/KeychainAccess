@@ -27,7 +27,7 @@ import UIKit
 import KeychainAccess
 
 class AccountsViewController: UITableViewController {
-    var itemsGroupedByService: [String: [[String: AnyObject]]]?
+    var itemsGroupedByService: [String: [[String: Any]]]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,7 +101,7 @@ class AccountsViewController: UITableViewController {
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
-    
+
     // MARK:
     
     func reloadData() {
