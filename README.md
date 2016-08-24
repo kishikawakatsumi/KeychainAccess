@@ -216,7 +216,7 @@ print(attributes.label)
 print(attributes.creator)
 ```
 
-### :key: Configuration (Accessibility, Sharing, iCould Sync)
+### :key: Configuration (Accessibility, Sharing, iCloud Sync)
 
 **Provides fluent interfaces**
 
