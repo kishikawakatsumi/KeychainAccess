@@ -32,10 +32,10 @@ class AccountsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         reloadData()
         tableView.reloadData()
     }
@@ -43,9 +43,9 @@ class AccountsViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
+
     // MARK:
-    
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if itemsGroupedByService != nil {
             let services = Array(itemsGroupedByService!.keys)
@@ -53,42 +53,42 @@ class AccountsViewController: UITableViewController {
         }
         return 0
     }
-    
+
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let services = Array(itemsGroupedByService!.keys)
         let service = services[section]
-        
+
         let items = Keychain(service: service).allItems()
         return items.count
     }
-    
+
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let services = Array(itemsGroupedByService!.keys)
         return services[section]
     }
-    
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) 
-        
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+
         let services = Array(itemsGroupedByService!.keys)
         let service = services[indexPath.section]
-        
+
         let items = Keychain(service: service).allItems()
         let item = items[indexPath.row]
-        
+
         cell.textLabel?.text = item["key"] as? String
         cell.detailTextLabel?.text = item["value"] as? String
-        
+
         return cell
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         let services = Array(itemsGroupedByService!.keys)
         let service = services[indexPath.section]
-        
+
         let keychain = Keychain(service: service)
         let items = keychain.allItems()
-        
+
         let item = items[indexPath.row]
         let key = item["key"] as! String
         

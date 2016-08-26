@@ -30,14 +30,14 @@ class InputViewController: UITableViewController {
 
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
-    
+
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var serviceField: UITextField!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.rowHeight = 44.0
         tableView.estimatedRowHeight = 44.0
     }
@@ -45,9 +45,9 @@ class InputViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
+
     // MARK:
-    
+
     @IBAction func cancelAction(sender: UIBarButtonItem) {
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -63,7 +63,7 @@ class InputViewController: UITableViewController {
         
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
+
     @IBAction func editingChanged(sender: UITextField) {
         switch (usernameField.text, passwordField.text) {
         case let (username?, password?):
