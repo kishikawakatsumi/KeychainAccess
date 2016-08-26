@@ -80,141 +80,141 @@ public enum AuthenticationType {
 
 public enum Accessibility {
     /**
-    Item data can only be accessed
-    while the device is unlocked. This is recommended for items that only
-    need be accesible while the application is in the foreground. Items
-    with this attribute will migrate to a new device when using encrypted
-    backups.
-    */
+     Item data can only be accessed
+     while the device is unlocked. This is recommended for items that only
+     need be accesible while the application is in the foreground. Items
+     with this attribute will migrate to a new device when using encrypted
+     backups.
+     */
     case WhenUnlocked
 
     /**
-    Item data can only be
-    accessed once the device has been unlocked after a restart. This is
-    recommended for items that need to be accesible by background
-    applications. Items with this attribute will migrate to a new device
-    when using encrypted backups.
-    */
+     Item data can only be
+     accessed once the device has been unlocked after a restart. This is
+     recommended for items that need to be accesible by background
+     applications. Items with this attribute will migrate to a new device
+     when using encrypted backups.
+     */
     case AfterFirstUnlock
 
     /**
-    Item data can always be accessed
-    regardless of the lock state of the device. This is not recommended
-    for anything except system use. Items with this attribute will migrate
-    to a new device when using encrypted backups.
-    */
+     Item data can always be accessed
+     regardless of the lock state of the device. This is not recommended
+     for anything except system use. Items with this attribute will migrate
+     to a new device when using encrypted backups.
+     */
     case Always
 
     /**
-    Item data can
-    only be accessed while the device is unlocked. This class is only
-    available if a passcode is set on the device. This is recommended for
-    items that only need to be accessible while the application is in the
-    foreground. Items with this attribute will never migrate to a new
-    device, so after a backup is restored to a new device, these items
-    will be missing. No items can be stored in this class on devices
-    without a passcode. Disabling the device passcode will cause all
-    items in this class to be deleted.
-    */
+     Item data can
+     only be accessed while the device is unlocked. This class is only
+     available if a passcode is set on the device. This is recommended for
+     items that only need to be accessible while the application is in the
+     foreground. Items with this attribute will never migrate to a new
+     device, so after a backup is restored to a new device, these items
+     will be missing. No items can be stored in this class on devices
+     without a passcode. Disabling the device passcode will cause all
+     items in this class to be deleted.
+     */
     @available(iOS 8.0, OSX 10.10, *)
     case WhenPasscodeSetThisDeviceOnly
 
     /**
-    Item data can only
-    be accessed while the device is unlocked. This is recommended for items
-    that only need be accesible while the application is in the foreground.
-    Items with this attribute will never migrate to a new device, so after
-    a backup is restored to a new device, these items will be missing.
-    */
+     Item data can only
+     be accessed while the device is unlocked. This is recommended for items
+     that only need be accesible while the application is in the foreground.
+     Items with this attribute will never migrate to a new device, so after
+     a backup is restored to a new device, these items will be missing.
+     */
     case WhenUnlockedThisDeviceOnly
 
     /**
-    Item data can
-    only be accessed once the device has been unlocked after a restart.
-    This is recommended for items that need to be accessible by background
-    applications. Items with this attribute will never migrate to a new
-    device, so after a backup is restored to a new device these items will
-    be missing.
-    */
+     Item data can
+     only be accessed once the device has been unlocked after a restart.
+     This is recommended for items that need to be accessible by background
+     applications. Items with this attribute will never migrate to a new
+     device, so after a backup is restored to a new device these items will
+     be missing.
+     */
     case AfterFirstUnlockThisDeviceOnly
 
     /**
-    Item data can always
-    be accessed regardless of the lock state of the device. This option
-    is not recommended for anything except system use. Items with this
-    attribute will never migrate to a new device, so after a backup is
-    restored to a new device, these items will be missing.
-    */
+     Item data can always
+     be accessed regardless of the lock state of the device. This option
+     is not recommended for anything except system use. Items with this
+     attribute will never migrate to a new device, so after a backup is
+     restored to a new device, these items will be missing.
+     */
     case AlwaysThisDeviceOnly
 }
 
 public struct AuthenticationPolicy: OptionSetType {
     /**
-    User presence policy using Touch ID or Passcode. Touch ID does not 
-    have to be available or enrolled. Item is still accessible by Touch ID
-    even if fingers are added or removed.
-    */
+     User presence policy using Touch ID or Passcode. Touch ID does not
+     have to be available or enrolled. Item is still accessible by Touch ID
+     even if fingers are added or removed.
+     */
     @available(iOS 8.0, OSX 10.10, *)
     @available(watchOS, unavailable)
     public static let UserPresence = AuthenticationPolicy(rawValue: 1 << 0)
 
     /**
-    Constraint: Touch ID (any finger). Touch ID must be available and 
-    at least one finger must be enrolled. Item is still accessible by 
-    Touch ID even if fingers are added or removed.
-    */
+     Constraint: Touch ID (any finger). Touch ID must be available and
+     at least one finger must be enrolled. Item is still accessible by
+     Touch ID even if fingers are added or removed.
+     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
     public static let TouchIDAny = AuthenticationPolicy(rawValue: 1 << 1)
 
     /**
-    Constraint: Touch ID from the set of currently enrolled fingers. 
-    Touch ID must be available and at least one finger must be enrolled. 
-    When fingers are added or removed, the item is invalidated.
-    */
+     Constraint: Touch ID from the set of currently enrolled fingers.
+     Touch ID must be available and at least one finger must be enrolled.
+     When fingers are added or removed, the item is invalidated.
+     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
     public static let TouchIDCurrentSet = AuthenticationPolicy(rawValue: 1 << 3)
 
     /**
-    Constraint: Device passcode
-    */
+     Constraint: Device passcode
+     */
     @available(iOS 9.0, OSX 10.11, *)
     @available(watchOS, unavailable)
     public static let DevicePasscode = AuthenticationPolicy(rawValue: 1 << 4)
 
     /**
-    Constraint logic operation: when using more than one constraint, 
-    at least one of them must be satisfied.
-    */
+     Constraint logic operation: when using more than one constraint,
+     at least one of them must be satisfied.
+     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
     public static let Or = AuthenticationPolicy(rawValue: 1 << 14)
 
     /**
-    Constraint logic operation: when using more than one constraint,
-    all must be satisfied.
-    */
+     Constraint logic operation: when using more than one constraint,
+     all must be satisfied.
+     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
     public static let And = AuthenticationPolicy(rawValue: 1 << 15)
 
     /**
-    Create access control for private key operations (i.e. sign operation)
-    */
+     Create access control for private key operations (i.e. sign operation)
+     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
     public static let PrivateKeyUsage = AuthenticationPolicy(rawValue: 1 << 30)
 
     /**
-    Security: Application provided password for data encryption key generation.
-    This is not a constraint but additional item encryption mechanism.
-    */
+     Security: Application provided password for data encryption key generation.
+     This is not a constraint but additional item encryption mechanism.
+     */
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
@@ -382,9 +382,9 @@ public class Keychain {
     }
 
     private let options: Options
-    
+
     // MARK:
-    
+
     public convenience init() {
         var options = Options()
         if let bundleIdentifier = NSBundle.mainBundle().bundleIdentifier {
@@ -557,7 +557,7 @@ public class Keychain {
         }
         try set(data, key: key)
     }
-    
+
     public func set(value: NSData, key: String) throws {
         var query = options.query()
         query[AttributeAccount] = key
@@ -912,9 +912,9 @@ public class Keychain {
 
     #if os(iOS)
     /**
-    @abstract Returns a randomly generated password.
-    @return String password in the form xxx-xxx-xxx-xxx where x is taken from the sets "abcdefghkmnopqrstuvwxy", "ABCDEFGHJKLMNPQRSTUVWXYZ", "3456789" with at least one character from each set being present.
-    */
+     @abstract Returns a randomly generated password.
+     @return String password in the form xxx-xxx-xxx-xxx where x is taken from the sets "abcdefghkmnopqrstuvwxy", "ABCDEFGHJKLMNPQRSTUVWXYZ", "3456789" with at least one character from each set being present.
+     */
     @available(iOS 8.0, *)
     public class func generatePassword() -> String {
         return SecCreateSharedWebCredentialPassword()! as String
