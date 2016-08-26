@@ -789,7 +789,7 @@ class KeychainAccessTests: XCTestCase {
         } catch {
             XCTFail("error occurred")
         }
-        
+
         do {
             // Add Keychain items
             let keychain = Keychain(service: "Twitter")
@@ -1405,31 +1405,31 @@ class KeychainAccessTests: XCTestCase {
 
             var error: Unmanaged<CFError>?
             let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
-            
+
             XCTAssertNil(error)
             XCTAssertNotNil(accessControl)
         }
         do {
             let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
-            
+
             let policy: AuthenticationPolicy = [.TouchIDAny, .Or, .DevicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
-            
+
             var error: Unmanaged<CFError>?
             let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
-            
+
             XCTAssertNil(error)
             XCTAssertNotNil(accessControl)
         }
         do {
             let accessibility: Accessibility = .WhenPasscodeSetThisDeviceOnly
-            
+
             let policy: AuthenticationPolicy = [.TouchIDAny, .And, .DevicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
-            
+
             var error: Unmanaged<CFError>?
             let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue, flags, &error)
-            
+
             XCTAssertNil(error)
             XCTAssertNotNil(accessControl)
         }
