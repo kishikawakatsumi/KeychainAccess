@@ -47,7 +47,7 @@ class KeychainAccessTests: XCTestCase {
     }
 
     // MARK:
-    
+
     func testGenericPassword() {
         do {
             // Add Keychain items

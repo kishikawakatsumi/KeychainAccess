@@ -58,7 +58,7 @@ try! keychain.remove("kishikawakatsumi")
 
 /****************
  * Error handling
-*****************/
+ ****************/
 
 /* set */
 do {
