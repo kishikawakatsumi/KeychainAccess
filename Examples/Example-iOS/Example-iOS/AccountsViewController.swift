@@ -81,7 +81,7 @@ class AccountsViewController: UITableViewController {
 
         return cell
     }
-    
+
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         let services = Array(itemsGroupedByService!.keys)
         let service = services[indexPath.section]
@@ -91,9 +91,9 @@ class AccountsViewController: UITableViewController {
 
         let item = items[indexPath.row]
         let key = item["key"] as! String
-        
+
         keychain[key] = nil
-        
+
         if items.count == 1 {
             reloadData()
             tableView.deleteSections(NSIndexSet(index: indexPath.section), withRowAnimation: .Automatic)
@@ -101,9 +101,9 @@ class AccountsViewController: UITableViewController {
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         }
     }
-    
+
     // MARK:
-    
+
     func reloadData() {
         let items = Keychain.allItems(.GenericPassword)
         itemsGroupedByService = groupBy(items) { item -> String in

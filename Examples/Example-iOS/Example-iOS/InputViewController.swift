@@ -60,7 +60,7 @@ class InputViewController: UITableViewController {
             keychain = Keychain()
         }
         keychain[usernameField.text!] = passwordField.text
-        
+
         dismissViewControllerAnimated(true, completion: nil)
     }
 

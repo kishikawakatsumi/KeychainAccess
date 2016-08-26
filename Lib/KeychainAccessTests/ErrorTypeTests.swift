@@ -27,7 +27,7 @@ import XCTest
 import KeychainAccess
 
 class ErrorTypeTests: XCTestCase {
-    
+
     override func setUp() {
         super.setUp()
     }
@@ -35,7 +35,7 @@ class ErrorTypeTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
     }
-    
+
     func testErrorType() {
         do {
             let status = Status(rawValue: errSecSuccess)

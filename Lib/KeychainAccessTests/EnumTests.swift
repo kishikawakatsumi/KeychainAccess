@@ -27,15 +27,15 @@ import XCTest
 import KeychainAccess
 
 class EnumTests: XCTestCase {
-    
+
     override func setUp() {
         super.setUp()
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }
-    
+
     func testItemClass() {
         do {
             let itemClass = ItemClass(rawValue: kSecClassGenericPassword as String)

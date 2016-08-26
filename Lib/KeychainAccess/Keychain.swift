@@ -332,27 +332,27 @@ public class Keychain {
     public var itemClass: ItemClass {
         return options.itemClass
     }
-    
+
     public var service: String {
         return options.service
     }
-    
+
     public var accessGroup: String? {
         return options.accessGroup
     }
-    
+
     public var server: NSURL {
         return options.server
     }
-    
+
     public var protocolType: ProtocolType {
         return options.protocolType
     }
-    
+
     public var authenticationType: AuthenticationType {
         return options.authenticationType
     }
-    
+
     public var accessibility: Accessibility {
         return options.accessibility
     }
@@ -362,15 +362,15 @@ public class Keychain {
     public var authenticationPolicy: AuthenticationPolicy? {
         return options.authenticationPolicy
     }
-    
+
     public var synchronizable: Bool {
         return options.synchronizable
     }
-    
+
     public var label: String? {
         return options.label
     }
-    
+
     public var comment: String? {
         return options.comment
     }
@@ -380,7 +380,7 @@ public class Keychain {
     public var authenticationPrompt: String? {
         return options.authenticationPrompt
     }
-    
+
     private let options: Options
     
     // MARK:
@@ -392,13 +392,13 @@ public class Keychain {
         }
         self.init(options)
     }
-    
+
     public convenience init(service: String) {
         var options = Options()
         options.service = service
         self.init(options)
     }
-    
+
     public convenience init(accessGroup: String) {
         var options = Options()
         if let bundleIdentifier = NSBundle.mainBundle().bundleIdentifier {
@@ -407,18 +407,18 @@ public class Keychain {
         options.accessGroup = accessGroup
         self.init(options)
     }
-    
+
     public convenience init(service: String, accessGroup: String) {
         var options = Options()
         options.service = service
         options.accessGroup = accessGroup
         self.init(options)
     }
-    
+
     public convenience init(server: String, protocolType: ProtocolType, authenticationType: AuthenticationType = .Default) {
         self.init(server: NSURL(string: server)!, protocolType: protocolType, authenticationType: authenticationType)
     }
-    
+
     public convenience init(server: NSURL, protocolType: ProtocolType, authenticationType: AuthenticationType = .Default) {
         var options = Options()
         options.itemClass = .InternetPassword
@@ -427,13 +427,13 @@ public class Keychain {
         options.authenticationType = authenticationType
         self.init(options)
     }
-    
+
     private init(_ opts: Options) {
         options = opts
     }
-    
+
     // MARK:
-    
+
     public func accessibility(accessibility: Accessibility) -> Keychain {
         var options = self.options
         options.accessibility = accessibility
@@ -448,19 +448,19 @@ public class Keychain {
         options.authenticationPolicy = authenticationPolicy
         return Keychain(options)
     }
-    
+
     public func synchronizable(synchronizable: Bool) -> Keychain {
         var options = self.options
         options.synchronizable = synchronizable
         return Keychain(options)
     }
-    
+
     public func label(label: String) -> Keychain {
         var options = self.options
         options.label = label
         return Keychain(options)
     }
-    
+
     public func comment(comment: String) -> Keychain {
         var options = self.options
         options.comment = comment
@@ -480,13 +480,13 @@ public class Keychain {
         options.authenticationPrompt = authenticationPrompt
         return Keychain(options)
     }
-    
+
     // MARK:
-    
+
     public func get(key: String) throws -> String? {
         return try getString(key)
     }
-    
+
     public func getString(key: String) throws -> String? {
         guard let data = try getData(key) else  {
             return nil
@@ -550,7 +550,7 @@ public class Keychain {
     }
 
     // MARK:
-    
+
     public func set(value: String, key: String) throws {
         guard let data = value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) else {
             throw conversionError(message: "failed to convert string to data")
@@ -673,37 +673,37 @@ public class Keychain {
             return (try? get(key) { $0 }).flatMap { $0 }
         }
     }
-    
+
     // MARK:
-    
+
     public func remove(key: String) throws {
         var query = options.query()
         query[AttributeAccount] = key
-        
+
         let status = SecItemDelete(query)
         if status != errSecSuccess && status != errSecItemNotFound {
             throw securityError(status: status)
         }
     }
-    
+
     public func removeAll() throws {
         var query = options.query()
         #if !os(iOS) && !os(watchOS) && !os(tvOS)
         query[MatchLimit] = MatchLimitAll
         #endif
-        
+
         let status = SecItemDelete(query)
         if status != errSecSuccess && status != errSecItemNotFound {
             throw securityError(status: status)
         }
     }
-    
+
     // MARK:
-    
+
     public func contains(key: String) throws -> Bool {
         var query = options.query()
         query[AttributeAccount] = key
-        
+
         let status = SecItemCopyMatching(query, nil)
         switch status {
         case errSecSuccess:
@@ -714,19 +714,19 @@ public class Keychain {
             throw securityError(status: status)
         }
     }
-    
+
     // MARK:
-    
+
     public class func allKeys(itemClass: ItemClass) -> [(String, String)] {
         var query = [String: AnyObject]()
         query[Class] = itemClass.rawValue
         query[AttributeSynchronizable] = SynchronizableAny
         query[MatchLimit] = MatchLimitAll
         query[ReturnAttributes] = true
-        
+
         var result: AnyObject?
         let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
-        
+
         switch status {
         case errSecSuccess:
             if let items = result as? [[String: AnyObject]] {
@@ -743,15 +743,15 @@ public class Keychain {
             return []
         default: ()
         }
-        
+
         securityError(status: status)
         return []
     }
-    
+
     public func allKeys() -> [String] {
         return self.dynamicType.prettify(itemClass: itemClass, items: items()).map { $0["key"] as! String }
     }
-    
+
     public class func allItems(itemClass: ItemClass) -> [[String: AnyObject]] {
         var query = [String: AnyObject]()
         query[Class] = itemClass.rawValue
@@ -760,10 +760,10 @@ public class Keychain {
         #if os(iOS) || os(watchOS) || os(tvOS)
         query[ReturnData] = true
         #endif
-        
+
         var result: AnyObject?
         let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
-        
+
         switch status {
         case errSecSuccess:
             if let items = result as? [[String: AnyObject]] {
@@ -773,15 +773,15 @@ public class Keychain {
             return []
         default: ()
         }
-        
+
         securityError(status: status)
         return []
     }
-    
+
     public func allItems() -> [[String: AnyObject]] {
         return self.dynamicType.prettify(itemClass: itemClass, items: items())
     }
-    
+
     #if os(iOS)
     @available(iOS 8.0, *)
     public func getSharedPassword(completion: (account: String?, password: String?, error: NSError?) -> () = { account, password, error -> () in }) {
@@ -920,9 +920,9 @@ public class Keychain {
         return SecCreateSharedWebCredentialPassword()! as String
     }
     #endif
-    
+
     // MARK:
-    
+
     private func items() -> [[String: AnyObject]] {
         var query = options.query()
         query[MatchLimit] = MatchLimitAll
@@ -930,10 +930,10 @@ public class Keychain {
         #if os(iOS) || os(watchOS) || os(tvOS)
         query[ReturnData] = true
         #endif
-        
+
         var result: AnyObject?
         let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
-        
+
         switch status {
         case errSecSuccess:
             if let items = result as? [[String: AnyObject]] {
@@ -943,17 +943,17 @@ public class Keychain {
             return []
         default: ()
         }
-        
+
         securityError(status: status)
         return []
     }
-    
+
     private class func prettify(itemClass itemClass: ItemClass, items: [[String: AnyObject]]) -> [[String: AnyObject]] {
         let items = items.map { attributes -> [String: AnyObject] in
             var item = [String: AnyObject]()
-            
+
             item["class"] = itemClass.description
-            
+
             switch itemClass {
             case .GenericPassword:
                 if let service = attributes[AttributeService] as? String {
@@ -977,7 +977,7 @@ public class Keychain {
                     }
                 }
             }
-            
+
             if let key = attributes[AttributeAccount] as? String {
                 item["key"] = key
             }
@@ -988,7 +988,7 @@ public class Keychain {
                     item["value"] = data
                 }
             }
-            
+
             if let accessible = attributes[AttributeAccessible] as? String {
                 if let accessibility = Accessibility(rawValue: accessible) {
                     item["accessibility"] = accessibility.description
@@ -1002,29 +1002,29 @@ public class Keychain {
         }
         return items
     }
-    
+
     // MARK:
-    
+
     private class func conversionError(message message: String) -> NSError {
         let error = NSError(domain: KeychainAccessErrorDomain, code: Int(Status.ConversionError.rawValue), userInfo: [NSLocalizedDescriptionKey: message])
         print("error:[\(error.code)] \(error.localizedDescription)")
-        
+
         return error
     }
-    
+
     private func conversionError(message message: String) -> NSError {
         return self.dynamicType.conversionError(message: message)
     }
-    
+
     private class func securityError(status status: OSStatus) -> NSError {
         let message = Status(status: status).description
-        
+
         let error = NSError(domain: KeychainAccessErrorDomain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
         print("OSStatus error:[\(error.code)] \(error.localizedDescription)")
-        
+
         return error
     }
-    
+
     private func securityError(status status: OSStatus) -> NSError {
         return self.dynamicType.securityError(status: status)
     }
@@ -1032,22 +1032,22 @@ public class Keychain {
 
 struct Options {
     var itemClass: ItemClass = .GenericPassword
-    
+
     var service: String = ""
     var accessGroup: String? = nil
-    
+
     var server: NSURL!
     var protocolType: ProtocolType!
     var authenticationType: AuthenticationType = .Default
-    
+
     var accessibility: Accessibility = .AfterFirstUnlock
     var authenticationPolicy: AuthenticationPolicy?
-    
+
     var synchronizable: Bool = false
-    
+
     var label: String?
     var comment: String?
-    
+
     var authenticationPrompt: String?
 
     var attributes = [String: AnyObject]()
@@ -1149,20 +1149,20 @@ extension Keychain: CustomStringConvertible, CustomDebugStringConvertible {
         description += "]"
         return description
     }
-    
+
     public var debugDescription: String {
         return "\(items())"
     }
 }
 
 extension Options {
-    
+
     func query() -> [String: AnyObject] {
         var query = [String: AnyObject]()
-        
+
         query[Class] = itemClass.rawValue
         query[AttributeSynchronizable] = SynchronizableAny
-        
+
         switch itemClass {
         case .GenericPassword:
             query[AttributeService] = service
@@ -1184,22 +1184,22 @@ extension Options {
                 query[UseOperationPrompt] = authenticationPrompt
             }
         }
-        
+
         return query
     }
-    
+
     func attributes(key key: String?, value: NSData) -> ([String: AnyObject], NSError?) {
         var attributes: [String: AnyObject]
-        
+
         if key != nil {
             attributes = query()
             attributes[AttributeAccount] = key
         } else {
             attributes = [String: AnyObject]()
         }
-        
+
         attributes[ValueData] = value
-        
+
         if label != nil {
             attributes[AttributeLabel] = label
         }
@@ -1224,9 +1224,9 @@ extension Options {
         } else {
             attributes[AttributeAccessible] = accessibility.rawValue
         }
-        
+
         attributes[AttributeSynchronizable] = synchronizable
-        
+
         return (attributes, nil)
     }
 }
@@ -1244,7 +1244,7 @@ extension Attributes: CustomStringConvertible, CustomDebugStringConvertible {
 }
 
 extension ItemClass: RawRepresentable, CustomStringConvertible {
-    
+
     public init?(rawValue: String) {
         switch rawValue {
         case String(kSecClassGenericPassword):
@@ -1255,7 +1255,7 @@ extension ItemClass: RawRepresentable, CustomStringConvertible {
             return nil
         }
     }
-    
+
     public var rawValue: String {
         switch self {
         case GenericPassword:
@@ -1264,7 +1264,7 @@ extension ItemClass: RawRepresentable, CustomStringConvertible {
             return String(kSecClassInternetPassword)
         }
     }
-    
+
     public var description: String {
         switch self {
         case GenericPassword:
@@ -1276,7 +1276,7 @@ extension ItemClass: RawRepresentable, CustomStringConvertible {
 }
 
 extension ProtocolType: RawRepresentable, CustomStringConvertible {
-    
+
     public init?(rawValue: String) {
         switch rawValue {
         case String(kSecAttrProtocolFTP):
@@ -1345,7 +1345,7 @@ extension ProtocolType: RawRepresentable, CustomStringConvertible {
             return nil
         }
     }
-    
+
     public var rawValue: String {
         switch self {
         case FTP:
@@ -1412,7 +1412,7 @@ extension ProtocolType: RawRepresentable, CustomStringConvertible {
             return String(kSecAttrProtocolPOP3S)
         }
     }
-    
+
     public var description: String {
         switch self {
         case FTP:
@@ -1482,7 +1482,7 @@ extension ProtocolType: RawRepresentable, CustomStringConvertible {
 }
 
 extension AuthenticationType: RawRepresentable, CustomStringConvertible {
-    
+
     public init?(rawValue: String) {
         switch rawValue {
         case String(kSecAttrAuthenticationTypeNTLM):
@@ -1505,7 +1505,7 @@ extension AuthenticationType: RawRepresentable, CustomStringConvertible {
             return nil
         }
     }
-    
+
     public var rawValue: String {
         switch self {
         case NTLM:
@@ -1526,7 +1526,7 @@ extension AuthenticationType: RawRepresentable, CustomStringConvertible {
             return String(kSecAttrAuthenticationTypeDefault)
         }
     }
-    
+
     public var description: String {
         switch self {
         case NTLM:
@@ -1550,7 +1550,7 @@ extension AuthenticationType: RawRepresentable, CustomStringConvertible {
 }
 
 extension Accessibility: RawRepresentable, CustomStringConvertible {
-    
+
     public init?(rawValue: String) {
         if #available(OSX 10.10, *) {
             switch rawValue {
@@ -1613,7 +1613,7 @@ extension Accessibility: RawRepresentable, CustomStringConvertible {
             return String(kSecAttrAccessibleAlwaysThisDeviceOnly)
         }
     }
-    
+
     public var description: String {
         switch self {
         case WhenUnlocked:
@@ -1639,7 +1639,7 @@ extension CFError {
         let domain = CFErrorGetDomain(self) as String
         let code = CFErrorGetCode(self)
         let userInfo = CFErrorCopyUserInfo(self) as [NSObject: AnyObject]
-        
+
         return NSError(domain: domain, code: code, userInfo: userInfo)
     }
 }
@@ -2051,7 +2051,7 @@ public enum Status: OSStatus, ErrorType {
 }
 
 extension Status: RawRepresentable, CustomStringConvertible {
-    
+
     public init(status: OSStatus) {
         if let mappedStatus = Status(rawValue: status) {
             self = mappedStatus
@@ -2059,7 +2059,7 @@ extension Status: RawRepresentable, CustomStringConvertible {
             self = .UnexpectedError
         }
     }
-    
+
     public var description: String {
         switch self {
         case Success:
