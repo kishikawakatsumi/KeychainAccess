@@ -9,12 +9,13 @@ CLANG_MODULES_AUTOLINK = NO;
 ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 
-PRODUCT_BUNDLE_IDENTIFIER = com.kishikawakatsumi.TestHost;
+PRODUCT_BUNDLE_IDENTIFIER = com.kishikawakatsumi.KeychainAccess.TestHost;
 
-CODE_SIGNING_REQUIRED[sdk=macosx*] = NO;
 CODE_SIGN_ENTITLEMENTS = TestHost/TestHost.entitlements;
-PROVISIONING_PROFILE[sdk=iphone*] = ;
-PROVISIONING_PROFILE[sdk=appletv*] = ;
+PROVISIONING_PROFILE_SPECIFIER[sdk=iphone*] = iOS Development;
+
+CODE_SIGN_IDENTITY[sdk=macosx*] = Developer ID Application
+PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*] = KeychainAccess Tests
 OTHER_CODE_SIGN_FLAGS[sdk=macosx*] = --deep;
 
 PRINCIPAL_CLASS[sdk=iphone*] = UIApplication;
