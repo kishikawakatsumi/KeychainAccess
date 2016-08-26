@@ -2,24 +2,21 @@ require 'xcjobs'
 
 def destinations(platform: 'iphonesimulator')
   if platform == 'iphonesimulator'
-    [ 'name=iPad 2,OS=8.1',
-      'name=iPad Air,OS=8.1',
-      'name=iPhone 4s,OS=8.1',
-      'name=iPhone 5,OS=8.1',
-      'name=iPhone 5s,OS=8.1',
-      'name=iPhone 6,OS=8.1',
-      'name=iPhone 6 Plus,OS=8.1',
-      'name=iPhone 6,OS=9.0',
-      'name=iPhone 6 Plus,OS=9.0',
-      'name=iPhone 6,OS=9.1',
-      'name=iPhone 6 Plus,OS=9.1'
+    [ 'name=iPhone 5,OS=10.0',
+      'name=iPhone 5s,OS=10.0',
+      'name=iPhone 6,OS=10.0',
+      'name=iPhone 6s Plus,OS=10.0',
+      'name=iPhone SE,OS=10.0',
+      'name=iPad Air 2,OS=10.0',
+      'name=iPad Pro (9.7 inch),OS=10.0',
+      'name=iPad Pro (12.9 inch),OS=10.0'
     ]
   elsif platform == 'watchsimulator'
-    [ 'name=Apple Watch - 38mm,OS=2.0',
-      'name=Apple Watch - 42mm,OS=2.0'
+    [ 'name=Apple Watch - 38mm,OS=3.0',
+      'name=Apple Watch - 42mm,OS=3.0'
     ]
   elsif platform == 'appletvsimulator'
-    [ 'name=Apple TV 1080p,OS=9.0'
+    [ 'name=Apple TV 1080p,OS=10.0'
     ]
   else
     []
@@ -49,11 +46,11 @@ namespace :build do
       t.scheme = 'KeychainAccess'
       t.sdk = platform
       if platform == 'iphonesimulator'
-        t.add_destination('name=iPhone 6,OS=9.1')
+        t.add_destination('name=iPhone 6,OS=10.0')
       elsif platform == 'watchsimulator'
-        t.add_destination('name=Apple Watch - 42mm,OS=2.0')
+        t.add_destination('name=Apple Watch - 42mm,OS=3.0')
       elsif platform == 'appletvsimulator'
-        t.add_destination('name=Apple TV 1080p,OS=9.0')
+        t.add_destination('name=Apple TV 1080p,OS=10.0')
       end
       t.configuration = configuration
       t.build_dir = 'build'
