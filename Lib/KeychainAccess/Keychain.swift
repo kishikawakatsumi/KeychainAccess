@@ -514,7 +514,7 @@ public class Keychain {
         query[AttributeAccount] = key
 
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+        let status = SecItemCopyMatching(query, &result)
 
         switch status {
         case errSecSuccess:
@@ -542,7 +542,7 @@ public class Keychain {
         query[AttributeAccount] = key
 
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+        let status = SecItemCopyMatching(query, &result)
 
         switch status {
         case errSecSuccess:
@@ -733,7 +733,7 @@ public class Keychain {
         query[ReturnAttributes] = true
 
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+        let status = SecItemCopyMatching(query, &result)
 
         switch status {
         case errSecSuccess:
@@ -770,7 +770,7 @@ public class Keychain {
         #endif
 
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+        let status = SecItemCopyMatching(query, &result)
 
         switch status {
         case errSecSuccess:
@@ -940,7 +940,7 @@ public class Keychain {
         #endif
 
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+        let status = SecItemCopyMatching(query, &result)
 
         switch status {
         case errSecSuccess:
