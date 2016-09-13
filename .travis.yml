@@ -1,6 +1,4 @@
 language: objective-c
-osx_image: xcode8
-rvm: 2.3.1
 cache:
   directories:
     - Lib/vendor/bundle
@@ -23,14 +21,33 @@ branches:
   only:
     - master
     - swift-2.3
+matrix:
+  include:
+    - osx_image: xcode8
+      env: ACTION=build
+    - osx_image: xcode8
+      env: ACTION='build:carthage'
+    - osx_image: xcode8
+      env: ACTION='test:iphonesimulator:debug coverage:coveralls'
+    - osx_image: xcode8
+      env: ACTION='test:iphonesimulator:release coverage:coveralls'
+    - osx_image: xcode8
+      env: ACTION='test:appletvsimulator coverage:coveralls'
+    - osx_image: xcode8
+      env: ACTION='test:macosx coverage:coveralls'
+    - osx_image: xcode7.3
+      env: ACTION=build
+    - osx_image: xcode7.3
+      env: ACTION='build:carthage'
+    - osx_image: xcode7.3
+      env: ACTION='test:iphonesimulator:debug coverage:coveralls'
+    - osx_image: xcode7.3
+      env: ACTION='test:iphonesimulator:release coverage:coveralls'
+    - osx_image: xcode7.3
+      env: ACTION='test:appletvsimulator coverage:coveralls'
+    - osx_image: xcode7.3
+      env: ACTION='test:macosx coverage:coveralls'
 env:
-  matrix:
-    - ACTION=build
-    - ACTION='build:carthage'
-    - ACTION='test:iphonesimulator:debug coverage:coveralls'
-    - ACTION='test:iphonesimulator:release coverage:coveralls'
-    - ACTION='test:appletvsimulator coverage:coveralls'
-    - ACTION='test:macosx coverage:coveralls'
   global:
     - LANG=en_US.UTF-8
     - LC_ALL=en_US.UTF-8
