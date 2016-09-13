@@ -30,4 +30,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files = 'Lib/KeychainAccess/*.swift'
+
+  s.pod_target_xcconfig = { "SWIFT_VERSION" => "2.3" }
 end
