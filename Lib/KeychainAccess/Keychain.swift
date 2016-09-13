@@ -220,11 +220,19 @@ public struct AuthenticationPolicy: OptionSetType {
     @available(watchOS, unavailable)
     public static let ApplicationPassword = AuthenticationPolicy(rawValue: 1 << 31)
 
+    #if swift(>=2.3)
+    public let rawValue: UInt
+
+    public init(rawValue: UInt) {
+        self.rawValue = rawValue
+    }
+    #else
     public let rawValue: Int
 
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
+    #endif
 }
 
 public struct Attributes {
@@ -506,7 +514,7 @@ public class Keychain {
         query[AttributeAccount] = key
 
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+        let status = SecItemCopyMatching(query, &result)
 
         switch status {
         case errSecSuccess:
@@ -534,7 +542,7 @@ public class Keychain {
         query[AttributeAccount] = key
 
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+        let status = SecItemCopyMatching(query, &result)
 
         switch status {
         case errSecSuccess:
@@ -725,7 +733,7 @@ public class Keychain {
         query[ReturnAttributes] = true
 
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+        let status = SecItemCopyMatching(query, &result)
 
         switch status {
         case errSecSuccess:
@@ -762,7 +770,7 @@ public class Keychain {
         #endif
 
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+        let status = SecItemCopyMatching(query, &result)
 
         switch status {
         case errSecSuccess:
@@ -932,7 +940,7 @@ public class Keychain {
         #endif
 
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, UnsafeMutablePointer($0)) }
+        let status = SecItemCopyMatching(query, &result)
 
         switch status {
         case errSecSuccess:
