@@ -55,6 +55,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		145652E11D898BB9006E8D0E /* Example-iOS.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "Example-iOS.entitlements"; sourceTree = "<group>"; };
 		14DAEE901A51E1BE0070B77E /* Example-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14DAEE941A51E1BE0070B77E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14DAEE951A51E1BE0070B77E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -113,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				14DAEE941A51E1BE0070B77E /* Info.plist */,
+				145652E11D898BB9006E8D0E /* Example-iOS.entitlements */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -277,6 +279,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "Example-iOS/Example-iOS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -301,7 +304,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -324,6 +327,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "Example-iOS/Example-iOS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -340,7 +344,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

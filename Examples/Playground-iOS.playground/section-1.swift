@@ -13,8 +13,8 @@ var keychain: Keychain
 keychain = Keychain(service: "com.example.github-token")
 
 /* for Internet Password */
-let URL = NSURL(string: "https://github.com")!
-keychain = Keychain(server: URL, protocolType: .HTTPS)
+let url = URL(string: "https://github.com")!
+keychain = Keychain(server: url, protocolType: .https)
 
 
 /**************
@@ -25,7 +25,7 @@ keychain = Keychain(server: URL, protocolType: .HTTPS)
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 
 /* set method */
-try! keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
+try? keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 
 
 /*****************
@@ -53,7 +53,7 @@ let data = try! keychain.getData("kishikawakatsumi")
 keychain["kishikawakatsumi"] = nil
 
 /* remove method */
-try! keychain.remove("kishikawakatsumi")
+try? keychain.remove("kishikawakatsumi")
 
 
 /****************
@@ -63,7 +63,7 @@ try! keychain.remove("kishikawakatsumi")
 /* set */
 do {
     try keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
-} catch let error as NSError {
+} catch let error {
     print("error: \(error.localizedDescription)")
 }
 
@@ -71,14 +71,14 @@ do {
 // First, get the failable (value or error) object
 do {
     let token = try keychain.get("kishikawakatsumi")
-} catch let error as NSError {
+} catch let error {
     print("error: \(error.localizedDescription)")
 }
 
 /* remove */
 do {
     try keychain.remove("kishikawakatsumi")
-} catch let error as NSError {
+} catch let error {
     print("error: \(error.localizedDescription)")
 }
 
@@ -87,7 +87,7 @@ do {
  * Label and Comment
  *******************/
 
-keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+keychain = Keychain(server: URL(string: "https://github.com")!, protocolType: .https)
     .label("github.com (kishikawakatsumi)")
     .comment("github access token")
 
@@ -98,11 +98,11 @@ keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: 
 
 /* for background application */
 let background = Keychain(service: "com.example.github-token")
-    .accessibility(.AfterFirstUnlock)
+    .accessibility(.afterFirstUnlock)
 
 /* for forground application */
 let forground = Keychain(service: "com.example.github-token")
-    .accessibility(.WhenUnlocked)
+    .accessibility(.whenUnlocked)
 
 /* Sharing Keychain Items */
 let shared = Keychain(service: "com.example.github-token", accessGroup: "12ABCD3E4F.shared")
@@ -113,13 +113,13 @@ let iCloud = Keychain(service: "com.example.github-token")
 
 /* One-Shot configuration change */
 
-try! keychain
-    .accessibility(.AfterFirstUnlock)
+try? keychain
+    .accessibility(.afterFirstUnlock)
     .synchronizable(true)
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 
-try! keychain
-    .accessibility(.WhenUnlocked)
+try? keychain
+    .accessibility(.whenUnlocked)
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 
 
@@ -128,7 +128,7 @@ try! keychain
  ***********/
 
 /* Display all stored items if print keychain object */
-keychain = Keychain(server: NSURL(string: "https://github.com")!, protocolType: .HTTPS)
+keychain = Keychain(server: URL(string: "https://github.com")!, protocolType: .https)
 print("\(keychain)")
 
 /* Obtaining all stored keys */

@@ -27,13 +27,13 @@ import UIKit
 import KeychainAccess
 
 class AccountsViewController: UITableViewController {
-    var itemsGroupedByService: [String: [[String: AnyObject]]]?
+    var itemsGroupedByService: [String: [[String: Any]]]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         reloadData()
@@ -46,7 +46,7 @@ class AccountsViewController: UITableViewController {
 
     // MARK:
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         if itemsGroupedByService != nil {
             let services = Array(itemsGroupedByService!.keys)
             return services.count
@@ -54,7 +54,7 @@ class AccountsViewController: UITableViewController {
         return 0
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let services = Array(itemsGroupedByService!.keys)
         let service = services[section]
 
@@ -62,13 +62,13 @@ class AccountsViewController: UITableViewController {
         return items.count
     }
 
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let services = Array(itemsGroupedByService!.keys)
         return services[section]
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
         let services = Array(itemsGroupedByService!.keys)
         let service = services[indexPath.section]
@@ -82,7 +82,7 @@ class AccountsViewController: UITableViewController {
         return cell
     }
 
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         let services = Array(itemsGroupedByService!.keys)
         let service = services[indexPath.section]
 
@@ -96,16 +96,16 @@ class AccountsViewController: UITableViewController {
 
         if items.count == 1 {
             reloadData()
-            tableView.deleteSections(NSIndexSet(index: indexPath.section), withRowAnimation: .Automatic)
+            tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
         } else {
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
 
     // MARK:
 
     func reloadData() {
-        let items = Keychain.allItems(.GenericPassword)
+        let items = Keychain.allItems(.genericPassword)
         itemsGroupedByService = groupBy(items) { item -> String in
             if let service = item["service"] as? String {
                 return service
@@ -115,8 +115,8 @@ class AccountsViewController: UITableViewController {
     }
 }
 
-private func groupBy<C: CollectionType, K: Hashable>(xs: C, key: C.Generator.Element -> K) -> [K:[C.Generator.Element]] {
-    var gs: [K:[C.Generator.Element]] = [:]
+private func groupBy<C: Collection, K: Hashable>(_ xs: C, key: (C.Iterator.Element) -> K) -> [K:[C.Iterator.Element]] {
+    var gs: [K:[C.Iterator.Element]] = [:]
     for x in xs {
         let k = key(x)
         var ys = gs[k] ?? []
