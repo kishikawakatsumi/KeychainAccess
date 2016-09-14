@@ -500,7 +500,8 @@ public final class Keychain {
             return nil
         }
         guard let string = String(data: data, encoding: .utf8) else {
-            throw conversionError(message: "failed to convert data to string")
+            print("failed to convert data to string")
+            throw Status.conversionError
         }
         return string
     }
@@ -561,7 +562,8 @@ public final class Keychain {
 
     public func set(_ value: String, key: String) throws {
         guard let data = value.data(using: .utf8, allowLossyConversion: false) else {
-            throw conversionError(message: "failed to convert string to data")
+            print("failed to convert string to data")
+            throw Status.conversionError
         }
         try set(data, key: key)
     }
@@ -792,7 +794,7 @@ public final class Keychain {
 
     #if os(iOS)
     @available(iOS 8.0, *)
-    public func getSharedPassword(_ completion: @escaping (_ account: String?, _ password: String?, _ error: NSError?) -> () = { account, password, error -> () in }) {
+    public func getSharedPassword(_ completion: @escaping (_ account: String?, _ password: String?, _ error: Error?) -> () = { account, password, error -> () in }) {
         if let domain = server.host {
             type(of: self).requestSharedWebCredential(domain: domain, account: nil) { (credentials, error) -> () in
                 if let credential = credentials.first {
@@ -812,7 +814,7 @@ public final class Keychain {
 
     #if os(iOS)
     @available(iOS 8.0, *)
-    public func getSharedPassword(_ account: String, completion: @escaping (_ password: String?, _ error: NSError?) -> () = { password, error -> () in }) {
+    public func getSharedPassword(_ account: String, completion: @escaping (_ password: String?, _ error: Error?) -> () = { password, error -> () in }) {
         if let domain = server.host {
             type(of: self).requestSharedWebCredential(domain: domain, account: account) { (credentials, error) -> () in
                 if let credential = credentials.first {
@@ -834,14 +836,14 @@ public final class Keychain {
 
     #if os(iOS)
     @available(iOS 8.0, *)
-    public func setSharedPassword(_ password: String, account: String, completion: (_ error: NSError?) -> () = { e -> () in }) {
+    public func setSharedPassword(_ password: String, account: String, completion: (_ error: Error?) -> () = { e -> () in }) {
         setSharedPassword((password as String?)!, account: account, completion: completion)
     }
     #endif
 
     #if os(iOS)
     @available(iOS 8.0, *)
-    fileprivate func setSharedPassword(_ password: String?, account: String, completion: @escaping (_ error: NSError?) -> () = { e -> () in }) {
+    fileprivate func setSharedPassword(_ password: String?, account: String, completion: @escaping (_ error: Error?) -> () = { e -> () in }) {
         if let domain = server.host {
             SecAddSharedWebCredential(domain as CFString, account as CFString, password as CFString?) { error -> () in
                 if let error = error {
@@ -859,35 +861,35 @@ public final class Keychain {
 
     #if os(iOS)
     @available(iOS 8.0, *)
-    public func removeSharedPassword(_ account: String, completion: @escaping (_ error: NSError?) -> () = { e -> () in }) {
+    public func removeSharedPassword(_ account: String, completion: @escaping (_ error: Error?) -> () = { e -> () in }) {
         setSharedPassword(nil, account: account, completion: completion)
     }
     #endif
 
     #if os(iOS)
     @available(iOS 8.0, *)
-    public class func requestSharedWebCredential(_ completion: @escaping (_ credentials: [[String: String]], _ error: NSError?) -> () = { credentials, error -> () in }) {
+    public class func requestSharedWebCredential(_ completion: @escaping (_ credentials: [[String: String]], _ error: Error?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: nil, account: nil, completion: completion)
     }
     #endif
 
     #if os(iOS)
     @available(iOS 8.0, *)
-    public class func requestSharedWebCredential(domain: String, completion: @escaping (_ credentials: [[String: String]], _ error: NSError?) -> () = { credentials, error -> () in }) {
+    public class func requestSharedWebCredential(domain: String, completion: @escaping (_ credentials: [[String: String]], _ error: Error?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain, account: nil, completion: completion)
     }
     #endif
 
     #if os(iOS)
     @available(iOS 8.0, *)
-    public class func requestSharedWebCredential(domain: String, account: String, completion: @escaping (_ credentials: [[String: String]], _ error: NSError?) -> () = { credentials, error -> () in }) {
+    public class func requestSharedWebCredential(domain: String, account: String, completion: @escaping (_ credentials: [[String: String]], _ error: Error?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: Optional(domain), account: Optional(account)!, completion: completion)
     }
     #endif
 
     #if os(iOS)
     @available(iOS 8.0, *)
-    fileprivate class func requestSharedWebCredential(domain: String?, account: String?, completion: @escaping (_ credentials: [[String: String]], _ error: NSError?) -> ()) {
+    fileprivate class func requestSharedWebCredential(domain: String?, account: String?, completion: @escaping (_ credentials: [[String: String]], _ error: Error?) -> ()) {
         SecRequestSharedWebCredential(domain as CFString?, account as CFString?) { (credentials, error) -> () in
             var remoteError: NSError?
             if let error = error {
@@ -1015,29 +1017,16 @@ public final class Keychain {
 
     // MARK:
 
-    fileprivate class func conversionError(message: String) -> NSError {
-        let error = NSError(domain: KeychainAccessErrorDomain, code: Int(Status.conversionError.rawValue), userInfo: [NSLocalizedDescriptionKey: message])
-        print("error:[\(error.code)] \(error.localizedDescription)")
-
-        return error
-    }
-
-    fileprivate func conversionError(message: String) -> NSError {
-        return type(of: self).conversionError(message: message)
-    }
-
     @discardableResult
-    fileprivate class func securityError(status: OSStatus) -> NSError {
-        let message = Status(status: status).description
-
-        let error = NSError(domain: KeychainAccessErrorDomain, code: Int(status), userInfo: [NSLocalizedDescriptionKey: message])
-        print("OSStatus error:[\(error.code)] \(error.localizedDescription)")
+    fileprivate class func securityError(status: OSStatus) -> Error {
+        let error = Status(status: status)
+        print("OSStatus error:[\(error.errorCode)] \(error.description)")
 
         return error
     }
 
     @discardableResult
-    fileprivate func securityError(status: OSStatus) -> NSError {
+    fileprivate func securityError(status: OSStatus) -> Error {
         return type(of: self).securityError(status: status)
     }
 }
@@ -1200,7 +1189,7 @@ extension Options {
         return query
     }
 
-    func attributes(key: String?, value: Data) -> ([String: Any], NSError?) {
+    func attributes(key: String?, value: Data) -> ([String: Any], Error?) {
         var attributes: [String: Any]
 
         if key != nil {
@@ -1226,8 +1215,8 @@ extension Options {
                     if let error = error?.takeUnretainedValue() {
                         return (attributes, error.error)
                     }
-                    let message = Status.unexpectedError.description
-                    return (attributes, NSError(domain: KeychainAccessErrorDomain, code: Int(Status.unexpectedError.rawValue), userInfo: [NSLocalizedDescriptionKey: message]))
+
+                    return (attributes, Status.unexpectedError)
                 }
                 attributes[AttributeAccessControl] = accessControl
             } else {
@@ -2881,5 +2870,20 @@ extension Status: RawRepresentable, CustomStringConvertible {
         case .unexpectedError:
             return "Unexpected error has occurred."
         }
+    }
+}
+
+extension Status: CustomNSError {
+
+    public static var errorDomain: String {
+        return KeychainAccessErrorDomain
+    }
+
+    public var errorCode: Int {
+        return Int(rawValue)
+    }
+
+    public var errorUserInfo: [String : Any] {
+        return [NSLocalizedDescriptionKey: description]
     }
 }

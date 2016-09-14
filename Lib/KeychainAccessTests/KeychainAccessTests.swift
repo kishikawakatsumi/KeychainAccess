@@ -429,9 +429,23 @@ class KeychainAccessTests: XCTestCase {
         do {
             try keychain.set(data as Data, key: "RandomData")
             let _ = try keychain.getString("RandomData")
+            XCTFail("no error occurred")
         } catch let error as NSError {
             XCTAssertEqual(error.domain, KeychainAccessErrorDomain)
             XCTAssertEqual(error.code, Int(Status.conversionError.rawValue))
+            XCTAssertEqual(error.userInfo[NSLocalizedDescriptionKey] as! String, Status.conversionError.localizedDescription)
+        } catch {
+            XCTFail("unexpected error occurred")
+        }
+
+        do {
+            try keychain.set(data as Data, key: "RandomData")
+            let _ = try keychain.getString("RandomData")
+            XCTFail("no error occurred")
+        } catch Status.conversionError {
+            XCTAssertTrue(true)
+        } catch {
+            XCTFail("unexpected error occurred")
         }
     }
 
