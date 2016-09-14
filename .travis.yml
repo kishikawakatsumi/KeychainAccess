@@ -21,7 +21,6 @@ script:
 branches:
   only:
     - master
-    - swift-2.3
 env:
   matrix:
     - ACTION=build
