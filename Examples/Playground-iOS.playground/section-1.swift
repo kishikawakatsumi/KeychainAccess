@@ -25,7 +25,7 @@ keychain = Keychain(server: url, protocolType: .https)
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 
 /* set method */
-try! keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
+try? keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 
 
 /*****************
@@ -53,7 +53,7 @@ let data = try! keychain.getData("kishikawakatsumi")
 keychain["kishikawakatsumi"] = nil
 
 /* remove method */
-try! keychain.remove("kishikawakatsumi")
+try? keychain.remove("kishikawakatsumi")
 
 
 /****************
@@ -63,7 +63,7 @@ try! keychain.remove("kishikawakatsumi")
 /* set */
 do {
     try keychain.set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
-} catch let error as NSError {
+} catch let error {
     print("error: \(error.localizedDescription)")
 }
 
@@ -71,14 +71,14 @@ do {
 // First, get the failable (value or error) object
 do {
     let token = try keychain.get("kishikawakatsumi")
-} catch let error as NSError {
+} catch let error {
     print("error: \(error.localizedDescription)")
 }
 
 /* remove */
 do {
     try keychain.remove("kishikawakatsumi")
-} catch let error as NSError {
+} catch let error {
     print("error: \(error.localizedDescription)")
 }
 
@@ -113,12 +113,12 @@ let iCloud = Keychain(service: "com.example.github-token")
 
 /* One-Shot configuration change */
 
-try! keychain
+try? keychain
     .accessibility(.afterFirstUnlock)
     .synchronizable(true)
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 
-try! keychain
+try? keychain
     .accessibility(.whenUnlocked)
     .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 
