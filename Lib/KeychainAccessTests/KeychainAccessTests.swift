@@ -489,7 +489,7 @@ class KeychainAccessTests: XCTestCase {
 
                 let keychain = Keychain(service: "Twitter")
                     .attributes(attributes)
-                    .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence)
+                    .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence)
 
                 XCTAssertNil(keychain["kishikawakatsumi"], "not stored password")
 
@@ -1023,8 +1023,8 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertEqual(keychain.synchronizable(true).synchronizable, true)
         XCTAssertEqual(keychain.synchronizable(false).synchronizable, false)
         XCTAssertEqual(keychain.accessibility(.afterFirstUnlock).accessibility, Accessibility.afterFirstUnlock)
-        XCTAssertEqual(keychain.accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence).accessibility, Accessibility.whenPasscodeSetThisDeviceOnly)
-        XCTAssertEqual(keychain.accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence).authenticationPolicy, AuthenticationPolicy.UserPresence)
+        XCTAssertEqual(keychain.accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence).accessibility, Accessibility.whenPasscodeSetThisDeviceOnly)
+        XCTAssertEqual(keychain.accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence).authenticationPolicy, AuthenticationPolicy.userPresence)
         XCTAssertNil(keychain.label)
         XCTAssertEqual(keychain.label("Label").label, "Label")
         XCTAssertNil(keychain.comment)
@@ -1254,7 +1254,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.UserPresence]
+            let policy: AuthenticationPolicy = [.userPresence]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1267,7 +1267,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.UserPresence, .ApplicationPassword]
+            let policy: AuthenticationPolicy = [.userPresence, .applicationPassword]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1279,7 +1279,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.UserPresence, .ApplicationPassword, .PrivateKeyUsage]
+            let policy: AuthenticationPolicy = [.userPresence, .applicationPassword, .privateKeyUsage]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1291,7 +1291,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.ApplicationPassword]
+            let policy: AuthenticationPolicy = [.applicationPassword]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1303,7 +1303,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.ApplicationPassword, .PrivateKeyUsage]
+            let policy: AuthenticationPolicy = [.applicationPassword, .privateKeyUsage]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1315,7 +1315,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.PrivateKeyUsage]
+            let policy: AuthenticationPolicy = [.privateKeyUsage]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1327,7 +1327,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDAny]
+            let policy: AuthenticationPolicy = [.touchIDAny]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1339,7 +1339,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDAny, .DevicePasscode]
+            let policy: AuthenticationPolicy = [.touchIDAny, .devicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1351,7 +1351,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDAny, .ApplicationPassword]
+            let policy: AuthenticationPolicy = [.touchIDAny, .applicationPassword]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1363,7 +1363,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDAny, .ApplicationPassword, .PrivateKeyUsage]
+            let policy: AuthenticationPolicy = [.touchIDAny, .applicationPassword, .privateKeyUsage]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1375,7 +1375,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDCurrentSet]
+            let policy: AuthenticationPolicy = [.touchIDCurrentSet]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1387,7 +1387,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDCurrentSet, .DevicePasscode]
+            let policy: AuthenticationPolicy = [.touchIDCurrentSet, .devicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1399,7 +1399,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDCurrentSet, .ApplicationPassword]
+            let policy: AuthenticationPolicy = [.touchIDCurrentSet, .applicationPassword]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1411,7 +1411,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDCurrentSet, .ApplicationPassword, .PrivateKeyUsage]
+            let policy: AuthenticationPolicy = [.touchIDCurrentSet, .applicationPassword, .privateKeyUsage]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1423,7 +1423,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDAny, .Or, .DevicePasscode]
+            let policy: AuthenticationPolicy = [.touchIDAny, .or, .devicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1435,7 +1435,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.TouchIDAny, .And, .DevicePasscode]
+            let policy: AuthenticationPolicy = [.touchIDAny, .and, .devicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1449,7 +1449,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.UserPresence]
+            let policy: AuthenticationPolicy = [.userPresence]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
@@ -1461,7 +1461,7 @@ class KeychainAccessTests: XCTestCase {
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
-            let policy: AuthenticationPolicy = [.DevicePasscode]
+            let policy: AuthenticationPolicy = [.devicePasscode]
             let flags = SecAccessControlCreateFlags(rawValue: policy.rawValue)
 
             var error: Unmanaged<CFError>?
