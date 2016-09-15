@@ -21,6 +21,7 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 - **[Support Shared Web Credentials (iOS 8+)](#shared_web_credentials)**
 - [Works on both iOS & OS X](#requirements)
 - [watchOS and tvOS are supported](#requirements)
+- **[Swift 3 & Swift 2.3 compatible](#requirements)**
 
 ## :book: Usage
 
