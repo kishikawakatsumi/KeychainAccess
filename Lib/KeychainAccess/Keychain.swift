@@ -156,7 +156,7 @@ public struct AuthenticationPolicy: OptionSet {
      */
     @available(iOS 8.0, OSX 10.10, *)
     @available(watchOS, unavailable)
-    public static let UserPresence = AuthenticationPolicy(rawValue: 1 << 0)
+    public static let userPresence = AuthenticationPolicy(rawValue: 1 << 0)
 
     /**
      Constraint: Touch ID (any finger). Touch ID must be available and
@@ -166,7 +166,7 @@ public struct AuthenticationPolicy: OptionSet {
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
-    public static let TouchIDAny = AuthenticationPolicy(rawValue: 1 << 1)
+    public static let touchIDAny = AuthenticationPolicy(rawValue: 1 << 1)
 
     /**
      Constraint: Touch ID from the set of currently enrolled fingers.
@@ -176,14 +176,14 @@ public struct AuthenticationPolicy: OptionSet {
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
-    public static let TouchIDCurrentSet = AuthenticationPolicy(rawValue: 1 << 3)
+    public static let touchIDCurrentSet = AuthenticationPolicy(rawValue: 1 << 3)
 
     /**
      Constraint: Device passcode
      */
     @available(iOS 9.0, OSX 10.11, *)
     @available(watchOS, unavailable)
-    public static let DevicePasscode = AuthenticationPolicy(rawValue: 1 << 4)
+    public static let devicePasscode = AuthenticationPolicy(rawValue: 1 << 4)
 
     /**
      Constraint logic operation: when using more than one constraint,
@@ -192,7 +192,7 @@ public struct AuthenticationPolicy: OptionSet {
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
-    public static let Or = AuthenticationPolicy(rawValue: 1 << 14)
+    public static let or = AuthenticationPolicy(rawValue: 1 << 14)
 
     /**
      Constraint logic operation: when using more than one constraint,
@@ -201,7 +201,7 @@ public struct AuthenticationPolicy: OptionSet {
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
-    public static let And = AuthenticationPolicy(rawValue: 1 << 15)
+    public static let and = AuthenticationPolicy(rawValue: 1 << 15)
 
     /**
      Create access control for private key operations (i.e. sign operation)
@@ -209,7 +209,7 @@ public struct AuthenticationPolicy: OptionSet {
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
-    public static let PrivateKeyUsage = AuthenticationPolicy(rawValue: 1 << 30)
+    public static let privateKeyUsage = AuthenticationPolicy(rawValue: 1 << 30)
 
     /**
      Security: Application provided password for data encryption key generation.
@@ -218,7 +218,7 @@ public struct AuthenticationPolicy: OptionSet {
     @available(iOS 9.0, *)
     @available(OSX, unavailable)
     @available(watchOS, unavailable)
-    public static let ApplicationPassword = AuthenticationPolicy(rawValue: 1 << 31)
+    public static let applicationPassword = AuthenticationPolicy(rawValue: 1 << 31)
 
     #if swift(>=2.3)
     public let rawValue: UInt
