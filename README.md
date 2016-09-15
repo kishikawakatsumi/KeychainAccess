@@ -21,6 +21,7 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 - **[Support Shared Web Credentials (iOS 8+)](#shared_web_credentials)**
 - [Works on both iOS & OS X](#requirements)
 - [watchOS and tvOS are supported](#requirements)
+- **[Swift 3 & Swift 2.3 compatible](#requirements)**
 
 ## :book: Usage
 
@@ -224,7 +225,7 @@ print(attributes.creator)
 let keychain = Keychain(service: "com.example.github-token")
     .label("github.com (kishikawakatsumi)")
     .synchronizable(true)
-    .accessibility(.AfterFirstUnlock)
+    .accessibility(.afterFirstUnlock)
 ```
 
 #### <a name="accessibility"> Accessibility
@@ -253,7 +254,7 @@ let keychain = Keychain(service: "com.example.github-token")
 
 do {
     try keychain
-        .accessibility(.AfterFirstUnlock)
+        .accessibility(.afterFirstUnlock)
         .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 } catch let error {
     print("error: \(error)")
@@ -278,7 +279,7 @@ let keychain = Keychain(service: "com.example.github-token")
 
 do {
     try keychain
-        .accessibility(.WhenUnlocked)
+        .accessibility(.whenUnlocked)
         .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
 } catch let error {
     print("error: \(error)")
@@ -353,11 +354,11 @@ If the item not protected, the `authenticationPrompt` parameter just be ignored.
 ```swift
 let keychain = Keychain(service: "com.example.github-token")
 
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
     do {
         // Should be the secret invalidated when passcode is removed? If not then use `.WhenUnlocked`
         try keychain
-            .accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence)
+            .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence)
             .authenticationPrompt("Authenticate to update your access token")
             .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
     } catch let error {
@@ -375,7 +376,7 @@ If the item not protected, the `authenticationPrompt` parameter just be ignored.
 ```swift
 let keychain = Keychain(service: "com.example.github-token")
 
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
     do {
         let password = try keychain
             .authenticationPrompt("Authenticate to login to server")
@@ -492,7 +493,7 @@ print("\(keychain)")
 #### Obtaining all stored keys
 
 ```swift
-let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .https)
 
 let keys = keychain.allKeys()
 for key in keys {
@@ -510,7 +511,7 @@ key: honeylemon
 #### Obtaining all stored items
 
 ```swift
-let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .https)
 
 let items = keychain.allItems()
 for item in items {
