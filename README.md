@@ -1,9 +1,9 @@
 # KeychainAccess
-[![CI Status](http://img.shields.io/travis/kishikawakatsumi/KeychainAccess.svg?style=flat)](https://travis-ci.org/kishikawakatsumi/KeychainAccess)
-[![Coverage Status](https://coveralls.io/repos/kishikawakatsumi/KeychainAccess/badge.svg?branch=master&service=github)](https://coveralls.io/github/kishikawakatsumi/KeychainAccess?branch=master)
+[![CI Status](http://img.shields.io/travis/kishikawakatsumi/KeychainAccess.svg)](https://travis-ci.org/kishikawakatsumi/KeychainAccess)
+[![Coverage Status](https://img.shields.io/coveralls/kishikawakatsumi/KeychainAccess.svg)](https://coveralls.io/github/kishikawakatsumi/KeychainAccess?branch=master)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Version](https://img.shields.io/cocoapods/v/KeychainAccess.svg?style=flat)](http://cocoadocs.org/docsets/KeychainAccess)
-[![Platform](https://img.shields.io/cocoapods/p/KeychainAccess.svg?style=flat)](http://cocoadocs.org/docsets/KeychainAccess)
+[![Version](https://img.shields.io/cocoapods/v/KeychainAccess.svg)](http://cocoadocs.org/docsets/KeychainAccess)
+[![Platform](https://img.shields.io/cocoapods/p/KeychainAccess.svg)](http://cocoadocs.org/docsets/KeychainAccess)
 
 KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X. Makes using Keychain APIs extremely easy and much more palatable to use in Swift.
 
@@ -527,13 +527,16 @@ item: [authenticationType: Default, key: honeylemon, server: github.com, class: 
 
 ## Requirements
 
-|        | OS                               | Swift    |
-|--------|----------------------------------|----------|
-| **v1.1.x** | iOS 7+, OSX 10.9+                | 1.1      |
-| **v1.2.x** | iOS 7+, OSX 10.9+                | 1.2      |
-| **v2.0.x** | iOS 7+, OSX 10.9+, watchOS       | 2.0      |
-| **v2.1.x** | iOS 7+, OSX 10.9+, watchOS       | 2.0      |
-| **v2.2.x** | iOS 8+, OSX 10.9+, watchOS, tvOS | 2.0, 2.1 |
+|            | OS                                     | Swift         |
+|------------|----------------------------------------|---------------|
+| **v1.1.x** | iOS 7+, OSX 10.9+                      | 1.1           |
+| **v1.2.x** | iOS 7+, OSX 10.9+                      | 1.2           |
+| **v2.0.x** | iOS 7+, OSX 10.9+, watchOS 2+          | 2.0           |
+| **v2.1.x** | iOS 7+, OSX 10.9+, watchOS 2+          | 2.0           |
+| **v2.2.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1      |
+| **v2.3.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1, 2.2 |
+| **v2.4.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.2, 2.3      |
+| **v3.x**   | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 3.0           |
 
 ## Installation
 
