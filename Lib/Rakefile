@@ -1,4 +1,5 @@
 require 'xcjobs'
+require 'json'
 
 def destinations(platform: 'iphonesimulator')
   if platform == 'iphonesimulator'
@@ -71,7 +72,7 @@ namespace :build do
     if ENV['CI']
       pull_req = %[https://api.github.com/repos/#{ENV['TRAVIS_REPO_SLUG']}/pulls/#{ENV['TRAVIS_PULL_REQUEST']}]
       auth_token = 'kishikawakatsumi:209558699492df7782fbe62dda1891d6a6ba010f'
-      (ENV['TRAVIS_PULL_REQUEST'] == 'false' ? ENV['TRAVIS_BRANCH'] : `curl -u #{auth_token} -s #{pull_req} | jq -r .head.ref`).strip
+      (ENV['TRAVIS_PULL_REQUEST'] == 'false' ? ENV['TRAVIS_BRANCH'] : JSON.parse(`curl -u #{auth_token} -s #{pull_req}`)['head']['ref']).strip
     else
       %x[git rev-parse --abbrev-ref HEAD]
     end
