@@ -272,16 +272,14 @@
 				TargetAttributes = {
 					140F195B1A49D79400B0016A = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 27AEDK3C9F;
+						ProvisioningStyle = Automatic;
 					};
 					140F19661A49D79500B0016A = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 27AEDK3C9F;
 						TestTargetID = 14A62FFC1D32922C00809B3F;
 					};
 					14A630141D3293C700809B3F = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 27AEDK3C9F;
 						SystemCapabilities = {
 							com.apple.Keychain = {
 								enabled = 1;
