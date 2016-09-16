@@ -18,6 +18,8 @@ CODE_SIGN_IDENTITY[sdk=macosx*] = Developer ID Application
 PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*] = KeychainAccess Tests
 OTHER_CODE_SIGN_FLAGS[sdk=macosx*] = --deep;
 
+DEVELOPMENT_TEAM = 27AEDK3C9F;
+
 PRINCIPAL_CLASS[sdk=iphone*] = UIApplication;
 PRINCIPAL_CLASS[sdk=appletv*] = UIApplication;
 PRINCIPAL_CLASS[sdk=macosx*] = NSApplication;
