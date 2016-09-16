@@ -272,6 +272,7 @@
 				TargetAttributes = {
 					140F195B1A49D79400B0016A = {
 						CreatedOnToolsVersion = 6.1.1;
+						ProvisioningStyle = Automatic;
 					};
 					140F19661A49D79500B0016A = {
 						CreatedOnToolsVersion = 6.1.1;
