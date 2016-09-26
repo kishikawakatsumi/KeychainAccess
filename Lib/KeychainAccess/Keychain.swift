@@ -836,8 +836,8 @@ public final class Keychain {
 
     #if os(iOS)
     @available(iOS 8.0, *)
-    public func setSharedPassword(_ password: String, account: String, completion: (_ error: Error?) -> () = { e -> () in }) {
-        setSharedPassword((password as String?)!, account: account, completion: completion)
+    public func setSharedPassword(_ password: String, account: String, completion: @escaping (_ error: Error?) -> () = { e -> () in }) {
+        setSharedPassword(password as String?, account: account, completion: completion)
     }
     #endif
 
