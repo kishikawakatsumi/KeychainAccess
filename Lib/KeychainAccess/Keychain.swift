@@ -2874,10 +2874,7 @@ extension Status: RawRepresentable, CustomStringConvertible {
 }
 
 extension Status: CustomNSError {
-
-    public static var errorDomain: String {
-        return KeychainAccessErrorDomain
-    }
+    public static let errorDomain = KeychainAccessErrorDomain
 
     public var errorCode: Int {
         return Int(rawValue)
