@@ -41,7 +41,7 @@ keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 #### Saving Internet Password
 
 ```swift
-let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .https)
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
 
@@ -60,11 +60,11 @@ let keychain = Keychain(service: "com.example.github-token", accessGroup: "12ABC
 #### Create Keychain for Internet Password
 
 ```swift
-let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .https)
 ```
 
 ```swift
-let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS, authenticationType: .HTMLForm)
+let keychain = Keychain(server: "https://github.com", protocolType: .https, authenticationType: .htmlForm)
 ```
 
 ### :key: Adding an item
@@ -163,7 +163,7 @@ do {
 ### :key: Set Label and Comment
 
 ```swift
-let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .https)
 do {
     try keychain
         .label("github.com (kishikawakatsumi)")
@@ -242,7 +242,7 @@ let keychain = Keychain(service: "com.example.github-token")
 
 ```swift
 let keychain = Keychain(service: "com.example.github-token")
-    .accessibility(.AfterFirstUnlock)
+    .accessibility(.afterFirstUnlock)
 
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
@@ -267,7 +267,7 @@ do {
 
 ```swift
 let keychain = Keychain(service: "com.example.github-token")
-    .accessibility(.WhenUnlocked)
+    .accessibility(.whenUnlocked)
 
 keychain["kishikawakatsumi"] = "01234567-89ab-cdef-0123-456789abcdef"
 ```
@@ -329,11 +329,11 @@ If you want to store the Touch ID protected Keychain item, specify `accessibilit
 ```swift
 let keychain = Keychain(service: "com.example.github-token")
 
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+DispatchQueue.global().async {
     do {
         // Should be the secret invalidated when passcode is removed? If not then use `.WhenUnlocked`
         try keychain
-            .accessibility(.WhenPasscodeSetThisDeviceOnly, authenticationPolicy: .UserPresence)
+            .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence)
             .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
     } catch let error {
         // Error handling if needed...
@@ -354,7 +354,7 @@ If the item not protected, the `authenticationPrompt` parameter just be ignored.
 ```swift
 let keychain = Keychain(service: "com.example.github-token")
 
-DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+DispatchQueue.global().async {
     do {
         // Should be the secret invalidated when passcode is removed? If not then use `.WhenUnlocked`
         try keychain
@@ -376,7 +376,7 @@ If the item not protected, the `authenticationPrompt` parameter just be ignored.
 ```swift
 let keychain = Keychain(service: "com.example.github-token")
 
-DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+DispatchQueue.global().async {
     do {
         let password = try keychain
             .authenticationPrompt("Authenticate to login to server")
@@ -477,16 +477,16 @@ let password = Keychain.generatePassword() // => Nhu-GKm-s3n-pMx
 #### Display all stored items if print keychain object
 
 ```swift
-let keychain = Keychain(server: "https://github.com", protocolType: .HTTPS)
+let keychain = Keychain(server: "https://github.com", protocolType: .https)
 print("\(keychain)")
 ```
 
 ```
 =>
 [
-  [authenticationType: Default, key: kishikawakatsumi, server: github.com, class: InternetPassword, protocol: HTTPS]
-  [authenticationType: Default, key: hirohamada, server: github.com, class: InternetPassword, protocol: HTTPS]
-  [authenticationType: Default, key: honeylemon, server: github.com, class: InternetPassword, protocol: HTTPS]
+  [authenticationType: default, key: kishikawakatsumi, server: github.com, class: internetPassword, protocol: https]
+  [authenticationType: default, key: hirohamada, server: github.com, class: internetPassword, protocol: https]
+  [authenticationType: default, key: honeylemon, server: github.com, class: internetPassword, protocol: https]
 ]
 ```
 
@@ -521,9 +521,9 @@ for item in items {
 
 ```
 =>
-item: [authenticationType: Default, key: kishikawakatsumi, server: github.com, class: InternetPassword, protocol: HTTPS]
-item: [authenticationType: Default, key: hirohamada, server: github.com, class: InternetPassword, protocol: HTTPS]
-item: [authenticationType: Default, key: honeylemon, server: github.com, class: InternetPassword, protocol: HTTPS]
+item: [authenticationType: Default, key: kishikawakatsumi, server: github.com, class: InternetPassword, protocol: https]
+item: [authenticationType: Default, key: hirohamada, server: github.com, class: InternetPassword, protocol: https]
+item: [authenticationType: Default, key: honeylemon, server: github.com, class: InternetPassword, protocol: https]
 ```
 
 ## Requirements
