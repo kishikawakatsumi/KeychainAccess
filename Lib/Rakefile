@@ -6,18 +6,36 @@ def destinations(platform: 'iphonesimulator')
     [ 'name=iPhone 5,OS=10.0',
       'name=iPhone 5s,OS=10.0',
       'name=iPhone 6,OS=10.0',
+      'name=iPhone 6,OS=10.1',
       'name=iPhone 6s Plus,OS=10.0',
       'name=iPhone SE,OS=10.0',
+      'name=iPhone 7,OS=10.3',
+      'name=iPhone 7 Plus,OS=10.3',
       'name=iPad Air 2,OS=10.0',
       'name=iPad Pro (9.7 inch),OS=10.0',
-      'name=iPad Pro (12.9 inch),OS=10.0'
+      'name=iPad Pro (12.9 inch),OS=10.0',
+      'name=iPad Pro (12.9 inch),OS=10.1',
+      'name=iPad Pro (12.9 inch),OS=10.3'
     ]
   elsif platform == 'watchsimulator'
-    [ 'name=Apple Watch - 38mm,OS=3.0',
-      'name=Apple Watch - 42mm,OS=3.0'
+    [ 'name=Apple Watch - 38mm,OS=2.0',
+      'name=Apple Watch - 42mm,OS=2.0',
+      'name=Apple Watch - 38mm,OS=2.1',
+      'name=Apple Watch - 42mm,OS=2.1',
+      'name=Apple Watch - 38mm,OS=2.2',
+      'name=Apple Watch - 42mm,OS=2.2',
+      'name=Apple Watch - 38mm,OS=3.2',
+      'name=Apple Watch - 42mm,OS=3.2',
+      'name=Apple Watch Series 2 - 38mm,OS=3.2',
+      'name=Apple Watch Series 2 - 42mm,OS=3.2'
     ]
   elsif platform == 'appletvsimulator'
-    [ 'name=Apple TV 1080p,OS=10.0'
+    [ 'name=Apple TV 1080p,OS=9.0',
+      'name=Apple TV 1080p,OS=9.1',
+      'name=Apple TV 1080p,OS=9.2',
+      'name=Apple TV 1080p,OS=10.0',
+      'name=Apple TV 1080p,OS=10.1',
+      'name=Apple TV 1080p,OS=10.2'
     ]
   else
     []
@@ -48,10 +66,21 @@ namespace :build do
       t.sdk = platform
       if platform == 'iphonesimulator'
         t.add_destination('name=iPhone 6,OS=10.0')
+        t.add_destination('name=iPhone 6,OS=10.1')
+        t.add_destination('name=iPhone 7,OS=10.3')
       elsif platform == 'watchsimulator'
-        t.add_destination('name=Apple Watch - 42mm,OS=3.0')
+        t.add_destination('name=Apple Watch - 42mm,OS=2.0')
+        t.add_destination('name=Apple Watch - 42mm,OS=2.1')
+        t.add_destination('name=Apple Watch - 42mm,OS=2.2')
+        t.add_destination('name=Apple Watch - 42mm,OS=3.2')
+        t.add_destination('name=Apple Watch Series 2 - 42mm,OS=3.2')
       elsif platform == 'appletvsimulator'
+        t.add_destination('name=Apple TV 1080p,OS=9.0')
+        t.add_destination('name=Apple TV 1080p,OS=9.1')
+        t.add_destination('name=Apple TV 1080p,OS=9.2')
         t.add_destination('name=Apple TV 1080p,OS=10.0')
+        t.add_destination('name=Apple TV 1080p,OS=10.1')
+        t.add_destination('name=Apple TV 1080p,OS=10.2')
       end
       t.configuration = configuration
       t.build_dir = 'build'

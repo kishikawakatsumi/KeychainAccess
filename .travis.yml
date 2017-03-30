@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode8
+osx_image: xcode8.3
 cache:
   directories:
     - Lib/vendor/bundle
@@ -9,6 +9,8 @@ before_install:
 install:
   - "(cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)"
 before_script:
+  - echo $ENCRYPTION_SECRET
+  - echo $PASSPHRASE
   - openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/ios_developer.p12.enc -d -a -out ./Lib/Certificates/ios_developer.p12 || true
   - openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/developer_id_app.p12.enc -d -a -out ./Lib/Certificates/developer_id_app.p12 || true
   - openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/iOS_Development.mobileprovision.enc -d -a -out ./Lib/Certificates/iOS_Development.mobileprovision || true
