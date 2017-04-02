@@ -2051,7 +2051,7 @@ public enum Status: OSStatus, Error {
     case unexpectedError                    = -99999
 }
 
-extension Status: CustomStringConvertible {
+extension Status: RawRepresentable, CustomStringConvertible {
 
     public init(status: OSStatus) {
         if let mappedStatus = Status(rawValue: status) {
