@@ -4,6 +4,8 @@ cache:
   directories:
     - Lib/vendor/bundle
 before_install:
+  - echo $ENCRYPTION_SECRET
+  - echo $PASSPHRASE
   - brew update
   - brew outdated carthage || brew upgrade carthage
 install:
