@@ -12,3 +12,5 @@ security import ./Lib/Certificates/developer_id_app.p12 -k ~/Library/Keychains/b
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 cp ./Lib/Certificates/*.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 cp ./Lib/Certificates/*.provisionprofile ~/Library/MobileDevice/Provisioning\ Profiles/
+
+security set-key-partition-list -S apple-tool:,apple: -s -k travis build.keychain
