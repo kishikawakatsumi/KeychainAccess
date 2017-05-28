@@ -100,7 +100,7 @@ namespace :test do
         t.add_destination(destination)
       end
       t.configuration = configuration
-      t.coverage = true
+      t.add_build_option('-enableCodeCoverage', 'YES')
       t.build_dir = 'build'
       t.formatter = 'xcpretty -c'
     end
