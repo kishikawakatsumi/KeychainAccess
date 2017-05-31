@@ -3,21 +3,26 @@ require 'json'
 
 def destinations(platform: 'iphonesimulator')
   if platform == 'iphonesimulator'
-    [ 'name=iPhone 5,OS=10.0',
-      'name=iPhone 5s,OS=10.0',
-      'name=iPhone 6,OS=10.0',
-      'name=iPhone 6s Plus,OS=10.0',
-      'name=iPhone SE,OS=10.0',
-      'name=iPad Air 2,OS=10.0',
-      'name=iPad Pro (9.7 inch),OS=10.0',
-      'name=iPad Pro (12.9 inch),OS=10.0'
+    [ 'name=iPhone 5,OS=8.4',
+      'name=iPhone 5,OS=9.3',
+      'name=iPhone 5,OS=10.3',
+      'name=iPhone 5,OS=10.3',
+      'name=iPhone 5s,OS=10.3',
+      'name=iPhone 6,OS=10.3',
+      'name=iPhone 6s Plus,OS=10.3',
+      'name=iPhone 7,OS=10.3',
+      'name=iPhone 7 Plus,OS=10.3',
+      'name=iPhone SE,OS=10.3',
+      'name=iPad Air 2,OS=10.3',
+      'name=iPad Pro (9.7-inch),OS=10.3',
+      'name=iPad Pro (12.9-inch),OS=10.3'
     ]
   elsif platform == 'watchsimulator'
-    [ 'name=Apple Watch - 38mm,OS=3.0',
-      'name=Apple Watch - 42mm,OS=3.0'
+    [ 'name=Apple Watch - 38mm,OS=3.2',
+      'name=Apple Watch - 42mm,OS=3.2'
     ]
   elsif platform == 'appletvsimulator'
-    [ 'name=Apple TV 1080p,OS=10.0'
+    [ 'name=Apple TV 1080p,OS=10.2'
     ]
   else
     []
@@ -33,32 +38,32 @@ def configurations
 end
 
 desc "build for all platforms"
-task :build do |t|
+task 'build' do |t|
   supportedPlatforms
     .product(configurations)
     .map { |platform, configuration| Rake::Task["build:#{platform}:#{configuration.downcase}"] }
     .map(&:invoke)
 end
 
-namespace :build do
+namespace 'build' do
   supportedPlatforms.product(configurations).each do |platform, configuration|
     XCJobs::Build.new("#{platform}:#{configuration.downcase}") do |t|
       t.project = 'KeychainAccess'
       t.scheme = 'KeychainAccess'
       t.sdk = platform
       if platform == 'iphonesimulator'
-        t.add_destination('name=iPhone 6,OS=10.0')
+        t.add_destination('name=iPhone 7,OS=10.3')
       elsif platform == 'watchsimulator'
-        t.add_destination('name=Apple Watch - 42mm,OS=3.0')
+        t.add_destination('name=Apple Watch - 42mm,OS=3.2')
       elsif platform == 'appletvsimulator'
-        t.add_destination('name=Apple TV 1080p,OS=10.0')
+        t.add_destination('name=Apple TV 1080p,OS=10.2')
       end
       t.configuration = configuration
+      t.add_build_setting('ONLY_ACTIVE_ARCH', 'NO')
       t.build_dir = 'build'
-      t.formatter = 'xcpretty -c'
-      if ENV['CI']
-        t.add_build_setting('CODE_SIGN_IDENTITY', '')
-        t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
+      if platform == 'macosx' || platform == 'iphonesimulator' || platform == 'appletvsimulator'
+        t.for_testing = true
+        t.add_build_option('-enableCodeCoverage', 'YES')
       end
     end
   end
@@ -67,7 +72,7 @@ namespace :build do
     sh %[echo 'github \"kishikawakatsumi/KeychainAccess\" \"#{branch_name}\"' > Cartfile]
     sh %[carthage update --no-use-binaries]
   end
-  
+
   def branch_name
     if ENV['CI']
       pull_req = %[https://api.github.com/repos/#{ENV['TRAVIS_REPO_SLUG']}/pulls/#{ENV['TRAVIS_PULL_REQUEST']}]
@@ -79,18 +84,17 @@ namespace :build do
   end
 end
 
-namespace :test do
+desc "test for all platforms"
+task 'test' do |t|
   supportedPlatforms
-    .select { |platform| platform == 'macosx' || platform.end_with?('simulator') }.map do |platform|
-      task platform do |t|
-        configurations
-          .map { |configuration| Rake::Task["test:#{platform}:#{configuration.downcase}"] }
-          .map(&:invoke)
-      end
+    .select { |platform| platform == 'macosx' || platform == 'iphonesimulator' || platform == 'appletvsimulator' }.map do |platform|
+      configurations
+        .map { |configuration| Rake::Task["test:#{platform}:#{configuration.downcase}"] }
+        .map(&:invoke)
     end
 end
     
-namespace :test do
+namespace 'test' do
   supportedPlatforms.product(configurations).each do |platform, configuration|
     XCJobs::Test.new("#{platform}:#{configuration.downcase}") do |t|
       t.project = 'KeychainAccess'
@@ -100,11 +104,26 @@ namespace :test do
         t.add_destination(destination)
       end
       t.configuration = configuration
-      t.add_build_option('-enableCodeCoverage', 'YES')
       t.build_dir = 'build'
-      t.formatter = 'xcpretty -c'
+      t.add_build_option('-enableCodeCoverage', 'YES')
+      t.add_build_setting('ONLY_ACTIVE_ARCH', 'NO')
+      t.without_building = true
+      t.after_action do
+        build_coverage_reports()
+      end
+    end
+  end
+  
+  def build_coverage_reports()
+    project_name = 'KeychainAccess'
+    profdata = Dir.glob(File.join('build', '/**/Coverage.profdata')).first  
+    Dir.glob(File.join('build', "/**/#{project_name}")) do |target|
+      output = `xcrun llvm-cov report -instr-profile "#{profdata}" "#{target}" -arch=x86_64`
+      if $?.success?
+        puts output
+        `xcrun llvm-cov show -instr-profile "#{profdata}" "#{target}" -arch=x86_64 -use-color=0 > coverage.txt`
+        break
+      end
     end
   end
 end
-
-XCJobs::Coverage::Coveralls.new()
