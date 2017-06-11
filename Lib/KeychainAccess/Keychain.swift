@@ -477,7 +477,7 @@ public final class Keychain {
 
     public func attributes(_ attributes: [String: Any]) -> Keychain {
         var options = self.options
-        attributes.forEach { options.attributes.updateValue($1, forKey: $0) }
+        attributes.forEach { options.attributes.updateValue($0.1, forKey: $0.0) }
         return Keychain(options)
     }
 
@@ -596,7 +596,7 @@ public final class Keychain {
                 throw error
             }
 
-            options.attributes.forEach { attributes.updateValue($1, forKey: $0) }
+            options.attributes.forEach { attributes.updateValue($0.1, forKey: $0.0) }
 
             #if os(iOS)
             if status == errSecInteractionNotAllowed && floor(NSFoundationVersionNumber) <= floor(NSFoundationVersionNumber_iOS_8_0) {
@@ -621,7 +621,7 @@ public final class Keychain {
                 throw error
             }
 
-            options.attributes.forEach { attributes.updateValue($1, forKey: $0) }
+            options.attributes.forEach { attributes.updateValue($0.1, forKey: $0.0) }
 
             status = SecItemAdd(attributes as CFDictionary, nil)
             if status != errSecSuccess {
