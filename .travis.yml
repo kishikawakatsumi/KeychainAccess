@@ -1,11 +1,11 @@
 language: objective-c
-osx_image: xcode8
+osx_image: xcode9
 cache:
   directories:
   - Lib/vendor/bundle
-# before_install:
-# - brew update
-# - brew outdated carthage || brew upgrade carthage
+before_install:
+- brew update
+- brew outdated carthage || brew upgrade carthage
 install:
 - "(cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)"
 before_script:
