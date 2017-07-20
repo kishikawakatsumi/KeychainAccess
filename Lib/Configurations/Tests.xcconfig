@@ -18,3 +18,5 @@ TEST_HOST[sdk=macosx*] = $(BUILT_PRODUCTS_DIR)/TestHost.app/Contents/MacOS/TestH
 EXCLUDED_SOURCE_FILE_NAMES[sdk=watch*] = *;
 EXCLUDED_SOURCE_FILE_NAMES[sdk=appletv*] = SharedCredentialTests.swift;
 EXCLUDED_SOURCE_FILE_NAMES[sdk=macosx*] = SharedCredentialTests.swift;
+
+DEVELOPMENT_TEAM = 27AEDK3C9F;
