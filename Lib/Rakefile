@@ -104,6 +104,7 @@ namespace :test do
       end
       t.configuration = configuration
       t.add_build_option('-enableCodeCoverage', 'YES')
+      t.add_build_option('-maximum-concurrent-test-simulator-destinations', '３')
       t.build_dir = 'build'
       t.formatter = 'xcpretty -c'
     end
