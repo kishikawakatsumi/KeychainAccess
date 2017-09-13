@@ -389,6 +389,12 @@ public final class Keychain {
         return options.authenticationPrompt
     }
 
+    @available(iOS 9.0, OSX 10.11, *)
+    @available(watchOS, unavailable)
+    public var authenticationContext: Any? {
+        return options.authenticationContext
+    }
+
     fileprivate let options: Options
 
     // MARK:
@@ -486,6 +492,14 @@ public final class Keychain {
     public func authenticationPrompt(_ authenticationPrompt: String) -> Keychain {
         var options = self.options
         options.authenticationPrompt = authenticationPrompt
+        return Keychain(options)
+    }
+
+    @available(iOS 9.0, OSX 10.11, *)
+    @available(watchOS, unavailable)
+    public func authenticationContext(_ authenticationContext: Any) -> Keychain {
+        var options = self.options
+        options.authenticationContext = authenticationContext
         return Keychain(options)
     }
 
@@ -1050,6 +1064,7 @@ struct Options {
     var comment: String?
 
     var authenticationPrompt: String?
+    var authenticationContext: Any?
 
     var attributes = [String: Any]()
 }
@@ -1185,6 +1200,14 @@ extension Options {
                 query[UseOperationPrompt] = authenticationPrompt
             }
         }
+
+        #if os(iOS) || os(macOS)
+        if #available(iOS 9.0, OSX 10.11, *) {
+            if authenticationContext != nil {
+                query[UseAuthenticationContext] = authenticationContext
+            }
+        }
+        #endif
 
         return query
     }
