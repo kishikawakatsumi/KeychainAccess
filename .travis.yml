@@ -1,20 +1,31 @@
 language: objective-c
-osx_image: xcode8
+osx_image: xcode9
 cache:
   directories:
   - Lib/vendor/bundle
-# before_install:
-# - brew update
-# - brew outdated carthage || brew upgrade carthage
+before_install:
+- brew update
+- brew outdated carthage || brew upgrade carthage
 install:
 - "(cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)"
 before_script:
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/ios_developer.p12.enc -d -a -out ./Lib/Certificates/ios_developer.p12 || true
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/developer_id_app.p12.enc -d -a -out ./Lib/Certificates/developer_id_app.p12 || true
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/iOS_Development.mobileprovision.enc -d -a -out ./Lib/Certificates/iOS_Development.mobileprovision || true
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/tvOS_Development.mobileprovision.enc -d -a -out ./Lib/Certificates/tvOS_Development.mobileprovision || true
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/KeychainAccess_Tests.provisionprofile.enc -d -a -out ./Lib/Certificates/KeychainAccess_Tests.provisionprofile || true
-- ./Lib/Scripts/add_key.sh || true
+- echo "$ENCRYPTION_SECRET"
+- echo "$PASSPHRASE"
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/ios_developer.cer.enc
+  -d -a -out ./Lib/Certificates/ios_developer.cer || true
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/ios_developer.p12.enc
+  -d -a -out ./Lib/Certificates/ios_developer.p12 || true
+  - openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/developer_id_app.cer.enc
+  -d -a -out ./Lib/Certificates/developer_id_app.cer || true
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/developer_id_app.p12.enc
+  -d -a -out ./Lib/Certificates/developer_id_app.p12 || true
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/iOS_Development.mobileprovision.enc
+  -d -a -out ./Lib/Certificates/iOS_Development.mobileprovision || true
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/tvOS_Development.mobileprovision.enc
+  -d -a -out ./Lib/Certificates/tvOS_Development.mobileprovision || true
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/KeychainAccess_Tests.provisionprofile.enc
+  -d -a -out ./Lib/Certificates/KeychainAccess_Tests.provisionprofile || true
+- "./Lib/Scripts/add_key.sh || true"
 script:
 - "(cd Lib && bundle exec rake $ACTION)"
 after_success:
@@ -30,8 +41,7 @@ env:
   global:
   - LANG=en_US.UTF-8
   - LC_ALL=en_US.UTF-8
-  - secure: KL59HA2XSRa215qVXXnFpx48Tb/k+vNfFAbzyc+0M4mXl1VhSJv3bkTslqDrX822t3iFDFYhXbJ6aUo7szSdcbnCXU7VIhNPRK5QM00eS1AI4V0UwDQZ06g2f4Dmt+cQxACg+0CB0OaPnUCA4rkQQKeBMAWa67Tp2hNgQHwsnio=
-  - secure: B8zXiyX1zEq6uWaCxap5iW1joQBoOjNjSUlcs1t+QKdaFCFtjOI8C1JCClzk7rTnGNDDrhahFlE8yskSNKoBsaW2UJ8TzPIkD4F2pkxTHkaFQl/GBsdbHdOUFL4h0/zGQ6wY1Qhw7C+8+3U+1c9QbnNw6jOQwXTF6gs/XTNzG9Y=
+  - secure: VhfUXqRAmyOx+CN0VjPx5Cg/VE94an0nBKgh80LpnEZSlgS5gvR+fkU/6eykfhczlNQRVrSqXSVzvIbHGtApvTnNbYWeyWrxGmPRbw1qcZ4eeeyPaX5tpsZekZm09AHoE1S5UkmGgv72eD0b+I8DVbBhmbEzeGwQXYO8p7y/IEI=
 branches:
   only:
   - master
