@@ -15,9 +15,8 @@ PRODUCT_BUNDLE_IDENTIFIER = com.kishikawakatsumi.KeychainAccess.TestHost;
 CODE_SIGN_ENTITLEMENTS = TestHost/TestHost.entitlements;
 PROVISIONING_PROFILE_SPECIFIER[sdk=iphone*] = iOS Development;
 
-CODE_SIGN_IDENTITY[sdk=macosx*] = Developer ID Application
-PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*] = KeychainAccess Tests
-OTHER_CODE_SIGN_FLAGS[sdk=macosx*] = --deep;
+CODE_SIGN_IDENTITY[sdk=macosx*] = Developer ID Application;
+PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*] = KeychainAccess Tests;
 
 DEVELOPMENT_TEAM = 27AEDK3C9F;
 
