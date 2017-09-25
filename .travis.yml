@@ -1,30 +1,25 @@
 language: objective-c
-osx_image: xcode8
+osx_image: xcode9
 cache:
   directories:
-  - Lib/vendor/bundle
-# before_install:
-# - brew update
-# - brew outdated carthage || brew upgrade carthage
+  - Lib/vendor
+  - /usr/local/Homebrew
+  - $HOME/Library/Caches/Homebrew
+before_install:
+- brew update
+- brew outdated carthage || brew upgrade carthage
 install:
 - "(cd Lib && bundle install --path=vendor/bundle --binstubs=vendor/bin)"
 before_script:
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/ios_developer.p12.enc -d -a -out ./Lib/Certificates/ios_developer.p12 || true
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/developer_id_app.p12.enc -d -a -out ./Lib/Certificates/developer_id_app.p12 || true
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/iOS_Development.mobileprovision.enc -d -a -out ./Lib/Certificates/iOS_Development.mobileprovision || true
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/tvOS_Development.mobileprovision.enc -d -a -out ./Lib/Certificates/tvOS_Development.mobileprovision || true
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in ./Lib/Certificates/KeychainAccess_Tests.provisionprofile.enc -d -a -out ./Lib/Certificates/KeychainAccess_Tests.provisionprofile || true
+- ./Lib/Scripts/decode_cert.sh || true
 - ./Lib/Scripts/add_key.sh || true
 script:
 - "(cd Lib && bundle exec rake $ACTION)"
-after_success:
-- bash <(curl -s https://codecov.io/bash) -D './build' -J 'KeychainAccess'
 env:
   matrix:
   - ACTION=build
   - ACTION='build:carthage'
-  - ACTION='test:iphonesimulator:debug'
-  - ACTION='test:iphonesimulator:release'
+  - ACTION='test:iphonesimulator'
   - ACTION='test:appletvsimulator'
   - ACTION='test:macosx'
   global:

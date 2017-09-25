@@ -9,6 +9,8 @@ security import ./Lib/Certificates/apple.cer -k ~/Library/Keychains/build.keycha
 security import ./Lib/Certificates/ios_developer.p12 -k ~/Library/Keychains/build.keychain -P $PASSPHRASE -T /usr/bin/codesign
 security import ./Lib/Certificates/developer_id_app.p12 -k ~/Library/Keychains/build.keychain -P $PASSPHRASE -T /usr/bin/codesign
 
+security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k travis build.keychain
+
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 cp ./Lib/Certificates/*.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 cp ./Lib/Certificates/*.provisionprofile ~/Library/MobileDevice/Provisioning\ Profiles/

@@ -6,21 +6,26 @@ def destinations(platform: 'iphonesimulator')
     [ 'name=iPhone 5,OS=10.0',
       'name=iPhone 5s,OS=10.0',
       'name=iPhone 6,OS=10.0',
-      'name=iPhone 6s Plus,OS=10.0',
-      'name=iPhone SE,OS=10.0',
+      'name=iPhone 6s Plus,OS=10.3.1',
+      'name=iPhone SE,OS=10.3.1',
+      'name=iPhone 7,OS=11.0',
       'name=iPad Air 2,OS=10.0',
-      'name=iPad Pro (9.7 inch),OS=10.0',
-      'name=iPad Pro (12.9 inch),OS=10.0'
+      'name=iPad Pro (9.7-inch),OS=10.0',
+      'name=iPad Pro (12.9-inch),OS=10.0',
+      'name=iPad Pro (10.5-inch),OS=11.0'
     ]
   elsif platform == 'watchsimulator'
-    [ 'name=Apple Watch - 38mm,OS=3.0',
-      'name=Apple Watch - 42mm,OS=3.0'
+    [ 'name=Apple Watch - 38mm,OS=3.2',
+      'name=Apple Watch - 42mm,OS=4.0'
     ]
   elsif platform == 'appletvsimulator'
-    [ 'name=Apple TV 1080p,OS=10.0'
+    [ 'name=Apple TV 1080p,OS=10.2',
+      'name=Apple TV 1080p,OS=11.0'
     ]
   else
-    []
+    [
+      'platform=OS X,arch=x86_64'
+    ]
   end
 end
 
@@ -47,14 +52,15 @@ namespace :build do
       t.scheme = 'KeychainAccess'
       t.sdk = platform
       if platform == 'iphonesimulator'
-        t.add_destination('name=iPhone 6,OS=10.0')
+        t.add_destination('name=iPhone 7,OS=11.0')
       elsif platform == 'watchsimulator'
-        t.add_destination('name=Apple Watch - 42mm,OS=3.0')
+        t.add_destination('name=Apple Watch - 42mm,OS=4.0')
       elsif platform == 'appletvsimulator'
-        t.add_destination('name=Apple TV 1080p,OS=10.0')
+        t.add_destination('name=Apple TV 1080p,OS=11.0')
       end
       t.configuration = configuration
       t.build_dir = 'build'
+      t.hide_shell_script_environment = true
       t.formatter = 'xcpretty -c'
       if ENV['CI']
         t.add_build_setting('CODE_SIGN_IDENTITY', '')
@@ -62,12 +68,12 @@ namespace :build do
       end
     end
   end
-  
+
   task :carthage do
     sh %[echo 'github \"kishikawakatsumi/KeychainAccess\" \"#{branch_name}\"' > Cartfile]
     sh %[carthage update --no-use-binaries]
   end
-  
+
   def branch_name
     if ENV['CI']
       pull_req = %[https://api.github.com/repos/#{ENV['TRAVIS_REPO_SLUG']}/pulls/#{ENV['TRAVIS_PULL_REQUEST']}]
@@ -81,30 +87,51 @@ end
 
 namespace :test do
   supportedPlatforms
-    .select { |platform| platform == 'macosx' || platform.end_with?('simulator') }.map do |platform|
+    .select { |platform| platform == 'macosx' || platform == 'iphonesimulator' || platform == 'appletvsimulator' }
+    .each do |platform|
       task platform do |t|
-        configurations
-          .map { |configuration| Rake::Task["test:#{platform}:#{configuration.downcase}"] }
-          .map(&:invoke)
+        configurations.each do |configuration|
+          destinations(platform: platform)
+            .map { |destination| Rake::Task["test:#{platform}:#{configuration.downcase}:#{destination}"] }
+            .map(&:invoke)
+        end
       end
     end
 end
-    
+
 namespace :test do
-  supportedPlatforms.product(configurations).each do |platform, configuration|
-    XCJobs::Test.new("#{platform}:#{configuration.downcase}") do |t|
-      t.project = 'KeychainAccess'
-      t.scheme = 'KeychainAccess'
-      t.sdk = platform
+  supportedPlatforms
+    .select { |platform| platform == 'macosx' || platform == 'iphonesimulator' || platform == 'appletvsimulator' }
+    .product(configurations)
+    .each do |platform, configuration|
       destinations(platform: platform).each do |destination|
-        t.add_destination(destination)
+        XCJobs::Test.new("#{platform}:#{configuration.downcase}:#{destination}") do |t|
+          t.project = 'KeychainAccess'
+          t.scheme = 'KeychainAccess'
+          t.sdk = platform
+          t.configuration = configuration
+          t.add_destination(destination)
+          t.coverage = true
+          t.build_dir = 'build'
+          t.hide_shell_script_environment = true
+          t.after_action do
+            build_coverage_reports()
+            puts `curl -L https://codecov.io/bash | bash -s -- -f 'coverage.txt'`
+          end
+        end
       end
-      t.configuration = configuration
-      t.add_build_option('-enableCodeCoverage', 'YES')
-      t.build_dir = 'build'
-      t.formatter = 'xcpretty -c'
+    end
+end
+
+def build_coverage_reports()
+  project_name = 'KeychainAccess'
+  profdata = Dir.glob(File.join('build', '/**/Coverage.profdata')).first
+  Dir.glob(File.join('build', "/**/#{project_name}")) do |target|
+    output = `xcrun llvm-cov report -instr-profile "#{profdata}" "#{target}" -arch=x86_64`
+    if $?.success?
+      puts output
+      `xcrun llvm-cov show -instr-profile "#{profdata}" "#{target}" -arch=x86_64 -use-color=0 > coverage.txt`
+      break
     end
   end
 end
-
-XCJobs::Coverage::Coveralls.new()
