@@ -1,5 +1,4 @@
 language: objective-c
-osx_image: xcode9
 cache:
   directories:
   - Lib/vendor
@@ -15,13 +14,30 @@ before_script:
 - ./Lib/Scripts/add_key.sh || true
 script:
 - "(cd Lib && bundle exec rake $ACTION)"
+matrix:
+  include:
+  - osx_image: xcode9
+    env: ACTION=build
+  - osx_image: xcode9
+    env: ACTION='build:carthage'
+  - osx_image: xcode9
+    env: ACTION='test:iphonesimulator'
+  - osx_image: xcode9
+    env: ACTION='test:appletvsimulator'
+  - osx_image: xcode9
+    env: ACTION='test:macosx'
+
+  - osx_image: xcode8.3
+    env: ACTION=build
+  - osx_image: xcode8.3
+    env: ACTION='build:carthage'
+  - osx_image: xcode8.3
+    env: ACTION='test:iphonesimulator'
+  - osx_image: xcode8.3
+    env: ACTION='test:appletvsimulator'
+  - osx_image: xcode8.3
+    env: ACTION='test:macosx'
 env:
-  matrix:
-  - ACTION=build
-  - ACTION='build:carthage'
-  - ACTION='test:iphonesimulator'
-  - ACTION='test:appletvsimulator'
-  - ACTION='test:macosx'
   global:
   - LANG=en_US.UTF-8
   - LC_ALL=en_US.UTF-8
