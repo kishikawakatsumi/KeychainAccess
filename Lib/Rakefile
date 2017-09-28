@@ -1,27 +1,55 @@
 require 'xcjobs'
 require 'json'
 
+def xcode_version
+  `xcodebuild -version`.split("\n").first.scan(/\d+/).join('.')
+end
+
 def destinations(platform: 'iphonesimulator')
   if platform == 'iphonesimulator'
-    [ 'name=iPhone 5,OS=10.0',
-      'name=iPhone 5s,OS=10.0',
-      'name=iPhone 6,OS=10.0',
-      'name=iPhone 6s Plus,OS=10.3.1',
-      'name=iPhone SE,OS=10.3.1',
-      'name=iPhone 7,OS=11.0',
-      'name=iPad Air 2,OS=10.0',
-      'name=iPad Pro (9.7-inch),OS=10.0',
-      'name=iPad Pro (12.9-inch),OS=10.0',
-      'name=iPad Pro (10.5-inch),OS=11.0'
-    ]
+    if xcode_version.start_with?('8')
+      [ 'name=iPhone 5,OS=10.0',
+        'name=iPhone 5s,OS=10.0',
+        'name=iPhone 6,OS=10.0',
+        'name=iPhone 6s Plus,OS=10.3.1',
+        'name=iPhone SE,OS=10.3.1',
+        'name=iPad Air 2,OS=10.0',
+        'name=iPad Pro (9.7-inch),OS=10.0',
+        'name=iPad Pro (12.9-inch),OS=10.0'
+      ]
+    else
+      [ 'name=iPhone 5,OS=10.0',
+        'name=iPhone 5s,OS=10.0',
+        'name=iPhone 6,OS=10.0',
+        'name=iPhone 6s Plus,OS=10.3.1',
+        'name=iPhone SE,OS=10.3.1',
+        'name=iPhone 7,OS=11.0',
+        'name=iPad Air 2,OS=10.0',
+        'name=iPad Pro (9.7-inch),OS=10.0',
+        'name=iPad Pro (12.9-inch),OS=10.0',
+        'name=iPad Pro (10.5-inch),OS=11.0'
+      ]
+    end
   elsif platform == 'watchsimulator'
-    [ 'name=Apple Watch - 38mm,OS=3.2',
-      'name=Apple Watch - 42mm,OS=4.0'
-    ]
+    if xcode_version.start_with?('8')
+      [ 'name=Apple Watch - 38mm,OS=3.2',
+        'name=Apple Watch Series 2 - 42mm,OS=3.2'
+      ]
+    else
+      [ 'name=Apple Watch - 38mm,OS=3.2',
+        'name=Apple Watch - 42mm,OS=4.0',
+        'name=Apple Watch Series 2 - 42mm,OS=4.0'
+      ]
+    end
   elsif platform == 'appletvsimulator'
-    [ 'name=Apple TV 1080p,OS=10.2',
-      'name=Apple TV 1080p,OS=11.0'
-    ]
+    if xcode_version.start_with?('8')
+      [ 'name=Apple TV 1080p,OS=10.2'
+      ]
+    else
+      [ 'name=Apple TV 1080p,OS=10.2',
+        'name=Apple TV 1080p,OS=11.0'
+      ]
+    end
   else
     [
       'platform=OS X,arch=x86_64'
@@ -51,13 +79,6 @@ namespace :build do
       t.project = 'KeychainAccess'
       t.scheme = 'KeychainAccess'
       t.sdk = platform
-      if platform == 'iphonesimulator'
-        t.add_destination('name=iPhone 7,OS=11.0')
-      elsif platform == 'watchsimulator'
-        t.add_destination('name=Apple Watch - 42mm,OS=4.0')
-      elsif platform == 'appletvsimulator'
-        t.add_destination('name=Apple TV 1080p,OS=11.0')
-      end
       t.configuration = configuration
       t.build_dir = 'build'
       t.hide_shell_script_environment = true
@@ -66,12 +87,35 @@ namespace :build do
         t.add_build_setting('CODE_SIGN_IDENTITY', '')
         t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
       end
+      if xcode_version.start_with?('8')
+        t.add_build_setting('SWIFT_VERSION', '3.0')
+        if platform == 'iphonesimulator'
+          t.add_destination('name=iPhone 7,OS=10.3.1')
+        elsif platform == 'watchsimulator'
+          t.add_destination('name=Apple Watch - 42mm,OS=3.2')
+        elsif platform == 'appletvsimulator'
+          t.add_destination('name=Apple TV 1080p,OS=10.0')
+        end
+      else
+        if platform == 'iphonesimulator'
+          t.add_destination('name=iPhone 7,OS=11.0')
+        elsif platform == 'watchsimulator'
+          t.add_destination('name=Apple Watch - 42mm,OS=4.0')
+        elsif platform == 'appletvsimulator'
+          t.add_destination('name=Apple TV 1080p,OS=11.0')
+        end
+      end
     end
   end
 
   task :carthage do
     sh %[echo 'github \"kishikawakatsumi/KeychainAccess\" \"#{branch_name}\"' > Cartfile]
-    sh %[carthage update --no-use-binaries]
+    if xcode_version.start_with?('8')
+      sh %[echo SWIFT_VERSION=\"3.0\" > swift3.xcconfig]
+      sh %[XCODE_XCCONFIG_FILE=`pwd`/swift3.xcconfig carthage update --no-use-binaries]
+    else
+      sh %[carthage update --no-use-binaries]
+    end
   end
 
   def branch_name
@@ -114,6 +158,9 @@ namespace :test do
           t.coverage = true
           t.build_dir = 'build'
           t.hide_shell_script_environment = true
+          if xcode_version.start_with?('8')
+            t.add_build_setting('SWIFT_VERSION', '3.0')
+          end
           t.after_action do
             build_coverage_reports()
             puts `curl -L https://codecov.io/bash | bash -s -- -f 'coverage.txt'`
