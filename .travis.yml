@@ -13,7 +13,7 @@ before_script:
 - ./Lib/Scripts/decode_cert.sh || true
 - ./Lib/Scripts/add_key.sh || true
 script:
-- "(cd Lib && bundle exec rake $ACTION)"
+- "(cd Lib && travis_retry bundle exec rake $ACTION)"
 matrix:
   include:
   - osx_image: xcode9
