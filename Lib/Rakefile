@@ -17,6 +17,18 @@ def destinations(platform: 'iphonesimulator')
         'name=iPad Pro (9.7-inch),OS=10.0',
         'name=iPad Pro (12.9-inch),OS=10.0'
       ]
+    elsif xcode_version.start_with?('9.1') || xcode_version.start_with?('9.2')
+      [ 'name=iPhone 5,OS=10.0',
+        'name=iPhone 5s,OS=10.0',
+        'name=iPhone 6,OS=10.0',
+        'name=iPhone 6s Plus,OS=10.3.1',
+        'name=iPhone SE,OS=10.3.1',
+        'name=iPhone X,OS=11.1',
+        'name=iPad Air 2,OS=10.0',
+        'name=iPad Pro (9.7-inch),OS=10.0',
+        'name=iPad Pro (12.9-inch),OS=10.0',
+        'name=iPad Pro (10.5-inch),OS=11.0'
+      ]
     else
       [ 'name=iPhone 5,OS=10.0',
         'name=iPhone 5s,OS=10.0',
