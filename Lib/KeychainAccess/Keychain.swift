@@ -433,15 +433,16 @@ public final class Keychain {
         self.init(options)
     }
 
-    public convenience init(server: String, protocolType: ProtocolType, authenticationType: AuthenticationType = .default) {
-        self.init(server: URL(string: server)!, protocolType: protocolType, authenticationType: authenticationType)
+    public convenience init(server: String, protocolType: ProtocolType, accessGroup: String? = nil, authenticationType: AuthenticationType = .default) {
+        self.init(server: URL(string: server)!, protocolType: protocolType, accessGroup: accessGroup, authenticationType: authenticationType)
     }
 
-    public convenience init(server: URL, protocolType: ProtocolType, authenticationType: AuthenticationType = .default) {
+    public convenience init(server: URL, protocolType: ProtocolType, accessGroup: String? = nil, authenticationType: AuthenticationType = .default) {
         var options = Options()
         options.itemClass = .internetPassword
         options.server = server
         options.protocolType = protocolType
+        options.accessGroup = accessGroup
         options.authenticationType = authenticationType
         self.init(options)
     }
@@ -984,14 +985,15 @@ public final class Keychain {
             var item = [String: Any]()
 
             item["class"] = itemClass.description
+            
+            if let accessGroup = attributes[AttributeAccessGroup] as? String {
+                item["accessGroup"] = accessGroup
+            }
 
             switch itemClass {
             case .genericPassword:
                 if let service = attributes[AttributeService] as? String {
                     item["service"] = service
-                }
-                if let accessGroup = attributes[AttributeAccessGroup] as? String {
-                    item["accessGroup"] = accessGroup
                 }
             case .internetPassword:
                 if let server = attributes[AttributeServer] as? String {
@@ -1183,16 +1185,16 @@ extension Options {
 
         query[Class] = itemClass.rawValue
         query[AttributeSynchronizable] = SynchronizableAny
+        // Access group is not supported on any simulators.
+        #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS) && !os(tvOS))
+            if let accessGroup = self.accessGroup {
+                query[AttributeAccessGroup] = accessGroup
+            }
+        #endif
 
         switch itemClass {
         case .genericPassword:
             query[AttributeService] = service
-            // Access group is not supported on any simulators.
-            #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS) && !os(tvOS))
-            if let accessGroup = self.accessGroup {
-                query[AttributeAccessGroup] = accessGroup
-            }
-            #endif
         case .internetPassword:
             query[AttributeServer] = server.host
             query[AttributePort] = server.port
