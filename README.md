@@ -540,7 +540,7 @@ item: [authenticationType: Default, key: honeylemon, server: github.com, class: 
 | **v2.3.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1, 2.2 |
 | **v2.4.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.2, 2.3      |
 | **v3.0.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 3.x           |
-| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 3.x, 4.0      |
+| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0           |
 
 ## Installation
 
