@@ -576,7 +576,9 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
                 XCTAssertEqual(attributes?.accessible, Accessibility.afterFirstUnlock.rawValue)
-                if #available(iOS 9.0, *) {
+                if #available(iOS 11.3, *) {
+                    XCTAssertNotNil(attributes?.accessControl)
+                } else if #available(iOS 9.0, *) {
                     XCTAssertNil(attributes?.accessControl)
                 } else {
                     XCTAssertNotNil(attributes?.accessControl)
@@ -618,7 +620,9 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
                 XCTAssertEqual(attributes?.accessible, Accessibility.afterFirstUnlock.rawValue)
-                if #available(iOS 9.0, *) {
+                if #available(iOS 11.3, *) {
+                    XCTAssertNotNil(attributes?.accessControl)
+                } else if #available(iOS 9.0, *) {
                     XCTAssertNil(attributes?.accessControl)
                 } else {
                     XCTAssertNotNil(attributes?.accessControl)
@@ -661,7 +665,9 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
                 XCTAssertEqual(attributes?.accessible, Accessibility.afterFirstUnlock.rawValue)
-                if #available(iOS 9.0, *) {
+                if #available(iOS 11.3, *) {
+                    XCTAssertNotNil(attributes?.accessControl)
+                } else if #available(iOS 9.0, *) {
                     XCTAssertNil(attributes?.accessControl)
                 } else {
                     XCTAssertNotNil(attributes?.accessControl)
