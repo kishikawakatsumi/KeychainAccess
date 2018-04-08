@@ -576,6 +576,7 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
                 XCTAssertEqual(attributes?.accessible, Accessibility.afterFirstUnlock.rawValue)
+                #if os(iOS)
                 if #available(iOS 11.3, *) {
                     XCTAssertNotNil(attributes?.accessControl)
                 } else if #available(iOS 9.0, *) {
@@ -583,6 +584,13 @@ class KeychainAccessTests: XCTestCase {
                 } else {
                     XCTAssertNotNil(attributes?.accessControl)
                 }
+                #else
+                if #available(tvOS 11.3, *) {
+                    XCTAssertNotNil(attributes?.accessControl)
+                } else {
+                    XCTAssertNil(attributes?.accessControl)
+                }
+                #endif
                 XCTAssertEqual(attributes?.accessGroup, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
@@ -620,6 +628,7 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
                 XCTAssertEqual(attributes?.accessible, Accessibility.afterFirstUnlock.rawValue)
+                #if os(iOS)
                 if #available(iOS 11.3, *) {
                     XCTAssertNotNil(attributes?.accessControl)
                 } else if #available(iOS 9.0, *) {
@@ -627,6 +636,13 @@ class KeychainAccessTests: XCTestCase {
                 } else {
                     XCTAssertNotNil(attributes?.accessControl)
                 }
+                #else
+                if #available(tvOS 11.3, *) {
+                    XCTAssertNotNil(attributes?.accessControl)
+                } else {
+                    XCTAssertNil(attributes?.accessControl)
+                }
+                #endif
                 XCTAssertEqual(attributes?.accessGroup, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
@@ -665,6 +681,7 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
                 XCTAssertEqual(attributes?.accessible, Accessibility.afterFirstUnlock.rawValue)
+                #if os(iOS)
                 if #available(iOS 11.3, *) {
                     XCTAssertNotNil(attributes?.accessControl)
                 } else if #available(iOS 9.0, *) {
@@ -672,6 +689,13 @@ class KeychainAccessTests: XCTestCase {
                 } else {
                     XCTAssertNotNil(attributes?.accessControl)
                 }
+                #else
+                if #available(tvOS 11.3, *) {
+                    XCTAssertNotNil(attributes?.accessControl)
+                } else {
+                    XCTAssertNil(attributes?.accessControl)
+                }
+                #endif
                 XCTAssertEqual(attributes?.accessGroup, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
