@@ -778,7 +778,14 @@ public final class Keychain {
     }
 
     public func allKeys() -> [String] {
-        return type(of: self).prettify(itemClass: itemClass, items: items()).flatMap { $0["key"] as? String }
+        let allItems = type(of: self).prettify(itemClass: itemClass, items: items())
+        let filter: ([String: Any]) -> String? = { $0["key"] as? String }
+
+        #if swift(>=4.1)
+            return allItems.compactMap(filter)
+        #else
+            return allItems.flatMap(filter)
+        #endif
     }
 
     public class func allItems(_ itemClass: ItemClass) -> [[String: Any]] {
