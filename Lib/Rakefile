@@ -17,6 +17,16 @@ def destinations(platform: 'iphonesimulator')
         'name=iPad Pro (9.7-inch),OS=10.0',
         'name=iPad Pro (12.9-inch),OS=10.0'
       ]
+    elsif xcode_version.start_with?('9.3')
+      [ 'name=iPhone 5s,OS=11.0.1',
+        'name=iPhone 5s,OS=11.1',
+        'name=iPhone 6,OS=11.2',
+        'name=iPhone 6s Plus,OS=11.3',
+        'name=iPhone SE,OS=11.0.1',
+        'name=iPad Air 2,OS=11.1',
+        'name=iPad Pro (9.7-inch),OS=11.2',
+        'name=iPad Pro (12.9-inch),OS=11.3'
+      ]
     else
       [ 'name=iPhone 5,OS=10.0',
         'name=iPhone 5s,OS=10.0',
@@ -35,6 +45,11 @@ def destinations(platform: 'iphonesimulator')
       [ 'name=Apple Watch - 38mm,OS=3.2',
         'name=Apple Watch Series 2 - 42mm,OS=3.2'
       ]
+    elsif xcode_version.start_with?('9.3')
+      [ 'name=Apple Watch - 38mm,OS=4.3',
+        'name=Apple Watch - 42mm,OS=4.3',
+        'name=Apple Watch Series 2 - 42mm,OS=4.3'
+      ]
     else
       [ 'name=Apple Watch - 38mm,OS=3.2',
         'name=Apple Watch - 42mm,OS=4.0',
@@ -44,6 +59,9 @@ def destinations(platform: 'iphonesimulator')
   elsif platform == 'appletvsimulator'
     if xcode_version.start_with?('8')
       [ 'name=Apple TV 1080p,OS=10.2'
+      ]
+    elsif xcode_version.start_with?('9.3')
+      [ 'name=Apple TV 4K,OS=11.3'
       ]
     else
       [ 'name=Apple TV 1080p,OS=10.2',
@@ -96,7 +114,17 @@ namespace :build do
         elsif platform == 'appletvsimulator'
           t.add_destination('name=Apple TV 1080p,OS=10.0')
         end
+      elsif xcode_version.start_with?('9.3')
+        t.add_build_setting('SWIFT_VERSION', '4.1')
+        if platform == 'iphonesimulator'
+          t.add_destination('name=iPhone 7,OS=11.3')
+        elsif platform == 'watchsimulator'
+          t.add_destination('name=Apple Watch - 42mm,OS=4.3')
+        elsif platform == 'appletvsimulator'
+          t.add_destination('name=Apple TV 4K,OS=11.3')
+        end
       else
+        t.add_build_setting('SWIFT_VERSION', '4.0')
         if platform == 'iphonesimulator'
           t.add_destination('name=iPhone 7,OS=11.0')
         elsif platform == 'watchsimulator'
@@ -150,6 +178,10 @@ namespace :test do
           t.hide_shell_script_environment = true
           if xcode_version.start_with?('8')
             t.add_build_setting('SWIFT_VERSION', '3.0')
+          elsif xcode_version.start_with?('9.3')
+            t.add_build_setting('SWIFT_VERSION', '4.1')
+          else
+            t.add_build_setting('SWIFT_VERSION', '4.0')
           end
           t.after_action do
             build_coverage_reports()
