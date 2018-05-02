@@ -27,6 +27,26 @@ def destinations(platform: 'iphonesimulator')
         'name=iPad Pro (9.7-inch),OS=11.2',
         'name=iPad Pro (12.9-inch),OS=11.3'
       ]
+    elsif xcode_version.start_with?('9.2')
+      [ 'name=iPhone 5s,OS=11.2',
+        'name=iPhone 5s,OS=11.2',
+        'name=iPhone 6,OS=11.2',
+        'name=iPhone 6s Plus,OS=11.2',
+        'name=iPhone SE,OS=11.2',
+        'name=iPad Air 2,OS=11.2',
+        'name=iPad Pro (9.7-inch),OS=11.2',
+        'name=iPad Pro (12.9-inch),OS=11.2'
+      ]
+    elsif xcode_version.start_with?('9.1')
+      [ 'name=iPhone 5s,OS=11.1',
+        'name=iPhone 5s,OS=11.1',
+        'name=iPhone 6,OS=11.1',
+        'name=iPhone 6s Plus,OS=11.1',
+        'name=iPhone SE,OS=11.1',
+        'name=iPad Air 2,OS=11.1',
+        'name=iPad Pro (9.7-inch),OS=11.1',
+        'name=iPad Pro (12.9-inch),OS=11.1'
+      ]
     else
       [ 'name=iPhone 5,OS=10.0',
         'name=iPhone 5s,OS=10.0',
@@ -50,6 +70,16 @@ def destinations(platform: 'iphonesimulator')
         'name=Apple Watch - 42mm,OS=4.3',
         'name=Apple Watch Series 2 - 42mm,OS=4.3'
       ]
+    elsif xcode_version.start_with?('9.2')
+      [ 'name=Apple Watch - 38mm,OS=4.2',
+        'name=Apple Watch - 42mm,OS=4.2',
+        'name=Apple Watch Series 2 - 42mm,OS=4.2'
+      ]
+    elsif xcode_version.start_with?('9.1')
+      [ 'name=Apple Watch - 38mm,OS=4.1',
+        'name=Apple Watch - 42mm,OS=4.1',
+        'name=Apple Watch Series 2 - 42mm,OS=4.1'
+      ]
     else
       [ 'name=Apple Watch - 38mm,OS=3.2',
         'name=Apple Watch - 42mm,OS=4.0',
@@ -62,6 +92,12 @@ def destinations(platform: 'iphonesimulator')
       ]
     elsif xcode_version.start_with?('9.3')
       [ 'name=Apple TV 4K,OS=11.3'
+      ]
+    elsif xcode_version.start_with?('9.2')
+      [ 'name=Apple TV 4K,OS=11.2'
+      ]
+    elsif xcode_version.start_with?('9.1')
+      [ 'name=Apple TV 4K,OS=11.1'
       ]
     else
       [ 'name=Apple TV 1080p,OS=10.2',
@@ -122,6 +158,24 @@ namespace :build do
           t.add_destination('name=Apple Watch - 42mm,OS=4.3')
         elsif platform == 'appletvsimulator'
           t.add_destination('name=Apple TV 4K,OS=11.3')
+        end
+      elsif xcode_version.start_with?('9.2')
+        t.add_build_setting('SWIFT_VERSION', '4.0')
+        if platform == 'iphonesimulator'
+          t.add_destination('name=iPhone 7,OS=11.2')
+        elsif platform == 'watchsimulator'
+          t.add_destination('name=Apple Watch - 42mm,OS=4.2')
+        elsif platform == 'appletvsimulator'
+          t.add_destination('name=Apple TV 4K,OS=11.2')
+        end
+      elsif xcode_version.start_with?('9.1')
+        t.add_build_setting('SWIFT_VERSION', '4.0')
+        if platform == 'iphonesimulator'
+          t.add_destination('name=iPhone 7,OS=11.1')
+        elsif platform == 'watchsimulator'
+          t.add_destination('name=Apple Watch - 42mm,OS=4.1')
+        elsif platform == 'appletvsimulator'
+          t.add_destination('name=Apple TV 4K,OS=11.1')
         end
       else
         t.add_build_setting('SWIFT_VERSION', '4.0')
