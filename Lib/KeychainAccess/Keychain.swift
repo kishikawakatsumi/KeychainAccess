@@ -744,10 +744,15 @@ public final class Keychain {
     public func contains(_ key: String) throws -> Bool {
         var query = options.query()
         query[AttributeAccount] = key
-
+        if #available(iOSApplicationExtension 9.0, *) {
+            query[UseAuthenticationUI] = UseAuthenticationUIFail
+        }
+        
         let status = SecItemCopyMatching(query as CFDictionary, nil)
         switch status {
         case errSecSuccess:
+            return true
+        case errSecInteractionNotAllowed:
             return true
         case errSecItemNotFound:
             return false
