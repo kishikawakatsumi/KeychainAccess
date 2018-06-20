@@ -26,3 +26,9 @@ vendor/
 
 # Carthage
 Carthage/Build
+
+# Swift Package Manager
+.DS_Store
+/.build
+/Packages
+/*.xcodeproj
