@@ -2,8 +2,6 @@ language: objective-c
 cache:
   directories:
   - Lib/vendor
-  - /usr/local/Homebrew
-  - $HOME/Library/Caches/Homebrew
 before_install:
 - brew update
 - brew outdated carthage || brew upgrade carthage
