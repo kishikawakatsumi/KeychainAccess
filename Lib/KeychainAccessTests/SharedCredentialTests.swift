@@ -73,7 +73,7 @@ class SharedCredentialTests: XCTestCase {
             for _ in 0...100_000 {
                 let password = Keychain.generatePassword()
 
-                XCTAssertEqual(password.characters.count, "xxx-xxx-xxx-xxx".characters.count)
+                XCTAssertEqual(password.count, "xxx-xxx-xxx-xxx".count)
                 XCTAssertFalse(passwords.contains(password))
 
                 passwords.insert(password)
