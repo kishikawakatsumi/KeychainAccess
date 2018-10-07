@@ -11,6 +11,17 @@ script:
 - "(cd Lib && travis_retry bundle exec rake $ACTION)"
 matrix:
   include:
+  - osx_image: xcode10
+    env: ACTION=build
+  - osx_image: xcode10
+    env: ACTION='build:carthage'
+  - osx_image: xcode10
+    env: ACTION='test:iphonesimulator'
+  - osx_image: xcode10
+    env: ACTION='test:appletvsimulator'
+  - osx_image: xcode10
+    env: ACTION='test:macosx'
+
   - osx_image: xcode9.4
     env: ACTION=build
   - osx_image: xcode9.4
