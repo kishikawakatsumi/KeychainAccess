@@ -267,12 +267,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "kishikawa katsumi";
 				TargetAttributes = {
 					140F195B1A49D79400B0016A = {
 						CreatedOnToolsVersion = 6.1.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					140F19661A49D79500B0016A = {
