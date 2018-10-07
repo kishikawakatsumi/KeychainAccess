@@ -243,21 +243,18 @@ namespace :build do
   task :carthage do
     sh %[echo 'github \"kishikawakatsumi/KeychainAccess\"' > Cartfile]
     if xcode_version.start_with?('10')
-      sh %[echo SWIFT_VERSION=\"4.2\" > swift42.xcconfig]
-      sh %[XCODE_XCCONFIG_FILE=`pwd`/swift42.xcconfig carthage update --no-use-binaries]
+      sh %[echo SWIFT_VERSION=\"4.2\" > swift.xcconfig]
     elsif xcode_version.start_with?('9.4')
-      sh %[echo SWIFT_VERSION=\"4.1\" > swift41.xcconfig]
-      sh %[XCODE_XCCONFIG_FILE=`pwd`/swift41.xcconfig carthage update --no-use-binaries]
+      sh %[echo SWIFT_VERSION=\"4.1\" > swift.xcconfig]
     elsif xcode_version.start_with?('9.3')
-      sh %[echo SWIFT_VERSION=\"4.1\" > swift41.xcconfig]
-      sh %[XCODE_XCCONFIG_FILE=`pwd`/swift41.xcconfig carthage update --no-use-binaries]
+      sh %[echo SWIFT_VERSION=\"4.1\" > swift.xcconfig]
     elsif xcode_version.start_with?('9')
-      sh %[echo SWIFT_VERSION=\"4.0\" > swift40.xcconfig]
-      sh %[XCODE_XCCONFIG_FILE=`pwd`/swift40.xcconfig carthage update --no-use-binaries]
+      sh %[echo SWIFT_VERSION=\"4.0\" > swift.xcconfig]
     else
-      sh %[echo SWIFT_VERSION=\"3.0\" > swift3.xcconfig]
-      sh %[XCODE_XCCONFIG_FILE=`pwd`/swift3.xcconfig carthage update --no-use-binaries]
+      sh %[echo SWIFT_VERSION=\"3.0\" > swift.xcconfig]
     end
+    sh %[XCODE_XCCONFIG_FILE=`pwd`/swift.xcconfig carthage update --no-use-binaries]
+    sh %[find . -name '*.bcsymbolmap' | xargs grep swiftlang]
   end
 end
 
@@ -290,8 +287,10 @@ namespace :test do
           t.coverage = true
           t.build_dir = 'build'
           t.hide_shell_script_environment = true
-          if xcode_version.start_with?('9.4')
+          if xcode_version.start_with?('10')
             t.add_build_setting('SWIFT_VERSION', '4.2')
+          elsif xcode_version.start_with?('9.4')
+            t.add_build_setting('SWIFT_VERSION', '4.1')
           elsif xcode_version.start_with?('9.3')
             t.add_build_setting('SWIFT_VERSION', '4.1')
           elsif xcode_version.start_with?('9')
