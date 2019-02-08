@@ -1,6 +1,6 @@
-// swift-tools-version:4.2
+// swift-tools-version:4.0
 //
-//  Package.swift
+//  Package@swift-4.swift
 //  KeychainAccess
 //
 //  Created by kishikawa katsumi on 2015/12/4.
@@ -21,5 +21,5 @@ let package = Package(
             name: "KeychainAccess",
             path: "Sources")
     ],
-    swiftLanguageVersions: [.v3, .v4, .v4_2, .version("5")]
+    swiftLanguageVersions: [3, 4]
 )
