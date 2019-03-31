@@ -1376,7 +1376,7 @@ class KeychainAccessTests: XCTestCase {
             let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue as CFTypeRef, flags, &error)
 
             XCTAssertNil(error)
-            XCTAssertNotNil(accessControl)
+            XCTAssertTrue(accessControl != nil)
         }
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
@@ -1424,7 +1424,7 @@ class KeychainAccessTests: XCTestCase {
             let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue as CFTypeRef, flags, &error)
 
             XCTAssertNil(error)
-            XCTAssertNotNil(accessControl)
+            XCTAssertTrue(accessControl != nil)
         }
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
@@ -1460,7 +1460,7 @@ class KeychainAccessTests: XCTestCase {
             let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue as CFTypeRef, flags, &error)
 
             XCTAssertNil(error)
-            XCTAssertNotNil(accessControl)
+            XCTAssertTrue(accessControl != nil)
         }
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
@@ -1472,7 +1472,7 @@ class KeychainAccessTests: XCTestCase {
             let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault, accessibility.rawValue as CFTypeRef, flags, &error)
 
             XCTAssertNil(error)
-            XCTAssertNotNil(accessControl)
+            XCTAssertTrue(accessControl != nil)
         }
         #endif
         #if os(OSX)
