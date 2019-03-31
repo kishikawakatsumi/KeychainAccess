@@ -267,24 +267,26 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "kishikawa katsumi";
 				TargetAttributes = {
 					140F195B1A49D79400B0016A = {
 						CreatedOnToolsVersion = 6.1.1;
-						LastSwiftMigration = 1000;
+						DevelopmentTeam = 27AEDK3C9F;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					140F19661A49D79500B0016A = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 27AEDK3C9F;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 14A62FFC1D32922C00809B3F;
 					};
 					14A630141D3293C700809B3F = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 27AEDK3C9F;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.Keychain = {
 								enabled = 1;
@@ -295,7 +297,7 @@
 			};
 			buildConfigurationList = 140F19561A49D79400B0016A /* Build configuration list for PBXProject "KeychainAccess" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
