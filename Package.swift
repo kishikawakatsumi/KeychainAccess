@@ -1,4 +1,5 @@
-//
+// swift-tools-version:4.0
+
 //  Package.swift
 //  KeychainAccess
 //
@@ -9,5 +10,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "KeychainAccess"
+    name: "KeychainAccess",
+    products: [
+        .library(name: "KeychainAccess", targets: ["KeychainAccess"])
+    ],
+    targets: [
+        .target(name: "KeychainAccess", path: "Lib/KeychainAccess")
+    ]
 )
