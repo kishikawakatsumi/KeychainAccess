@@ -1203,7 +1203,7 @@ extension Options {
         var query = [String: Any]()
 
         query[Class] = itemClass.rawValue
-        query[AttributeSynchronizable] = SynchronizableAny
+        query[AttributeSynchronizable] = attributes[AttributeSynchronizable] ?? SynchronizableAny
         if let accessGroup = self.accessGroup {
             query[AttributeAccessGroup] = accessGroup
         }
