@@ -1201,7 +1201,7 @@ extension Options {
         var query = [String: Any]()
 
         query[Class] = itemClass.rawValue
-        query[AttributeSynchronizable] = SynchronizableAny
+        query[AttributeSynchronizable] = attributes[AttributeSynchronizable] ?? SynchronizableAny
 
         switch itemClass {
         case .genericPassword:
