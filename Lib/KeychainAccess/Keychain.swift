@@ -512,11 +512,23 @@ public final class Keychain {
     // MARK:
 
     public func get(_ key: String) throws -> String? {
-        return try getString(key)
+        return try getString(key, exactly: false)
+    }
+
+    public func get(exactly key: String) throws -> String? {
+        return try getString(key, exactly: true)
     }
 
     public func getString(_ key: String) throws -> String? {
-        guard let data = try getData(key) else  {
+        return try getString(key, exactly: false)
+    }
+
+    public func getString(exactly key: String) throws -> String? {
+        return try getString(key, exactly: true)
+    }
+
+    private func getString(_ key: String, exactly: Bool = false) throws -> String? {
+        guard let data = try getData(key, exactly: exactly) else  {
             return nil
         }
         guard let string = String(data: data, encoding: .utf8) else {
@@ -527,7 +539,15 @@ public final class Keychain {
     }
 
     public func getData(_ key: String) throws -> Data? {
-        var query = options.query()
+        return try getData(key, exactly: false)
+    }
+
+    public func getData(exactly key: String) throws -> Data? {
+        return try getData(key, exactly: true)
+    }
+
+    private func getData(_ key: String, exactly: Bool = false) throws -> Data? {
+        var query = options.query(exactly: exactly)
 
         query[MatchLimit] = MatchLimitOne
         query[ReturnData] = kCFBooleanTrue
@@ -1199,13 +1219,17 @@ extension Keychain: CustomStringConvertible, CustomDebugStringConvertible {
 
 extension Options {
 
-    func query() -> [String: Any] {
+    func query(exactly: Bool = false) -> [String: Any] {
         var query = [String: Any]()
 
         query[Class] = itemClass.rawValue
-        query[AttributeSynchronizable] = attributes[AttributeSynchronizable] ?? SynchronizableAny
         if let accessGroup = self.accessGroup {
             query[AttributeAccessGroup] = accessGroup
+        }
+        if exactly {
+            query[AttributeSynchronizable] = attributes[AttributeSynchronizable] ?? SynchronizableAny
+        } else {
+            query[AttributeSynchronizable] = SynchronizableAny
         }
 
         switch itemClass {
