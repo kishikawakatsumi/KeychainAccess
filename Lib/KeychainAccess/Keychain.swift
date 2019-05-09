@@ -1206,12 +1206,9 @@ extension Options {
         switch itemClass {
         case .genericPassword:
             query[AttributeService] = service
-            // Access group is not supported on any simulators.
-            #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS) && !os(tvOS))
             if let accessGroup = self.accessGroup {
                 query[AttributeAccessGroup] = accessGroup
             }
-            #endif
         case .internetPassword:
             query[AttributeServer] = server.host
             query[AttributePort] = server.port
