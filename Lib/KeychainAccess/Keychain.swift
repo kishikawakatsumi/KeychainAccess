@@ -745,6 +745,12 @@ public final class Keychain {
         var query = options.query()
         query[AttributeAccount] = key
 
+        if #available(iOS 9.0, *) {
+            query[UseAuthenticationUI] = UseAuthenticationUIFail
+        } else {
+            query[UseNoAuthenticationUI] = kCFBooleanTrue
+        }
+        
         let status = SecItemCopyMatching(query as CFDictionary, nil)
         switch status {
         case errSecSuccess:
