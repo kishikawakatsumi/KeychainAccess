@@ -82,6 +82,27 @@ class AccountsViewController: UITableViewController {
         return cell
     }
 
+    #if swift(>=4.2)
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let services = Array(itemsGroupedByService!.keys)
+        let service = services[indexPath.section]
+
+        let keychain = Keychain(service: service)
+        let items = keychain.allItems()
+
+        let item = items[indexPath.row]
+        let key = item["key"] as! String
+
+        keychain[key] = nil
+
+        if items.count == 1 {
+            reloadData()
+            tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
+        } else {
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    #else
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         let services = Array(itemsGroupedByService!.keys)
         let service = services[indexPath.section]
@@ -101,6 +122,7 @@ class AccountsViewController: UITableViewController {
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
+    #endif
 
     // MARK:
 

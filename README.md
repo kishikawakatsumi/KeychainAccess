@@ -4,9 +4,6 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/KeychainAccess.svg)](http://cocoadocs.org/docsets/KeychainAccess)
 [![Platform](https://img.shields.io/cocoapods/p/KeychainAccess.svg)](http://cocoadocs.org/docsets/KeychainAccess)
-[![Swift 3.x](https://img.shields.io/badge/Swift-3.x-orange.svg?style=flat)](https://swift.org/)
-[![Swift 4.0](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)](https://swift.org/)
-[![Swift 4.1](https://img.shields.io/badge/Swift-4.1-orange.svg?style=flat)](https://swift.org/)
 
 KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X. Makes using Keychain APIs extremely easy and much more palatable to use in Swift.
 
@@ -540,7 +537,7 @@ item: [authenticationType: Default, key: honeylemon, server: github.com, class: 
 | **v2.3.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1, 2.2 |
 | **v2.4.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.2, 2.3      |
 | **v3.0.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 3.x           |
-| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1      |
+| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2 |
 
 ## Installation
 
