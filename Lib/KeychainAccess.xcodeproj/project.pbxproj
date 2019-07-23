@@ -407,6 +407,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = "${TOOLCHAIN_DIR}/usr/lib/swift-${SWIFT_VERSION}/${PLATFORM_NAME}";
 			};
 			name = Debug;
 		};
@@ -414,6 +415,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E44EB1BF9EEB3004FFEC1 /* KeychainAccess.xcconfig */;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = "${TOOLCHAIN_DIR}/usr/lib/swift-${SWIFT_VERSION}/${PLATFORM_NAME}";
 			};
 			name = Release;
 		};
