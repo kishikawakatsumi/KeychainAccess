@@ -173,7 +173,25 @@ namespace :build do
         t.add_build_setting('CODE_SIGN_IDENTITY', '')
         t.add_build_setting('CODE_SIGNING_REQUIRED', 'NO')
       end
-      if xcode_version.start_with?('10')
+      if xcode_version.start_with?('11')
+        t.add_build_setting('SWIFT_VERSION', '5.1')
+        if platform == 'iphonesimulator'
+          t.add_destination('name=iPhone 11,OS=13.0')
+        elsif platform == 'watchsimulator'
+          t.add_destination('name=Apple Watch Series 5 - 44mm,OS=6.0')
+        elsif platform == 'appletvsimulator'
+          t.add_destination('name=Apple TV 4K,OS=13.0')
+        end
+      elsif xcode_version.start_with?('10.3')
+        t.add_build_setting('SWIFT_VERSION', '5.0')
+        if platform == 'iphonesimulator'
+          t.add_destination('name=iPhone 7,OS=12.0')
+        elsif platform == 'watchsimulator'
+          t.add_destination('name=Apple Watch Series 4 - 44mm,OS=5.0')
+        elsif platform == 'appletvsimulator'
+          t.add_destination('name=Apple TV 4K,OS=12.0')
+        end
+      elsif xcode_version.start_with?('10')
         t.add_build_setting('SWIFT_VERSION', '4.2')
         if platform == 'iphonesimulator'
           t.add_destination('name=iPhone 7,OS=12.0')
