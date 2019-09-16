@@ -188,7 +188,7 @@ namespace :build do
         if platform == 'iphonesimulator'
           t.add_destination('name=iPhone Xs,OS=13.0')
         elsif platform == 'watchsimulator'
-          t.add_destination('name=Apple Watch Series 5 - 44mm,OS=6.0')
+          t.add_destination('name=Apple Watch Series 4 - 44mm,OS=6.0')
         elsif platform == 'appletvsimulator'
           t.add_destination('name=Apple TV 4K,OS=13.0')
         end
