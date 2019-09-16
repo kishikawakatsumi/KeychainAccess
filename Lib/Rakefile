@@ -270,7 +270,11 @@ namespace :build do
 
   task :carthage do
     sh %[echo 'github \"kishikawakatsumi/KeychainAccess\"' > Cartfile]
-    if xcode_version.start_with?('10')
+    if xcode_version.start_with?('11')
+      sh %[echo SWIFT_VERSION=\"5.1\" > swift.xcconfig]
+    elsif xcode_version.start_with?('10.3')
+      sh %[echo SWIFT_VERSION=\"5.0\" > swift.xcconfig]
+    elsif xcode_version.start_with?('10')
       sh %[echo SWIFT_VERSION=\"4.2\" > swift.xcconfig]
     elsif xcode_version.start_with?('9.4')
       sh %[echo SWIFT_VERSION=\"4.1\" > swift.xcconfig]
@@ -315,7 +319,11 @@ namespace :test do
           t.coverage = true
           t.build_dir = 'build'
           t.hide_shell_script_environment = true
-          if xcode_version.start_with?('10')
+          if xcode_version.start_with?('11')
+            t.add_build_setting('SWIFT_VERSION', '5.1')
+          elsif xcode_version.start_with?('10.3')
+            t.add_build_setting('SWIFT_VERSION', '5.0')
+          elsif xcode_version.start_with?('10')
             t.add_build_setting('SWIFT_VERSION', '4.2')
           elsif xcode_version.start_with?('9.4')
             t.add_build_setting('SWIFT_VERSION', '4.1')
