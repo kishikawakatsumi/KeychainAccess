@@ -590,13 +590,13 @@ public final class Keychain {
     public func set(_ value: Data, key: String) throws {
         var query = options.query()
         query[AttributeAccount] = key
-        #if os(iOS)
+        #if os(iOS) && !targetEnvironment(macCatalyst)
         if #available(iOS 9.0, *) {
             query[UseAuthenticationUI] = UseAuthenticationUIFail
         } else {
             query[UseNoAuthenticationUI] = kCFBooleanTrue
         }
-        #elseif os(OSX)
+        #elseif os(OSX) || targetEnvironment(macCatalyst)
         query[ReturnData] = kCFBooleanTrue
         if #available(OSX 10.11, *) {
             query[UseAuthenticationUI] = UseAuthenticationUIFail
@@ -617,7 +617,7 @@ public final class Keychain {
 
             options.attributes.forEach { attributes.updateValue($1, forKey: $0) }
 
-            #if os(iOS)
+            #if os(iOS) && !targetEnvironment(macCatalyst)
             if status == errSecInteractionNotAllowed && floor(NSFoundationVersionNumber) <= floor(NSFoundationVersionNumber_iOS_8_0) {
                 try remove(key)
                 try set(value, key: key)
@@ -729,7 +729,7 @@ public final class Keychain {
 
     public func removeAll() throws {
         var query = options.query()
-        #if !os(iOS) && !os(watchOS) && !os(tvOS)
+        #if targetEnvironment(macCatalyst) || (!os(iOS) && !os(watchOS) && !os(tvOS))
         query[MatchLimit] = MatchLimitAll
         #endif
 
@@ -805,7 +805,7 @@ public final class Keychain {
         query[Class] = itemClass.rawValue
         query[MatchLimit] = MatchLimitAll
         query[ReturnAttributes] = kCFBooleanTrue
-        #if os(iOS) || os(watchOS) || os(tvOS)
+        #if (os(iOS) || os(watchOS) || os(tvOS)) && !targetEnvironment(macCatalyst)
         query[ReturnData] = kCFBooleanTrue
         #endif
 
@@ -830,7 +830,7 @@ public final class Keychain {
         return type(of: self).prettify(itemClass: itemClass, items: items())
     }
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     @available(iOS 8.0, *)
     public func getSharedPassword(_ completion: @escaping (_ account: String?, _ password: String?, _ error: Error?) -> () = { account, password, error -> () in }) {
         if let domain = server.host {
@@ -850,7 +850,7 @@ public final class Keychain {
     }
     #endif
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     @available(iOS 8.0, *)
     public func getSharedPassword(_ account: String, completion: @escaping (_ password: String?, _ error: Error?) -> () = { password, error -> () in }) {
         if let domain = server.host {
@@ -872,14 +872,14 @@ public final class Keychain {
     }
     #endif
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     @available(iOS 8.0, *)
     public func setSharedPassword(_ password: String, account: String, completion: @escaping (_ error: Error?) -> () = { e -> () in }) {
         setSharedPassword(password as String?, account: account, completion: completion)
     }
     #endif
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     @available(iOS 8.0, *)
     fileprivate func setSharedPassword(_ password: String?, account: String, completion: @escaping (_ error: Error?) -> () = { e -> () in }) {
         if let domain = server.host {
@@ -897,35 +897,35 @@ public final class Keychain {
     }
     #endif
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     @available(iOS 8.0, *)
     public func removeSharedPassword(_ account: String, completion: @escaping (_ error: Error?) -> () = { e -> () in }) {
         setSharedPassword(nil, account: account, completion: completion)
     }
     #endif
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     @available(iOS 8.0, *)
     public class func requestSharedWebCredential(_ completion: @escaping (_ credentials: [[String: String]], _ error: Error?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: nil, account: nil, completion: completion)
     }
     #endif
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     @available(iOS 8.0, *)
     public class func requestSharedWebCredential(domain: String, completion: @escaping (_ credentials: [[String: String]], _ error: Error?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: domain, account: nil, completion: completion)
     }
     #endif
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     @available(iOS 8.0, *)
     public class func requestSharedWebCredential(domain: String, account: String, completion: @escaping (_ credentials: [[String: String]], _ error: Error?) -> () = { credentials, error -> () in }) {
         requestSharedWebCredential(domain: Optional(domain), account: Optional(account)!, completion: completion)
     }
     #endif
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     @available(iOS 8.0, *)
     fileprivate class func requestSharedWebCredential(domain: String?, account: String?, completion: @escaping (_ credentials: [[String: String]], _ error: Error?) -> ()) {
         SecRequestSharedWebCredential(domain as CFString?, account as CFString?) { (credentials, error) -> () in
@@ -960,7 +960,7 @@ public final class Keychain {
     }
     #endif
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     /**
      @abstract Returns a randomly generated password.
      @return String password in the form xxx-xxx-xxx-xxx where x is taken from the sets "abcdefghkmnopqrstuvwxy", "ABCDEFGHJKLMNPQRSTUVWXYZ", "3456789" with at least one character from each set being present.
@@ -977,7 +977,7 @@ public final class Keychain {
         var query = options.query()
         query[MatchLimit] = MatchLimitAll
         query[ReturnAttributes] = kCFBooleanTrue
-        #if os(iOS) || os(watchOS) || os(tvOS)
+        #if (os(iOS) || os(watchOS) || os(tvOS)) && !targetEnvironment(macCatalyst)
         query[ReturnData] = kCFBooleanTrue
         #endif
 
@@ -1145,7 +1145,7 @@ private let ValuePersistentRef = String(kSecValuePersistentRef)
 @available(iOS 8.0, OSX 10.10, *)
 private let UseOperationPrompt = String(kSecUseOperationPrompt)
 
-#if os(iOS)
+#if os(iOS) && !targetEnvironment(macCatalyst)
 @available(iOS, introduced: 8.0, deprecated: 9.0, message: "Use a UseAuthenticationUI instead.")
 private let UseNoAuthenticationUI = String(kSecUseNoAuthenticationUI)
 #endif
@@ -1170,7 +1170,7 @@ private let UseAuthenticationUIFail = String(kSecUseAuthenticationUIFail)
 @available(watchOS, unavailable)
 private let UseAuthenticationUISkip = String(kSecUseAuthenticationUISkip)
 
-#if os(iOS)
+#if os(iOS) && !targetEnvironment(macCatalyst)
 /** Credential Key Constants */
 private let SharedPassword = String(kSecSharedPassword)
 #endif
@@ -1207,7 +1207,7 @@ extension Options {
         case .genericPassword:
             query[AttributeService] = service
             // Access group is not supported on any simulators.
-            #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS) && !os(tvOS))
+            #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS) && !os(tvOS)) || targetEnvironment(macCatalyst)
             if let accessGroup = self.accessGroup {
                 query[AttributeAccessGroup] = accessGroup
             }
