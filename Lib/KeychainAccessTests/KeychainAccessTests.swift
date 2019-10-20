@@ -130,6 +130,122 @@ class KeychainAccessTests: XCTestCase {
         }
     }
 
+    func testGenericPasswordWithAccessGroup1() {
+        do {
+            // Add Keychain items
+            let keychain = Keychain(service: "Twitter")
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+
+            do { try keychain.set("kishikawa_katsumi", key: "username") } catch {}
+            do { try keychain.set("password_1234", key: "password") } catch {}
+            do { try keychainWithAccessGroup.set("kishikawa_katsumi_access_group", key: "username") } catch {}
+            do { try keychainWithAccessGroup.set("password_1234_access_group", key: "password") } catch {}
+
+            XCTAssertEqual(try! keychain.get("username"), "kishikawa_katsumi")
+            XCTAssertEqual(try! keychain.get("password"), "password_1234")
+
+            XCTAssertEqual(try! keychainWithAccessGroup.get("username"), "kishikawa_katsumi_access_group")
+            XCTAssertEqual(try! keychainWithAccessGroup.get("password"), "password_1234_access_group")
+        }
+
+        do {
+            // Update Keychain items
+            let keychain = Keychain(service: "Twitter")
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+
+            do { try keychain.set("katsumi_kishikawa", key: "username") } catch {}
+            do { try keychain.set("1234_password", key: "password") } catch {}
+            do { try keychainWithAccessGroup.set("katsumi_kishikawa_access_group", key: "username") } catch {}
+            do { try keychainWithAccessGroup.set("1234_password_access_group", key: "password") } catch {}
+
+            XCTAssertEqual(try! keychain.get("username"), "katsumi_kishikawa")
+            XCTAssertEqual(try! keychain.get("password"), "1234_password")
+
+            XCTAssertEqual(try! keychainWithAccessGroup.get("username"), "katsumi_kishikawa_access_group")
+            XCTAssertEqual(try! keychainWithAccessGroup.get("password"), "1234_password_access_group")
+        }
+
+        do {
+            // Remove Keychain items
+            let keychain = Keychain(service: "Twitter")
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+
+            XCTAssertNotNil(try! keychainWithAccessGroup.get("username"))
+            XCTAssertNotNil(try! keychainWithAccessGroup.get("password"))
+
+            do { try keychainWithAccessGroup.remove("username") } catch {}
+            do { try keychainWithAccessGroup.remove("password") } catch {}
+
+
+            XCTAssertNil(try! keychainWithAccessGroup.get("username"))
+            XCTAssertNil(try! keychainWithAccessGroup.get("password"))
+
+            XCTAssertNotNil(try! keychain.get("username"))
+            XCTAssertNotNil(try! keychain.get("password"))
+
+            do { try keychain.remove("username") } catch {}
+            do { try keychain.remove("password") } catch {}
+
+            XCTAssertNil(try! keychain.get("username"))
+            XCTAssertNil(try! keychain.get("password"))
+        }
+    }
+
+    func testGenericPasswordWithAccessGroup2() {
+        do {
+            // Add Keychain items
+            let keychain = Keychain(service: "Twitter")
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+
+            do { try keychain.set("kishikawa_katsumi", key: "username") } catch {}
+            do { try keychain.set("password_1234", key: "password") } catch {}
+            do { try keychainWithAccessGroup.set("kishikawa_katsumi_access_group", key: "username") } catch {}
+            do { try keychainWithAccessGroup.set("password_1234_access_group", key: "password") } catch {}
+
+            XCTAssertEqual(try! keychain.get("username"), "kishikawa_katsumi")
+            XCTAssertEqual(try! keychain.get("password"), "password_1234")
+
+            XCTAssertEqual(try! keychainWithAccessGroup.get("username"), "kishikawa_katsumi_access_group")
+            XCTAssertEqual(try! keychainWithAccessGroup.get("password"), "password_1234_access_group")
+        }
+
+        do {
+            // Update Keychain items
+            let keychain = Keychain(service: "Twitter")
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+
+            do { try keychain.set("katsumi_kishikawa", key: "username") } catch {}
+            do { try keychain.set("1234_password", key: "password") } catch {}
+            do { try keychainWithAccessGroup.set("katsumi_kishikawa_access_group", key: "username") } catch {}
+            do { try keychainWithAccessGroup.set("1234_password_access_group", key: "password") } catch {}
+
+            XCTAssertEqual(try! keychain.get("username"), "katsumi_kishikawa")
+            XCTAssertEqual(try! keychain.get("password"), "1234_password")
+
+            XCTAssertEqual(try! keychainWithAccessGroup.get("username"), "katsumi_kishikawa_access_group")
+            XCTAssertEqual(try! keychainWithAccessGroup.get("password"), "1234_password_access_group")
+        }
+
+        do {
+            // Remove Keychain items
+            let keychain = Keychain(service: "Twitter")
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+
+            XCTAssertNotNil(try! keychainWithAccessGroup.get("username"))
+            XCTAssertNotNil(try! keychainWithAccessGroup.get("password"))
+
+            do { try keychain.remove("username") } catch {}
+            do { try keychain.remove("password") } catch {}
+
+            // If the access group is empty, the query will match all access group. So delete all values in other access groups.
+            XCTAssertNil(try! keychain.get("username"))
+            XCTAssertNil(try! keychain.get("password"))
+
+            XCTAssertNil(try! keychainWithAccessGroup.get("username"))
+            XCTAssertNil(try! keychainWithAccessGroup.get("password"))
+        }
+    }
+
     // MARK:
 
     func testInternetPassword() {
