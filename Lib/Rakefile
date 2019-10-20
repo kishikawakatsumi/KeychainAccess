@@ -8,7 +8,7 @@ end
 def destinations(platform: 'iphonesimulator')
   if platform == 'iphonesimulator'
     if xcode_version.start_with?('11')
-      [ 'name=iPhone Xs,OS=13.0',
+      [ 'name=iPhone 11 Pro,OS=13.0',
         'name=iPhone Xs,OS=12.2',
       ]
     elsif xcode_version.start_with?('10')
@@ -186,7 +186,7 @@ namespace :build do
       if xcode_version.start_with?('11')
         t.add_build_setting('SWIFT_VERSION', '5.1')
         if platform == 'iphonesimulator'
-          t.add_destination('name=iPhone Xs,OS=13.0')
+          t.add_destination('name=iPhone 11,OS=13.0')
         elsif platform == 'watchsimulator'
           t.add_destination('name=Apple Watch Series 4 - 44mm,OS=6.0')
         elsif platform == 'appletvsimulator'
