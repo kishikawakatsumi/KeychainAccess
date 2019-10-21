@@ -1,5 +1,6 @@
 SUPPORTED_PLATFORMS = macosx iphoneos iphonesimulator appletvos appletvsimulator;
 TARGETED_DEVICE_FAMILY = 1,2,3;
+SUPPORTS_MACCATALYST = YES;
 
 COMBINE_HIDPI_IMAGES = YES;
 COPY_PHASE_STRIP = NO;

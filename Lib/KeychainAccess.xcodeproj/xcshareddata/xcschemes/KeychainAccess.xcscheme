@@ -61,6 +61,16 @@
                ReferencedContainer = "container:KeychainAccess.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "14A98C79235D292000BBB893"
+               BuildableName = "KeychainAccessTests-MacCatalyst.xctest"
+               BlueprintName = "KeychainAccessTests-MacCatalyst"
+               ReferencedContainer = "container:TestHost-MacCatalyst/TestHost-MacCatalyst.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

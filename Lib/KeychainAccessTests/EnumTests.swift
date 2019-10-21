@@ -27,7 +27,6 @@ import XCTest
 import KeychainAccess
 
 class EnumTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
     }
@@ -276,11 +275,13 @@ class EnumTests: XCTestCase {
             XCTAssertEqual(accessibility, .afterFirstUnlock)
             XCTAssertEqual(accessibility?.description, "AfterFirstUnlock")
         }
+        #if !targetEnvironment(macCatalyst)
         do {
             let accessibility = Accessibility(rawValue: kSecAttrAccessibleAlways as String)
             XCTAssertEqual(accessibility, .always)
             XCTAssertEqual(accessibility?.description, "Always")
         }
+        #endif
         do {
             let accessibility = Accessibility(rawValue: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly as String)
             XCTAssertEqual(accessibility, .whenPasscodeSetThisDeviceOnly)
@@ -296,10 +297,12 @@ class EnumTests: XCTestCase {
             XCTAssertEqual(accessibility, .afterFirstUnlockThisDeviceOnly)
             XCTAssertEqual(accessibility?.description, "AfterFirstUnlockThisDeviceOnly")
         }
+        #if !targetEnvironment(macCatalyst)
         do {
             let accessibility = Accessibility(rawValue: kSecAttrAccessibleAlwaysThisDeviceOnly as String)
             XCTAssertEqual(accessibility, .alwaysThisDeviceOnly)
             XCTAssertEqual(accessibility?.description, "AlwaysThisDeviceOnly")
         }
+        #endif
     }
 }

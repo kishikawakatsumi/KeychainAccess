@@ -5,6 +5,9 @@
       location = "group:Lib/KeychainAccess.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:Lib/TestHost-MacCatalyst/TestHost-MacCatalyst.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Examples/Example-iOS/Example-iOS.xcodeproj">
    </FileRef>
 </Workspace>

@@ -1,9 +1,9 @@
 //
-//  AppDelegate.swift
-//  TestHost
+//  ViewController.swift
+//  TestHost-MacCatalyst
 //
-//  Created by kishikawa katsumi on 7/10/16.
-//  Copyright © 2016 kishikawa katsumi. All rights reserved.
+//  Created by Kishikawa Katsumi on 2019/10/21.
+//  Copyright © 2019 Kishikawa Katsumi. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,29 +23,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if os(OSX)
-import Cocoa
-
-@NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
-    @IBOutlet weak var window: NSWindow!
-    func applicationDidFinishLaunching(aNotification: NSNotification) {}
-}
-#else
 import UIKit
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
-
-    #if swift(>=4.2)
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        return true
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
-    #else
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
-        return true
-    }
-    #endif
 }
-#endif
