@@ -348,6 +348,8 @@ public final class Keychain {
         return options.service
     }
 
+    // This attribute (kSecAttrAccessGroup) applies to macOS keychain items only if you also set a value of true for the
+    // kSecUseDataProtectionKeychain key, the kSecAttrSynchronizable key, or both.
     public var accessGroup: String? {
         return options.accessGroup
     }

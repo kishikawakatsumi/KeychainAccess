@@ -133,8 +133,11 @@ class KeychainAccessTests: XCTestCase {
     func testGenericPasswordWithAccessGroup1() {
         do {
             // Add Keychain items
-            let keychain = Keychain(service: "Twitter")
-            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+            // This attribute (kSecAttrAccessGroup) applies to macOS keychain items only if you also set a value of true for the
+            // kSecUseDataProtectionKeychain key, the kSecAttrSynchronizable key, or both.
+            // https://developer.apple.com/documentation/security/ksecattraccessgroup
+            let keychain = Keychain(service: "Twitter").synchronizable(true)
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared").synchronizable(true)
 
             do { try keychain.set("kishikawa_katsumi", key: "username") } catch {}
             do { try keychain.set("password_1234", key: "password") } catch {}
@@ -150,8 +153,8 @@ class KeychainAccessTests: XCTestCase {
 
         do {
             // Update Keychain items
-            let keychain = Keychain(service: "Twitter")
-            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+            let keychain = Keychain(service: "Twitter").synchronizable(true)
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared").synchronizable(true)
 
             do { try keychain.set("katsumi_kishikawa", key: "username") } catch {}
             do { try keychain.set("1234_password", key: "password") } catch {}
@@ -167,8 +170,8 @@ class KeychainAccessTests: XCTestCase {
 
         do {
             // Remove Keychain items
-            let keychain = Keychain(service: "Twitter")
-            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+            let keychain = Keychain(service: "Twitter").synchronizable(true)
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared").synchronizable(true)
 
             XCTAssertNotNil(try! keychainWithAccessGroup.get("username"))
             XCTAssertNotNil(try! keychainWithAccessGroup.get("password"))
@@ -194,8 +197,8 @@ class KeychainAccessTests: XCTestCase {
     func testGenericPasswordWithAccessGroup2() {
         do {
             // Add Keychain items
-            let keychain = Keychain(service: "Twitter")
-            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+            let keychain = Keychain(service: "Twitter").synchronizable(true)
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared").synchronizable(true)
 
             do { try keychain.set("kishikawa_katsumi", key: "username") } catch {}
             do { try keychain.set("password_1234", key: "password") } catch {}
@@ -211,8 +214,8 @@ class KeychainAccessTests: XCTestCase {
 
         do {
             // Update Keychain items
-            let keychain = Keychain(service: "Twitter")
-            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+            let keychain = Keychain(service: "Twitter").synchronizable(true)
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared").synchronizable(true)
 
             do { try keychain.set("katsumi_kishikawa", key: "username") } catch {}
             do { try keychain.set("1234_password", key: "password") } catch {}
@@ -228,8 +231,8 @@ class KeychainAccessTests: XCTestCase {
 
         do {
             // Remove Keychain items
-            let keychain = Keychain(service: "Twitter")
-            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared")
+            let keychain = Keychain(service: "Twitter").synchronizable(true)
+            let keychainWithAccessGroup = Keychain(service: "Twitter", accessGroup: "27AEDK3C9F.shared").synchronizable(true)
 
             XCTAssertNotNil(try! keychainWithAccessGroup.get("username"))
             XCTAssertNotNil(try! keychainWithAccessGroup.get("password"))
