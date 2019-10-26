@@ -1204,12 +1204,9 @@ extension Options {
 
         query[Class] = itemClass.rawValue
         query[AttributeSynchronizable] = SynchronizableAny
-        // Access group is not supported on any simulators.
-        #if (!arch(i386) && !arch(x86_64)) || (!os(iOS) && !os(watchOS) && !os(tvOS))
-            if let accessGroup = self.accessGroup {
-                query[AttributeAccessGroup] = accessGroup
-            }
-        #endif
+        if let accessGroup = self.accessGroup {
+            query[AttributeAccessGroup] = accessGroup
+        }
 
         switch itemClass {
         case .genericPassword:
