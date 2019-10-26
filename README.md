@@ -179,7 +179,7 @@ do {
 
 ```swift
 let keychain = Keychain()
-let persistentRef = keychain[attributes: "kishikawakatsumi"].persistentRef
+let persistentRef = keychain[attributes: "kishikawakatsumi"]?.persistentRef
 ...
 ```
 
@@ -187,7 +187,7 @@ let persistentRef = keychain[attributes: "kishikawakatsumi"].persistentRef
 
 ```swift
 let keychain = Keychain()
-let creationDate = keychain[attributes: "kishikawakatsumi"].creationDate
+let creationDate = keychain[attributes: "kishikawakatsumi"]?.creationDate
 ...
 ```
 
