@@ -1618,4 +1618,87 @@ class KeychainAccessTests: XCTestCase {
         }
         #endif
     }
+
+    func testIgnoringAttributeSynchronizable() {
+        let keychain = Keychain(service: "Twitter").synchronizable(false)
+        let keychainSynchronizable = Keychain(service: "Twitter").synchronizable(true)
+
+        XCTAssertNil(try! keychain.get("username", ignoringAttributeSynchronizable: false), "not stored username")
+        XCTAssertNil(try! keychain.get("password", ignoringAttributeSynchronizable: false), "not stored password")
+        XCTAssertNil(try! keychainSynchronizable.get("username", ignoringAttributeSynchronizable: false), "not stored username")
+        XCTAssertNil(try! keychainSynchronizable.get("password", ignoringAttributeSynchronizable: false), "not stored password")
+
+        do { try keychain.set("kishikawakatsumi", key: "username", ignoringAttributeSynchronizable: false) } catch {}
+        do { try keychainSynchronizable.set("kishikawakatsumi_synchronizable", key: "username", ignoringAttributeSynchronizable: false) } catch {}
+        XCTAssertEqual(try! keychain.get("username", ignoringAttributeSynchronizable: false), "kishikawakatsumi", "stored username")
+        XCTAssertEqual(try! keychainSynchronizable.get("username", ignoringAttributeSynchronizable: false), "kishikawakatsumi_synchronizable", "stored username")
+        XCTAssertNil(try! keychain.get("password", ignoringAttributeSynchronizable: false), "not stored password")
+        XCTAssertNil(try! keychainSynchronizable.get("password", ignoringAttributeSynchronizable: false), "not stored password")
+
+        do { try keychain.set("password1234", key: "password", ignoringAttributeSynchronizable: false) } catch {}
+        do { try keychainSynchronizable.set("password1234_synchronizable", key: "password", ignoringAttributeSynchronizable: false) } catch {}
+        XCTAssertEqual(try! keychain.get("username", ignoringAttributeSynchronizable: false), "kishikawakatsumi", "stored username")
+        XCTAssertEqual(try! keychainSynchronizable.get("username", ignoringAttributeSynchronizable: false), "kishikawakatsumi_synchronizable", "stored username")
+        XCTAssertEqual(try! keychain.get("password", ignoringAttributeSynchronizable: false), "password1234", "stored password")
+        XCTAssertEqual(try! keychainSynchronizable.get("password", ignoringAttributeSynchronizable: false), "password1234_synchronizable", "stored password")
+
+        do { try keychain.remove("username", ignoringAttributeSynchronizable: false) } catch {}
+        XCTAssertNil(try! keychain.get("username", ignoringAttributeSynchronizable: false), "not stored username")
+        XCTAssertEqual(try! keychainSynchronizable.get("username", ignoringAttributeSynchronizable: false), "kishikawakatsumi_synchronizable", "stored username")
+
+        do { try keychainSynchronizable.remove("username", ignoringAttributeSynchronizable: false) } catch {}
+        XCTAssertNil(try! keychain.get("username", ignoringAttributeSynchronizable: false), "not stored username")
+        XCTAssertNil(try! keychainSynchronizable.get("username", ignoringAttributeSynchronizable: false), "not stored username")
+        
+        XCTAssertEqual(try! keychain.get("password", ignoringAttributeSynchronizable: false), "password1234", "stored password")
+        XCTAssertEqual(try! keychainSynchronizable.get("password", ignoringAttributeSynchronizable: false), "password1234_synchronizable", "stored password")
+
+        do { try keychain.removeAll() } catch {}
+        XCTAssertNil(try! keychain.get("username", ignoringAttributeSynchronizable: false), "not stored username")
+        XCTAssertNil(try! keychainSynchronizable.get("username", ignoringAttributeSynchronizable: false), "not stored username")
+        XCTAssertNil(try! keychain.get("password", ignoringAttributeSynchronizable: false), "not stored password")
+        XCTAssertNil(try! keychainSynchronizable.get("password", ignoringAttributeSynchronizable: false), "not stored password")
+    }
+
+    func testIgnoringAttributeSynchronizableBackwardCompatibility() {
+        let keychain = Keychain(service: "Twitter").synchronizable(false)
+        let keychainSynchronizable = Keychain(service: "Twitter").synchronizable(true)
+
+        XCTAssertNil(try! keychain.get("username"), "not stored username")
+        XCTAssertNil(try! keychain.get("password"), "not stored password")
+        XCTAssertNil(try! keychainSynchronizable.get("username"), "not stored username")
+        XCTAssertNil(try! keychainSynchronizable.get("password"), "not stored password")
+
+        do { try keychain.set("kishikawakatsumi", key: "username") } catch {}
+        XCTAssertEqual(try! keychain.get("username"), "kishikawakatsumi", "stored username")
+        XCTAssertEqual(try! keychainSynchronizable.get("username"), "kishikawakatsumi", "stored username")
+
+        do { try keychainSynchronizable.set("kishikawakatsumi_synchronizable", key: "username") } catch {}
+        XCTAssertEqual(try! keychain.get("username"), "kishikawakatsumi_synchronizable", "stored username")
+        XCTAssertEqual(try! keychainSynchronizable.get("username"), "kishikawakatsumi_synchronizable", "stored username")
+        XCTAssertNil(try! keychain.get("password"), "not stored password")
+        XCTAssertNil(try! keychainSynchronizable.get("password"), "not stored password")
+
+        do { try keychain.set("password1234", key: "password") } catch {}
+        XCTAssertEqual(try! keychain.get("password"), "password1234", "stored password")
+        XCTAssertEqual(try! keychainSynchronizable.get("password"), "password1234", "stored password")
+
+        do { try keychainSynchronizable.set("password1234_synchronizable", key: "password") } catch {}
+        XCTAssertEqual(try! keychain.get("username"), "kishikawakatsumi_synchronizable", "stored username")
+        XCTAssertEqual(try! keychainSynchronizable.get("username"), "kishikawakatsumi_synchronizable", "stored username")
+        XCTAssertEqual(try! keychain.get("password"), "password1234_synchronizable", "stored password")
+        XCTAssertEqual(try! keychainSynchronizable.get("password"), "password1234_synchronizable", "stored password")
+
+        do { try keychain.remove("username") } catch {}
+        XCTAssertNil(try! keychain.get("username"), "not stored username")
+        XCTAssertNil(try! keychainSynchronizable.get("username"), "not stored username")
+        XCTAssertEqual(try! keychain.get("password"), "password1234_synchronizable", "stored password")
+        XCTAssertEqual(try! keychainSynchronizable.get("password"), "password1234_synchronizable", "stored password")
+
+        do { try keychain.removeAll() } catch {}
+        XCTAssertNil(try! keychain.get("username"), "not stored username")
+        XCTAssertNil(try! keychainSynchronizable.get("username"), "not stored username")
+        XCTAssertNil(try! keychain.get("password"), "not stored password")
+        XCTAssertNil(try! keychainSynchronizable.get("password"), "not stored password")
+    }
 }

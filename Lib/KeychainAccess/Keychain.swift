@@ -511,24 +511,12 @@ public final class Keychain {
 
     // MARK:
 
-    public func get(_ key: String) throws -> String? {
-        return try getString(key, exactly: false)
+    public func get(_ key: String, ignoringAttributeSynchronizable: Bool = true) throws -> String? {
+        return try getString(key, ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
     }
 
-    public func get(exactly key: String) throws -> String? {
-        return try getString(key, exactly: true)
-    }
-
-    public func getString(_ key: String) throws -> String? {
-        return try getString(key, exactly: false)
-    }
-
-    public func getString(exactly key: String) throws -> String? {
-        return try getString(key, exactly: true)
-    }
-
-    private func getString(_ key: String, exactly: Bool = false) throws -> String? {
-        guard let data = try getData(key, exactly: exactly) else  {
+    public func getString(_ key: String, ignoringAttributeSynchronizable: Bool = true) throws -> String? {
+        guard let data = try getData(key, ignoringAttributeSynchronizable: ignoringAttributeSynchronizable) else  {
             return nil
         }
         guard let string = String(data: data, encoding: .utf8) else {
@@ -538,16 +526,8 @@ public final class Keychain {
         return string
     }
 
-    public func getData(_ key: String) throws -> Data? {
-        return try getData(key, exactly: false)
-    }
-
-    public func getData(exactly key: String) throws -> Data? {
-        return try getData(key, exactly: true)
-    }
-
-    private func getData(_ key: String, exactly: Bool = false) throws -> Data? {
-        var query = options.query(exactly: exactly)
+    public func getData(_ key: String, ignoringAttributeSynchronizable: Bool = true) throws -> Data? {
+        var query = options.query(ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
 
         query[MatchLimit] = MatchLimitOne
         query[ReturnData] = kCFBooleanTrue
@@ -570,8 +550,8 @@ public final class Keychain {
         }
     }
 
-    public func get<T>(_ key: String, handler: (Attributes?) -> T) throws -> T {
-        var query = options.query()
+    public func get<T>(_ key: String, ignoringAttributeSynchronizable: Bool = true, handler: (Attributes?) -> T) throws -> T {
+        var query = options.query(ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
 
         query[MatchLimit] = MatchLimitOne
 
@@ -600,16 +580,16 @@ public final class Keychain {
 
     // MARK:
 
-    public func set(_ value: String, key: String) throws {
+    public func set(_ value: String, key: String, ignoringAttributeSynchronizable: Bool = true) throws {
         guard let data = value.data(using: .utf8, allowLossyConversion: false) else {
             print("failed to convert string to data")
             throw Status.conversionError
         }
-        try set(data, key: key)
+        try set(data, key: key, ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
     }
 
-    public func set(_ value: Data, key: String) throws {
-        var query = options.query()
+    public func set(_ value: Data, key: String, ignoringAttributeSynchronizable: Bool = true) throws {
+        var query = options.query(ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
         query[AttributeAccount] = key
         #if os(iOS)
         if #available(iOS 9.0, *) {
@@ -738,8 +718,8 @@ public final class Keychain {
 
     // MARK:
 
-    public func remove(_ key: String) throws {
-        var query = options.query()
+    public func remove(_ key: String, ignoringAttributeSynchronizable: Bool = true) throws {
+        var query = options.query(ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
         query[AttributeAccount] = key
 
         let status = SecItemDelete(query as CFDictionary)
@@ -1219,17 +1199,17 @@ extension Keychain: CustomStringConvertible, CustomDebugStringConvertible {
 
 extension Options {
 
-    func query(exactly: Bool = false) -> [String: Any] {
+    func query(ignoringAttributeSynchronizable: Bool = true) -> [String: Any] {
         var query = [String: Any]()
 
         query[Class] = itemClass.rawValue
         if let accessGroup = self.accessGroup {
             query[AttributeAccessGroup] = accessGroup
         }
-        if exactly {
-            query[AttributeSynchronizable] = attributes[AttributeSynchronizable] ?? SynchronizableAny
-        } else {
+        if ignoringAttributeSynchronizable {
             query[AttributeSynchronizable] = SynchronizableAny
+        } else {
+            query[AttributeSynchronizable] = synchronizable ? kCFBooleanTrue : kCFBooleanFalse
         }
 
         switch itemClass {
