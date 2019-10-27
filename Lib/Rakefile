@@ -8,8 +8,7 @@ end
 def destinations(platform: 'iphonesimulator')
   if platform == 'iphonesimulator'
     if xcode_version.start_with?('11')
-      [ 'name=iPhone 11 Pro,OS=13.0',
-        'name=iPhone Xs,OS=12.2',
+      [ 'name=iPhone 11 Pro,OS=13.0'
       ]
     elsif xcode_version.start_with?('10')
       [ 'name=iPhone 5s,OS=12.0',
