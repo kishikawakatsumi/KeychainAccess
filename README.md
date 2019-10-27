@@ -197,9 +197,9 @@ let creationDate = keychain[attributes: "kishikawakatsumi"]?.creationDate
 let keychain = Keychain()
 do {
     let attributes = try keychain.get("kishikawakatsumi") { $0 }
-    print(attributes.comment)
-    print(attributes.label)
-    print(attributes.creator)
+    print(attributes?.comment)
+    print(attributes?.label)
+    print(attributes?.creator)
     ...
 } catch let error {
     print("error: \(error)")
@@ -210,10 +210,11 @@ do {
 
 ```swift
 let keychain = Keychain()
-let attributes = keychain[attributes: "kishikawakatsumi"]
-print(attributes.comment)
-print(attributes.label)
-print(attributes.creator)
+if let attributes = keychain[attributes: "kishikawakatsumi"] {
+    print(attributes.comment)
+    print(attributes.label)
+    print(attributes.creator)
+}
 ```
 
 ### :key: Configuration (Accessibility, Sharing, iCloud Sync)
