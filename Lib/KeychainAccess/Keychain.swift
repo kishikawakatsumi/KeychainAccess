@@ -782,11 +782,19 @@ public final class Keychain {
         query[AttributeAccount] = key
 
         if withoutAuthenticationUI {
+            #if os(iOS) || os(watchOS) || os(tvOS)
             if #available(iOS 9.0, *) {
                 query[UseAuthenticationUI] = UseAuthenticationUIFail
             } else {
                 query[UseNoAuthenticationUI] = kCFBooleanTrue
             }
+            #else
+            if #available(OSX 10.11, *) {
+                query[UseAuthenticationUI] = UseAuthenticationUIFail
+            } else if #available(OSX 10.10, *) {
+                query[UseNoAuthenticationUI] = kCFBooleanTrue
+            }
+            #endif
         }
         
         let status = SecItemCopyMatching(query as CFDictionary, nil)
@@ -1193,32 +1201,28 @@ private let ValueRef = String(kSecValueRef)
 private let ValuePersistentRef = String(kSecValuePersistentRef)
 
 /** Other Constants */
-@available(iOS 8.0, OSX 10.10, *)
+@available(iOS 8.0, OSX 10.10, tvOS 8.0, *)
 private let UseOperationPrompt = String(kSecUseOperationPrompt)
 
-#if os(iOS)
 @available(iOS, introduced: 8.0, deprecated: 9.0, message: "Use a UseAuthenticationUI instead.")
+@available(OSX, introduced: 10.10, deprecated: 10.11, message: "Use UseAuthenticationUI instead.")
+@available(watchOS, introduced: 2.0, deprecated: 2.0, message: "Use UseAuthenticationUI instead.")
+@available(tvOS, introduced: 8.0, deprecated: 9.0, message: "Use UseAuthenticationUI instead.")
 private let UseNoAuthenticationUI = String(kSecUseNoAuthenticationUI)
-#endif
 
-@available(iOS 9.0, OSX 10.11, *)
-@available(watchOS, unavailable)
+@available(iOS 9.0, OSX 10.11, watchOS 2.0, tvOS 9.0, *)
 private let UseAuthenticationUI = String(kSecUseAuthenticationUI)
 
-@available(iOS 9.0, OSX 10.11, *)
-@available(watchOS, unavailable)
+@available(iOS 9.0, OSX 10.11, watchOS 2.0, tvOS 9.0, *)
 private let UseAuthenticationContext = String(kSecUseAuthenticationContext)
 
-@available(iOS 9.0, OSX 10.11, *)
-@available(watchOS, unavailable)
+@available(iOS 9.0, OSX 10.11, watchOS 2.0, tvOS 9.0, *)
 private let UseAuthenticationUIAllow = String(kSecUseAuthenticationUIAllow)
 
-@available(iOS 9.0, OSX 10.11, *)
-@available(watchOS, unavailable)
+@available(iOS 9.0, OSX 10.11, watchOS 2.0, tvOS 9.0, *)
 private let UseAuthenticationUIFail = String(kSecUseAuthenticationUIFail)
 
-@available(iOS 9.0, OSX 10.11, *)
-@available(watchOS, unavailable)
+@available(iOS 9.0, OSX 10.11, watchOS 2.0, tvOS 9.0, *)
 private let UseAuthenticationUISkip = String(kSecUseAuthenticationUISkip)
 
 #if os(iOS)
