@@ -467,9 +467,9 @@ let password = Keychain.generatePassword() // => Nhu-GKm-s3n-pMx
 #### How to set up Shared Web Credentials
 
 > 1. Add a com.apple.developer.associated-domains entitlement to your app. This entitlement must include all the domains with which you want to share credentials.
-
+>
 > 2. Add an apple-app-site-association file to your website. This file must include application identifiers for all the apps with which the site wants to share credentials, and it must be properly signed.
-
+>
 > 3. When the app is installed, the system downloads and verifies the site association file for each of its associated domains. If the verification is successful, the app is associated with the domain.
 
 **More details:**  
