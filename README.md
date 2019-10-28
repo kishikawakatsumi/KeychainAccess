@@ -21,7 +21,7 @@ KeychainAccess is a simple Swift wrapper for Keychain that works on iOS and OS X
 - **[Support Shared Web Credentials (iOS 8+)](#shared_web_credentials)**
 - [Works on both iOS & OS X](#requirements)
 - [watchOS and tvOS are supported](#requirements)
-- **[Swift 4 & Swift 3 compatible](#requirements)**
+- **[Swift 3, 4 and 5 compatible](#requirements)**
 
 ## :book: Usage
 
@@ -531,17 +531,21 @@ item: [authenticationType: Default, key: honeylemon, server: github.com, class: 
 
 ## Requirements
 
-|            | OS                                     | Swift         |
-|------------|----------------------------------------|---------------|
-| **v1.1.x** | iOS 7+, OSX 10.9+                      | 1.1           |
-| **v1.2.x** | iOS 7+, OSX 10.9+                      | 1.2           |
-| **v2.0.x** | iOS 7+, OSX 10.9+, watchOS 2+          | 2.0           |
-| **v2.1.x** | iOS 7+, OSX 10.9+, watchOS 2+          | 2.0           |
-| **v2.2.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1      |
-| **v2.3.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1, 2.2 |
-| **v2.4.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.2, 2.3      |
-| **v3.0.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 3.x           |
-| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2 |
+|            | OS                                     | Swift              |
+|------------|----------------------------------------|--------------------|
+| **v1.1.x** | iOS 7+, OSX 10.9+                      | 1.1                |
+| **v1.2.x** | iOS 7+, OSX 10.9+                      | 1.2                |
+| **v2.0.x** | iOS 7+, OSX 10.9+, watchOS 2+          | 2.0                |
+| **v2.1.x** | iOS 7+, OSX 10.9+, watchOS 2+          | 2.0                |
+| **v2.2.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1           |
+| **v2.3.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1, 2.2      |
+| **v2.4.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.2, 2.3           |
+| **v3.0.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 3.x                |
+| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2      |
+| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2      |
+| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2      |
+| **v3.2.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 5.0, 4.0, 4.1, 4.2 |
+| **v4.0.0** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 5.0, 4.0, 4.1, 4.2 |
 
 ## Installation
 
