@@ -197,9 +197,9 @@ let creationDate = keychain[attributes: "kishikawakatsumi"]?.creationDate
 let keychain = Keychain()
 do {
     let attributes = try keychain.get("kishikawakatsumi") { $0 }
-    print(attributes.comment)
-    print(attributes.label)
-    print(attributes.creator)
+    print(attributes?.comment)
+    print(attributes?.label)
+    print(attributes?.creator)
     ...
 } catch let error {
     print("error: \(error)")
@@ -210,10 +210,11 @@ do {
 
 ```swift
 let keychain = Keychain()
-let attributes = keychain[attributes: "kishikawakatsumi"]
-print(attributes.comment)
-print(attributes.label)
-print(attributes.creator)
+if let attributes = keychain[attributes: "kishikawakatsumi"] {
+    print(attributes.comment)
+    print(attributes.label)
+    print(attributes.creator)
+}
 ```
 
 ### :key: Configuration (Accessibility, Sharing, iCloud Sync)
@@ -316,12 +317,15 @@ do {
 }
 ```
 
-### <a name="touch_id_integration"> :fu: Touch ID integration
+### <a name="touch_id_integration"> :fu: Touch ID (Face ID) integration
 
 **Any Operation that require authentication must be run in the background thread.**  
 **If you run in the main thread, UI thread will lock for the system to try to display the authentication dialog.**
 
-#### :closed_lock_with_key: Adding a Touch ID protected item
+
+**To use Face ID, add `NSFaceIDUsageDescription` key to your `Info.plist`**
+
+#### :closed_lock_with_key: Adding a Touch ID (Face ID) protected item
 
 If you want to store the Touch ID protected Keychain item, specify `accessibility` and `authenticationPolicy` attributes.  
 
@@ -340,7 +344,7 @@ DispatchQueue.global().async {
 }
 ```
 
-#### :closed_lock_with_key: Updating a Touch ID protected item
+#### :closed_lock_with_key: Updating a Touch ID (Face ID) protected item
 
 The same way as when adding.  
 
@@ -366,7 +370,7 @@ DispatchQueue.global().async {
 }
 ```
 
-#### :closed_lock_with_key: Obtaining a Touch ID protected item
+#### :closed_lock_with_key: Obtaining a Touch ID (Face ID) protected item
 
 The same way as when you get a normal item. It will be displayed automatically Touch ID or passcode authentication If the item you try to get is protected.  
 If you want to show custom authentication prompt message, specify an `authenticationPrompt` attribute.
@@ -388,7 +392,7 @@ DispatchQueue.global().async {
 }
 ```
 
-#### :closed_lock_with_key: Removing a Touch ID protected item
+#### :closed_lock_with_key: Removing a Touch ID (Face ID) protected item
 
 The same way as when you remove a normal item.
 There is no way to show Touch ID or passcode authentication when removing Keychain items.
