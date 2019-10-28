@@ -531,21 +531,22 @@ item: [authenticationType: Default, key: honeylemon, server: github.com, class: 
 
 ## Requirements
 
-|            | OS                                     | Swift              |
-|------------|----------------------------------------|--------------------|
-| **v1.1.x** | iOS 7+, OSX 10.9+                      | 1.1                |
-| **v1.2.x** | iOS 7+, OSX 10.9+                      | 1.2                |
-| **v2.0.x** | iOS 7+, OSX 10.9+, watchOS 2+          | 2.0                |
-| **v2.1.x** | iOS 7+, OSX 10.9+, watchOS 2+          | 2.0                |
-| **v2.2.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1           |
-| **v2.3.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1, 2.2      |
-| **v2.4.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.2, 2.3           |
-| **v3.0.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 3.x                |
-| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2      |
-| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2      |
-| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2      |
-| **v3.2.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 5.0, 4.0, 4.1, 4.2 |
-| **v4.0.0** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 5.0, 4.0, 4.1, 4.2 |
+|            | OS                                     | Swift                   |
+|------------|----------------------------------------|-------------------------|
+| **v1.1.x** | iOS 7+, OSX 10.9+                      | 1.1                     |
+| **v1.2.x** | iOS 7+, OSX 10.9+                      | 1.2                     |
+| **v2.0.x** | iOS 7+, OSX 10.9+, watchOS 2+          | 2.0                     |
+| **v2.1.x** | iOS 7+, OSX 10.9+, watchOS 2+          | 2.0                     |
+| **v2.2.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1                |
+| **v2.3.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.0, 2.1, 2.2           |
+| **v2.4.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 2.2, 2.3                |
+| **v3.0.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 3.x                     |
+| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2           |
+| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2           |
+| **v3.1.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 4.0, 4.1, 4.2           |
+| **v3.2.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 5.0, 4.0, 4.1, 4.2      |
+| **v4.0.x** | iOS 8+, OSX 10.9+, watchOS 2+, tvOS 9+ | 5.0, 4.0, 4.1, 4.2      |
+| **v4.1.x** | iOS 8+, OSX 10.9+, watchOS 3+, tvOS 9+ | 5.1, 5.0, 4.0, 4.1, 4.2 |
 
 ## Installation
 
