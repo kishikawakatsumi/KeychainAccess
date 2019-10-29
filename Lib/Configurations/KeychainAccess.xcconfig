@@ -1,5 +1,7 @@
 SUPPORTED_PLATFORMS = macosx iphoneos iphonesimulator watchos watchsimulator appletvos appletvsimulator;
 TARGETED_DEVICE_FAMILY = 1,2,3,4;
+SUPPORTS_MACCATALYST = YES;
+DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 
 COMBINE_HIDPI_IMAGES = YES;
 PRODUCT_BUNDLE_IDENTIFIER = com.kishikawakatsumi.$(PLATFORM_NAME).$(PRODUCT_NAME:rfc1034identifier);

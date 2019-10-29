@@ -25,11 +25,9 @@
 
 import Foundation
 import XCTest
-
 import KeychainAccess
 
 class KeychainAccessTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
 
@@ -458,7 +456,13 @@ class KeychainAccessTests: XCTestCase {
     func testDefaultInitializer() {
         let keychain = Keychain()
         XCTAssertEqual(keychain.service, Bundle.main.bundleIdentifier)
-        XCTAssertEqual(keychain.service, "com.kishikawakatsumi.KeychainAccess.TestHost")
+        let service: String
+        #if targetEnvironment(macCatalyst)
+        service = "maccatalyst.com.kishikawakatsumi.KeychainAccess.TestHost-MacCatalyst"
+        #else
+        service = "com.kishikawakatsumi.KeychainAccess.TestHost"
+        #endif
+        XCTAssertEqual(keychain.service, service)
         XCTAssertNil(keychain.accessGroup)
     }
 
@@ -470,7 +474,13 @@ class KeychainAccessTests: XCTestCase {
 
     func testInitializerWithAccessGroup() {
         let keychain = Keychain(accessGroup: "27AEDK3C9F.shared")
-        XCTAssertEqual(keychain.service, "com.kishikawakatsumi.KeychainAccess.TestHost")
+        let service: String
+        #if targetEnvironment(macCatalyst)
+        service = "maccatalyst.com.kishikawakatsumi.KeychainAccess.TestHost-MacCatalyst"
+        #else
+        service = "com.kishikawakatsumi.KeychainAccess.TestHost"
+        #endif
+        XCTAssertEqual(keychain.service, service)
         XCTAssertEqual(keychain.accessGroup, "27AEDK3C9F.shared")
     }
 
@@ -745,12 +755,22 @@ class KeychainAccessTests: XCTestCase {
                 XCTAssertNil(attributes?.ref)
                 XCTAssertNotNil(attributes?.persistentRef)
                 XCTAssertEqual(attributes?.accessible, Accessibility.afterFirstUnlock.rawValue)
+                #if targetEnvironment(macCatalyst)
+                XCTAssertNotNil(attributes?.accessControl)
+                #else
                 if ProcessInfo().isOperatingSystemAtLeast(OperatingSystemVersion(majorVersion: 11, minorVersion: 3, patchVersion: 0)) {
                     XCTAssertNotNil(attributes?.accessControl)
                 } else {
                     XCTAssertNil(attributes?.accessControl)
                 }
-                XCTAssertEqual(attributes?.accessGroup, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
+                #endif
+                let accessGroup: String
+                #if targetEnvironment(macCatalyst)
+                accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost-MacCatalyst"
+                #else
+                accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost"
+                #endif
+                XCTAssertEqual(attributes?.accessGroup, accessGroup)
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
                 XCTAssertNotNil(attributes?.modificationDate)
@@ -826,7 +846,13 @@ class KeychainAccessTests: XCTestCase {
                     XCTAssertNil(attributes?.accessControl)
                 }
                 #endif
-                XCTAssertEqual(attributes?.accessGroup, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
+                let accessGroup: String
+                #if targetEnvironment(macCatalyst)
+                accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost-MacCatalyst"
+                #else
+                accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost"
+                #endif
+                XCTAssertEqual(attributes?.accessGroup, accessGroup)
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
                 XCTAssertNotNil(attributes?.modificationDate)
@@ -878,7 +904,13 @@ class KeychainAccessTests: XCTestCase {
                     XCTAssertNil(attributes?.accessControl)
                 }
                 #endif
-                XCTAssertEqual(attributes?.accessGroup, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
+                let accessGroup: String
+                #if targetEnvironment(macCatalyst)
+                accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost-MacCatalyst"
+                #else
+                accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost"
+                #endif
+                XCTAssertEqual(attributes?.accessGroup, accessGroup)
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
                 XCTAssertNotNil(attributes?.modificationDate)
@@ -931,7 +963,13 @@ class KeychainAccessTests: XCTestCase {
                     XCTAssertNil(attributes?.accessControl)
                 }
                 #endif
-                XCTAssertEqual(attributes?.accessGroup, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
+                let accessGroup: String
+                #if targetEnvironment(macCatalyst)
+                accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost-MacCatalyst"
+                #else
+                accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost"
+                #endif
+                XCTAssertEqual(attributes?.accessGroup, accessGroup)
                 XCTAssertNotNil(attributes?.synchronizable)
                 XCTAssertNotNil(attributes?.creationDate)
                 XCTAssertNotNil(attributes?.modificationDate)
@@ -1320,25 +1358,36 @@ class KeychainAccessTests: XCTestCase {
             }
 
             #if !os(OSX)
-            XCTAssertEqual(sortedItems[0]["accessGroup"] as? String, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
+
+            let service: String
+            let accessGroup: String
+            #if targetEnvironment(macCatalyst)
+            service = "maccatalyst.com.kishikawakatsumi.KeychainAccess.TestHost-MacCatalyst"
+            accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost-MacCatalyst"
+            #else
+            service = "com.kishikawakatsumi.KeychainAccess.TestHost"
+            accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost"
+            #endif
+
+            XCTAssertEqual(sortedItems[0]["accessGroup"] as? String, accessGroup)
             XCTAssertEqual(sortedItems[0]["synchronizable"] as? String, "false")
-            XCTAssertEqual(sortedItems[0]["service"] as? String, "com.kishikawakatsumi.KeychainAccess.TestHost")
+            XCTAssertEqual(sortedItems[0]["service"] as? String, service)
             XCTAssertEqual(sortedItems[0]["value"] as? String, "value1")
             XCTAssertEqual(sortedItems[0]["key"] as? String, "key1")
             XCTAssertEqual(sortedItems[0]["class"] as? String, "GenericPassword")
             XCTAssertEqual(sortedItems[0]["accessibility"] as? String, "AfterFirstUnlock")
 
-            XCTAssertEqual(sortedItems[1]["accessGroup"] as? String, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
+            XCTAssertEqual(sortedItems[1]["accessGroup"] as? String, accessGroup)
             XCTAssertEqual(sortedItems[1]["synchronizable"] as? String, "false")
-            XCTAssertEqual(sortedItems[1]["service"] as? String, "com.kishikawakatsumi.KeychainAccess.TestHost")
+            XCTAssertEqual(sortedItems[1]["service"] as? String, service)
             XCTAssertEqual(sortedItems[1]["value"] as? String, "value2")
             XCTAssertEqual(sortedItems[1]["key"] as? String, "key2")
             XCTAssertEqual(sortedItems[1]["class"] as? String, "GenericPassword")
             XCTAssertEqual(sortedItems[1]["accessibility"] as? String, "AfterFirstUnlock")
 
-            XCTAssertEqual(sortedItems[2]["accessGroup"] as? String, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
+            XCTAssertEqual(sortedItems[2]["accessGroup"] as? String, accessGroup)
             XCTAssertEqual(sortedItems[2]["synchronizable"] as? String, "false")
-            XCTAssertEqual(sortedItems[2]["service"] as? String, "com.kishikawakatsumi.KeychainAccess.TestHost")
+            XCTAssertEqual(sortedItems[2]["service"] as? String, service)
             XCTAssertEqual(sortedItems[2]["value"] as? String, "value3")
             XCTAssertEqual(sortedItems[2]["key"] as? String, "key3")
             XCTAssertEqual(sortedItems[2]["class"] as? String, "GenericPassword")
@@ -1383,7 +1432,15 @@ class KeychainAccessTests: XCTestCase {
             }
 
             #if !os(OSX)
-            XCTAssertEqual(sortedItems[0]["accessGroup"] as? String, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
+
+            let accessGroup: String
+            #if targetEnvironment(macCatalyst)
+            accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost-MacCatalyst"
+            #else
+            accessGroup = "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost"
+            #endif
+
+            XCTAssertEqual(sortedItems[0]["accessGroup"] as? String, accessGroup)
             XCTAssertEqual(sortedItems[0]["synchronizable"] as? String, "true")
             XCTAssertEqual(sortedItems[0]["service"] as? String, "service1")
             XCTAssertEqual(sortedItems[0]["value"] as? String, "service1_value1")
@@ -1391,7 +1448,7 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(sortedItems[0]["class"] as? String, "GenericPassword")
             XCTAssertEqual(sortedItems[0]["accessibility"] as? String, "WhenUnlockedThisDeviceOnly")
 
-            XCTAssertEqual(sortedItems[1]["accessGroup"] as? String, "27AEDK3C9F.com.kishikawakatsumi.KeychainAccess.TestHost")
+            XCTAssertEqual(sortedItems[1]["accessGroup"] as? String, accessGroup)
             XCTAssertEqual(sortedItems[1]["synchronizable"] as? String, "false")
             XCTAssertEqual(sortedItems[1]["service"] as? String, "service1")
             XCTAssertEqual(sortedItems[1]["value"] as? String, "service1_value2")
@@ -1410,15 +1467,29 @@ class KeychainAccessTests: XCTestCase {
         }
         do {
             let keychain = Keychain(server: "https://google.com", protocolType: .https)
+            #if !targetEnvironment(macCatalyst)
             try! keychain
                 .synchronizable(false)
                 .accessibility(.alwaysThisDeviceOnly)
                 .set("google.com_value1", key: "google.com_key1")
+            #else
+            try! keychain
+                .synchronizable(false)
+                .accessibility(.afterFirstUnlockThisDeviceOnly)
+                .set("google.com_value1", key: "google.com_key1")
+            #endif
 
+            #if !targetEnvironment(macCatalyst)
             try! keychain
                 .synchronizable(true)
                 .accessibility(.always)
                 .set("google.com_value2", key: "google.com_key2")
+            #else
+            try! keychain
+                .synchronizable(true)
+                .accessibility(.afterFirstUnlock)
+                .set("google.com_value2", key: "google.com_key2")
+            #endif
 
             let allKeys = keychain.allKeys()
             XCTAssertEqual(allKeys.count, 2)
@@ -1441,8 +1512,11 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(sortedItems[0]["class"] as? String, "InternetPassword")
             XCTAssertEqual(sortedItems[0]["authenticationType"] as? String, "Default")
             XCTAssertEqual(sortedItems[0]["protocol"] as? String, "HTTPS")
+            #if targetEnvironment(macCatalyst)
+            XCTAssertEqual(sortedItems[0]["accessibility"] as? String, "AfterFirstUnlockThisDeviceOnly")
+            #else
             XCTAssertEqual(sortedItems[0]["accessibility"] as? String, "AlwaysThisDeviceOnly")
-
+            #endif
             XCTAssertEqual(sortedItems[1]["synchronizable"] as? String, "true")
             XCTAssertEqual(sortedItems[1]["value"] as? String, "google.com_value2")
             XCTAssertEqual(sortedItems[1]["key"] as? String, "google.com_key2")
@@ -1450,7 +1524,11 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertEqual(sortedItems[1]["class"] as? String, "InternetPassword")
             XCTAssertEqual(sortedItems[1]["authenticationType"] as? String, "Default")
             XCTAssertEqual(sortedItems[1]["protocol"] as? String, "HTTPS")
+            #if targetEnvironment(macCatalyst)
+            XCTAssertEqual(sortedItems[1]["accessibility"] as? String, "AfterFirstUnlock")
+            #else
             XCTAssertEqual(sortedItems[1]["accessibility"] as? String, "Always")
+            #endif
             #else
             XCTAssertEqual(sortedItems[0]["key"] as? String, "google.com_key1")
             XCTAssertEqual(sortedItems[0]["server"] as? String, "google.com")
@@ -1474,11 +1552,19 @@ class KeychainAccessTests: XCTestCase {
             let sortedKeys = allKeys.sorted { (key1, key2) -> Bool in
                 return key1.1.compare(key2.1) == .orderedAscending || key1.1.compare(key2.1) == .orderedSame
             }
-            XCTAssertEqual(sortedKeys[0].0, "com.kishikawakatsumi.KeychainAccess.TestHost")
+
+            let service: String
+            #if targetEnvironment(macCatalyst)
+            service = "maccatalyst.com.kishikawakatsumi.KeychainAccess.TestHost-MacCatalyst"
+            #else
+            service = "com.kishikawakatsumi.KeychainAccess.TestHost"
+            #endif
+
+            XCTAssertEqual(sortedKeys[0].0, service)
             XCTAssertEqual(sortedKeys[0].1, "key1")
-            XCTAssertEqual(sortedKeys[1].0, "com.kishikawakatsumi.KeychainAccess.TestHost")
+            XCTAssertEqual(sortedKeys[1].0, service)
             XCTAssertEqual(sortedKeys[1].1, "key2")
-            XCTAssertEqual(sortedKeys[2].0, "com.kishikawakatsumi.KeychainAccess.TestHost")
+            XCTAssertEqual(sortedKeys[2].0, service)
             XCTAssertEqual(sortedKeys[2].1, "key3")
             XCTAssertEqual(sortedKeys[3].0, "service1")
             XCTAssertEqual(sortedKeys[3].1, "service1_key1")

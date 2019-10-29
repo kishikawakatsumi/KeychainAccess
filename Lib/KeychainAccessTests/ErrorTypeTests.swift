@@ -27,7 +27,6 @@ import XCTest
 import KeychainAccess
 
 class ErrorTypeTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
     }

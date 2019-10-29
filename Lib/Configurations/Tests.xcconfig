@@ -1,4 +1,6 @@
 SUPPORTED_PLATFORMS = macosx iphoneos iphonesimulator appletvos appletvsimulator;
+TARGETED_DEVICE_FAMILY = 1,2;
+SUPPORTS_MACCATALYST = YES;
 
 COMBINE_HIDPI_IMAGES = YES;
 PRODUCT_BUNDLE_IDENTIFIER = com.kishikawakatsumi.$(PRODUCT_NAME:rfc1034identifier);

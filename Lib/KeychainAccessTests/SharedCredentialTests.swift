@@ -27,7 +27,6 @@ import XCTest
 import KeychainAccess
 
 class SharedCredentialTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
     }
