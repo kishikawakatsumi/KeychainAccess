@@ -459,9 +459,6 @@ public final class Keychain {
 
     public convenience init(accessGroup: String) {
         var options = Options()
-        if let bundleIdentifier = Bundle.main.bundleIdentifier {
-            options.service = bundleIdentifier
-        }
         options.accessGroup = accessGroup
         self.init(options)
     }
