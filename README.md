@@ -319,7 +319,7 @@ do {
 }
 ```
 
-### <a name="touch_id_integration"> :fu: Touch ID (Face ID) integration
+### <a name="touch_id_integration"> :cyclone: Touch ID (Face ID) integration
 
 **Any Operation that require authentication must be run in the background thread.**  
 **If you run in the main thread, UI thread will lock for the system to try to display the authentication dialog.**
@@ -477,7 +477,7 @@ let password = Keychain.generatePassword() // => Nhu-GKm-s3n-pMx
 **More details:**  
 <https://developer.apple.com/library/ios/documentation/Security/Reference/SharedWebCredentialsRef/>
 
-### :key: Debugging
+### :mag: Debugging
 
 #### Display all stored items if print keychain object
 
