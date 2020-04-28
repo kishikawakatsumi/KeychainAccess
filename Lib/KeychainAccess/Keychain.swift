@@ -153,16 +153,66 @@ public enum Accessibility {
     case alwaysThisDeviceOnly
 }
 
+/**
+ Predefined item attribute constants used to get or set values
+ in a dictionary. The kSecUseAuthenticationUI constant is the key and its
+ value is one of the constants defined here.
+ If the key kSecUseAuthenticationUI not provided then kSecUseAuthenticationUIAllow
+ is used as default.
+ */
+public enum AuthenticationUI {
+    /**
+     Specifies that authenticate UI can appear.
+     */
+    case allow
+
+    /**
+     Specifies that the error
+     errSecInteractionNotAllowed will be returned if an item needs
+     to authenticate with UI
+     */
+    case fail
+
+    /**
+     Specifies that all items which need
+     to authenticate with UI will be silently skipped. This value can be used
+     only with SecItemCopyMatching.
+     */
+    case skip
+}
+
+@available(iOS 9.0, OSX 10.11, *)
+extension AuthenticationUI {
+    public var rawValue: String {
+        switch self {
+        case .allow:
+            return UseAuthenticationUIAllow
+        case .fail:
+            return UseAuthenticationUIFail
+        case .skip:
+            return UseAuthenticationUISkip
+        }
+    }
+
+    public var description: String {
+        switch self {
+        case .allow:
+            return "allow"
+        case .fail:
+            return "fail"
+        case .skip:
+            return "skip"
+        }
+    }
+}
+
 public struct AuthenticationPolicy: OptionSet {
     /**
      User presence policy using Touch ID or Passcode. Touch ID does not
      have to be available or enrolled. Item is still accessible by Touch ID
      even if fingers are added or removed.
      */
-    @available(iOS 8.0, *)
-    @available(OSX 10.10, *)
-    @available(watchOS 2.0, *)
-    @available(tvOS 8.0, *)
+    @available(iOS 8.0, OSX 10.10, watchOS 2.0, tvOS 8.0, *)
     public static let userPresence = AuthenticationPolicy(rawValue: 1 << 0)
 
     /**
@@ -170,10 +220,7 @@ public struct AuthenticationPolicy: OptionSet {
      at least one finger must be enrolled. With Face ID user has to be enrolled. Item is still accessible by Touch ID even
      if fingers are added or removed. Item is still accessible by Face ID if user is re-enrolled.
      */
-    @available(iOS 11.3, *)
-    @available(OSX 10.13.4, *)
-    @available(watchOS 4.3, *)
-    @available(tvOS 11.3, *)
+    @available(iOS 11.3, OSX 10.13.4, watchOS 4.3, tvOS 11.3, *)
     public static let biometryAny = AuthenticationPolicy(rawValue: 1 << 1)
 
     /**
@@ -189,10 +236,7 @@ public struct AuthenticationPolicy: OptionSet {
      Constraint: Touch ID from the set of currently enrolled fingers. Touch ID must be available and at least one finger must
      be enrolled. When fingers are added or removed, the item is invalidated. When Face ID is re-enrolled this item is invalidated.
      */
-    @available(iOS 11.3, *)
-    @available(OSX 10.13.4, *)
-    @available(watchOS 4.3, *)
-    @available(tvOS 11.3, *)
+    @available(iOS 11.3, OSX 10.13, watchOS 4.3, tvOS 11.3, *)
     public static let biometryCurrentSet = AuthenticationPolicy(rawValue: 1 << 3)
 
     /**
@@ -207,10 +251,7 @@ public struct AuthenticationPolicy: OptionSet {
     /**
      Constraint: Device passcode
      */
-    @available(iOS 9.0, *)
-    @available(OSX 10.11, *)
-    @available(watchOS 2.0, *)
-    @available(tvOS 9.0, *)
+    @available(iOS 9.0, OSX 10.11, watchOS 2.0, tvOS 9.0, *)
     public static let devicePasscode = AuthenticationPolicy(rawValue: 1 << 4)
 
     /**
@@ -226,39 +267,27 @@ public struct AuthenticationPolicy: OptionSet {
      Constraint logic operation: when using more than one constraint,
      at least one of them must be satisfied.
      */
-    @available(iOS 9.0, *)
-    @available(OSX 10.12.1, *)
-    @available(watchOS 2.0, *)
-    @available(tvOS 9.0, *)
+    @available(iOS 9.0, OSX 10.12.1, watchOS 2.0, tvOS 9.0, *)
     public static let or = AuthenticationPolicy(rawValue: 1 << 14)
 
     /**
      Constraint logic operation: when using more than one constraint,
      all must be satisfied.
      */
-    @available(iOS 9.0, *)
-    @available(OSX 10.12.1, *)
-    @available(watchOS 2.0, *)
-    @available(tvOS 9.0, *)
+    @available(iOS 9.0, OSX 10.12.1, watchOS 2.0, tvOS 9.0, *)
     public static let and = AuthenticationPolicy(rawValue: 1 << 15)
 
     /**
      Create access control for private key operations (i.e. sign operation)
      */
-    @available(iOS 9.0, *)
-    @available(OSX 10.12.1, *)
-    @available(watchOS 2.0, *)
-    @available(tvOS 9.0, *)
+    @available(iOS 9.0, OSX 10.12.1, watchOS 2.0, tvOS 9.0, *)
     public static let privateKeyUsage = AuthenticationPolicy(rawValue: 1 << 30)
 
     /**
      Security: Application provided password for data encryption key generation.
      This is not a constraint but additional item encryption mechanism.
      */
-    @available(iOS 9.0, *)
-    @available(OSX 10.12.1, *)
-    @available(watchOS 2.0, *)
-    @available(tvOS 9.0, *)
+    @available(iOS 9.0, OSX 10.12.1, watchOS 2.0, tvOS 9.0, *)
     public static let applicationPassword = AuthenticationPolicy(rawValue: 1 << 31)
 
     #if swift(>=2.3)
@@ -432,6 +461,11 @@ public final class Keychain {
         return options.authenticationPrompt
     }
 
+    @available(iOS 9.0, OSX 10.11, *)
+    public var authenticationUI: AuthenticationUI {
+        return options.authenticationUI ?? .allow
+    }
+
     #if os(iOS) || os(OSX)
     @available(iOS 9.0, OSX 10.11, *)
     public var authenticationContext: LAContext? {
@@ -540,6 +574,13 @@ public final class Keychain {
         return Keychain(options)
     }
 
+    @available(iOS 9.0, OSX 10.11, *)
+    public func authenticationUI(_ authenticationUI: AuthenticationUI) -> Keychain {
+        var options = self.options
+        options.authenticationUI = authenticationUI
+        return Keychain(options)
+    }
+
     #if os(iOS) || os(OSX)
     @available(iOS 9.0, OSX 10.11, *)
     public func authenticationContext(_ authenticationContext: LAContext) -> Keychain {
@@ -633,14 +674,26 @@ public final class Keychain {
         query[AttributeAccount] = key
         #if os(iOS)
         if #available(iOS 9.0, *) {
-            query[UseAuthenticationUI] = UseAuthenticationUIFail
+            if let authenticationUI = options.authenticationUI {
+                query[UseAuthenticationUI] = authenticationUI.rawValue
+            } else {
+                query[UseAuthenticationUI] = UseAuthenticationUIFail
+            }
         } else {
             query[UseNoAuthenticationUI] = kCFBooleanTrue
         }
         #elseif os(OSX)
         query[ReturnData] = kCFBooleanTrue
         if #available(OSX 10.11, *) {
-            query[UseAuthenticationUI] = UseAuthenticationUIFail
+            if let authenticationUI = options.authenticationUI {
+                query[UseAuthenticationUI] = authenticationUI.rawValue
+            } else {
+                query[UseAuthenticationUI] = UseAuthenticationUIFail
+            }
+        }
+        #else
+        if let authenticationUI = options.authenticationUI {
+            query[UseAuthenticationUI] = authenticationUI.rawValue
         }
         #endif
 
@@ -789,17 +842,31 @@ public final class Keychain {
         if withoutAuthenticationUI {
             #if os(iOS) || os(watchOS) || os(tvOS)
             if #available(iOS 9.0, *) {
-                query[UseAuthenticationUI] = UseAuthenticationUIFail
+                if let authenticationUI = options.authenticationUI {
+                    query[UseAuthenticationUI] = authenticationUI.rawValue
+                } else {
+                    query[UseAuthenticationUI] = UseAuthenticationUIFail
+                }
             } else {
                 query[UseNoAuthenticationUI] = kCFBooleanTrue
             }
             #else
             if #available(OSX 10.11, *) {
-                query[UseAuthenticationUI] = UseAuthenticationUIFail
+                if let authenticationUI = options.authenticationUI {
+                    query[UseAuthenticationUI] = authenticationUI.rawValue
+                } else {
+                    query[UseAuthenticationUI] = UseAuthenticationUIFail
+                }
             } else if #available(OSX 10.10, *) {
                 query[UseNoAuthenticationUI] = kCFBooleanTrue
             }
             #endif
+        } else {
+            if #available(iOS 9.0, OSX 10.11, *) {
+                if let authenticationUI = options.authenticationUI {
+                    query[UseAuthenticationUI] = authenticationUI.rawValue
+                }
+            }
         }
         
         let status = SecItemCopyMatching(query as CFDictionary, nil)
@@ -1153,6 +1220,7 @@ struct Options {
     var comment: String?
 
     var authenticationPrompt: String?
+    var authenticationUI: AuthenticationUI?
     var authenticationContext: AnyObject?
 
     var attributes = [String: Any]()
