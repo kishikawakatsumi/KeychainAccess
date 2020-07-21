@@ -542,6 +542,15 @@ class KeychainAccessTests: XCTestCase {
         XCTAssertTrue(try! keychain.contains("username"), "stored username")
         XCTAssertTrue(try! keychain.contains("password"), "stored password")
     }
+    
+    func testContainsAny() {
+        let keychain = Keychain(service: "Twitter")
+
+        XCTAssertFalse(try! keychain.containsAny(), "not stored username")
+
+        do { try keychain.set("kishikawakatsumi", key: "username") } catch {}
+        XCTAssertTrue(try! keychain.containsAny(), "stored username")
+    }
 
     // MARK:
 
