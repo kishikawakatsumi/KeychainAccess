@@ -10,9 +10,9 @@ import Foundation
 @propertyWrapper
 public struct KeychainString {
     private let keychain: Keychain
-    let key: String
+    private let key: String
 
-    init(serviceName: String, key: String) {
+    public init(serviceName: String, key: String) {
         self.keychain = Keychain(service: serviceName)
         self.key = key
     }
@@ -34,9 +34,9 @@ public struct KeychainString {
 @propertyWrapper
 public struct KeychainData {
     private let keychain: Keychain
-    let key: String
+    private let key: String
 
-    init(serviceName: String, key: String) {
+    public init(serviceName: String, key: String) {
         self.keychain = Keychain(service: serviceName)
         self.key = key
     }
