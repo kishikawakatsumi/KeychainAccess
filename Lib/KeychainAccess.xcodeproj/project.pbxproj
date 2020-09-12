@@ -17,6 +17,7 @@
 		14A6301F1D3293C700809B3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14A6301E1D3293C700809B3F /* Assets.xcassets */; };
 		14C3A6781D32BF9C00349459 /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140F195C1A49D79400B0016A /* KeychainAccess.framework */; };
 		14C3A6791D32BF9C00349459 /* KeychainAccess.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 140F195C1A49D79400B0016A /* KeychainAccess.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3B9EAAF7250C9841007AAA11 /* Keychain+PropertiesWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9EAAF6250C9841007AAA11 /* Keychain+PropertiesWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		14A630231D3293C700809B3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14F0C1961D3295C4007DCDDB /* TestHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TestHost.entitlements; sourceTree = "<group>"; };
 		14F0C1981D329832007DCDDB /* TestHost.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = TestHost.xcconfig; path = Configurations/TestHost.xcconfig; sourceTree = "<group>"; };
+		3B9EAAF6250C9841007AAA11 /* Keychain+PropertiesWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Keychain+PropertiesWrapper.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 			children = (
 				140F19611A49D79400B0016A /* KeychainAccess.h */,
 				140F197A1A49D89200B0016A /* Keychain.swift */,
+				3B9EAAF6250C9841007AAA11 /* Keychain+PropertiesWrapper.swift */,
 				140F195F1A49D79400B0016A /* Supporting Files */,
 			);
 			path = KeychainAccess;
@@ -345,6 +348,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B9EAAF7250C9841007AAA11 /* Keychain+PropertiesWrapper.swift in Sources */,
 				140F197B1A49D89200B0016A /* Keychain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
