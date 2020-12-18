@@ -15,7 +15,8 @@ let package = Package(
         .macOS(.v10_10), .iOS(.v9), .tvOS(.v9), .watchOS(.v2)
     ],
     products: [
-        .library(name: "KeychainAccess", targets: ["KeychainAccess"])
+        .library(name: "KeychainAccess", targets: ["KeychainAccess"]),
+        .library(name: "KeychainAccess-Dynamic", type: .dynamic, targets: ["KeychainAccess"]),
     ],
     targets: [
         .target(name: "KeychainAccess", path: "Lib/KeychainAccess", exclude:["Info.plist"])
