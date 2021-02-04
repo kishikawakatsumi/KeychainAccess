@@ -182,3 +182,4 @@ build-iPhoneSimulator/
 # .rubocop-https?--*
 
 
+.swiftpm
