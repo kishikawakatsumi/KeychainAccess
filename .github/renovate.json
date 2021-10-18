@@ -1,0 +1,11 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "html": {
+    "fileMatch": [
+      "\\.html?$",
+      "\\.leaf?$"
+    ]
+  }
+}
