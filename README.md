@@ -338,7 +338,7 @@ DispatchQueue.global().async {
     do {
         // Should be the secret invalidated when passcode is removed? If not then use `.WhenUnlocked`
         try keychain
-            .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence)
+            .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: [.biometryAny])
             .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
     } catch let error {
         // Error handling if needed...
@@ -363,7 +363,7 @@ DispatchQueue.global().async {
     do {
         // Should be the secret invalidated when passcode is removed? If not then use `.WhenUnlocked`
         try keychain
-            .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence)
+            .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: [.biometryAny])
             .authenticationPrompt("Authenticate to update your access token")
             .set("01234567-89ab-cdef-0123-456789abcdef", key: "kishikawakatsumi")
     } catch let error {
