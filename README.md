@@ -585,7 +585,7 @@ KeychainAccess is also available through [Swift Package Manager](https://github.
 
 #### Xcode
 
-Select `File > Swift Packages > Add Package Dependency...`,  
+Select `File > Add Packages... > Add Package Dependency...`,  
 
 <img src="https://user-images.githubusercontent.com/40610/67627000-2833b580-f88f-11e9-89ef-18819b1a6c67.png" width="800px" />
 
