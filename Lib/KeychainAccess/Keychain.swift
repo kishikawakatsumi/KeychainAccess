@@ -1299,6 +1299,9 @@ private let UseAuthenticationUIFail = String(kSecUseAuthenticationUIFail)
 @available(iOS 9.0, OSX 10.11, watchOS 2.0, tvOS 9.0, *)
 private let UseAuthenticationUISkip = String(kSecUseAuthenticationUISkip)
 
+@available(iOS 13.0, OSX 10.15, watchOS 6.0, tvOS 13.0, *)
+private let UseDataProtectionKeychain = String(kSecUseDataProtectionKeychain)
+
 #if os(iOS) && !targetEnvironment(macCatalyst)
 /** Credential Key Constants */
 private let SharedPassword = String(kSecSharedPassword)
