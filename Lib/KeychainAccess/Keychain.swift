@@ -893,7 +893,7 @@ public final class Keychain {
         query[AttributeSynchronizable] = SynchronizableAny
         query[MatchLimit] = MatchLimitAll
         query[ReturnAttributes] = kCFBooleanTrue
-
+        
         var result: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
 
@@ -1364,6 +1364,12 @@ extension Options {
             }
         }
         #endif
+        
+        if #available(iOS 13.0, OSX 10.15, watchOS 6.0, tvOS 13.0, *) {
+            if accessGroup != nil {
+                query[UseDataProtectionKeychain] = true
+            }
+        }
 
         return query
     }
@@ -1406,6 +1412,12 @@ extension Options {
         }
 
         attributes[AttributeSynchronizable] = synchronizable ? kCFBooleanTrue : kCFBooleanFalse
+        
+        if #available(iOS 13.0, OSX 10.15, watchOS 6.0, tvOS 13.0, *) {
+            if accessGroup != nil {
+                attributes[UseDataProtectionKeychain] = true
+            }
+        }
 
         return (attributes, nil)
     }
