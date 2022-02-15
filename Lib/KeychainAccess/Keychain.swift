@@ -887,13 +887,19 @@ public final class Keychain {
 
     // MARK:
 
-    public class func allKeys(_ itemClass: ItemClass) -> [(String, String)] {
+    public class func allKeys(_ itemClass: ItemClass, accessGroupsCompatible: Bool = true) -> [(String, String)] {
         var query = [String: Any]()
         query[Class] = itemClass.rawValue
         query[AttributeSynchronizable] = SynchronizableAny
         query[MatchLimit] = MatchLimitAll
         query[ReturnAttributes] = kCFBooleanTrue
         
+        if #available(iOS 13.0, OSX 10.15, watchOS 6.0, tvOS 13.0, *) {
+            if accessGroupsCompatible {
+                query[UseDataProtectionKeychain] = true
+            }
+        }
+
         var result: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
 
