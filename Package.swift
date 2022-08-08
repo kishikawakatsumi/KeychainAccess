@@ -15,9 +15,29 @@ let package = Package(
         .macOS(.v10_10), .iOS(.v8), .tvOS(.v9), .watchOS(.v2)
     ],
     products: [
-        .library(name: "KeychainAccess", targets: ["KeychainAccess"])
+        .library(
+            name: "KeychainAccess", targets: ["KeychainAccess"],
+            dependencies: [], swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-define-availability",
+                    "-Xfrontend",
+                    "SwiftStdlib 5.9",
+                ])
+            ]
+        )
     ],
     targets: [
-        .target(name: "KeychainAccess", path: "Lib/KeychainAccess")
+        .target(
+            name: "KeychainAccess", path: "Lib/KeychainAccess",
+            dependencies: [], swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-define-availability",
+                    "-Xfrontend",
+                    "SwiftStdlib 5.9",
+                ])
+            ]
+        )
     ]
 )
