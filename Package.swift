@@ -16,21 +16,12 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "KeychainAccess", targets: ["KeychainAccess"],
-            dependencies: [], swiftSettings: [
-                .unsafeFlags([
-                    "-Xfrontend",
-                    "-define-availability",
-                    "-Xfrontend",
-                    "SwiftStdlib 5.9",
-                ])
-            ]
+            name: "KeychainAccess", targets: ["KeychainAccess"]
         )
     ],
     targets: [
         .target(
-            name: "KeychainAccess", path: "Lib/KeychainAccess",
-            dependencies: [], swiftSettings: [
+            name: "KeychainAccess", path: "Lib/KeychainAccess", swiftSettings: [
                 .unsafeFlags([
                     "-Xfrontend",
                     "-define-availability",
