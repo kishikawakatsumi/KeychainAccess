@@ -26,7 +26,7 @@ let package = Package(
                     "-Xfrontend",
                     "-define-availability",
                     "-Xfrontend",
-                    "SwiftStdlib 5.9:",
+                    "SwiftStdlib 5.9:iOS 15",
                 ])
             ]
         )
