@@ -18,6 +18,9 @@ let package = Package(
         .library(name: "KeychainAccess", targets: ["KeychainAccess"])
     ],
     targets: [
-        .target(name: "KeychainAccess", path: "Lib/KeychainAccess")
+        .target(
+          name: "KeychainAccess",
+          path: "Lib/KeychainAccess",
+          linkerSettings: [.unsafeFlags(["-Xlinker", "-no_application_extension"])])
     ]
 )
