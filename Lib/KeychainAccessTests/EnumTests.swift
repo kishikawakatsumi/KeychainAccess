@@ -262,7 +262,7 @@ class EnumTests: XCTestCase {
     }
 
     func testAccessibility() {
-        guard #available(OSX 10.10, *) else {
+        guard #available(macOS 10.10, *) else {
             return
         }
         do {

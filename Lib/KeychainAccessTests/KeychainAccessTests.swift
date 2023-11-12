@@ -1316,7 +1316,7 @@ class KeychainAccessTests: XCTestCase {
     // MARK:
 
     func testProperties() {
-        guard #available(OSX 10.10, *) else {
+        guard #available(macOS 10.10, *) else {
             return
         }
 
@@ -1357,7 +1357,7 @@ class KeychainAccessTests: XCTestCase {
                 return key1.compare(key2) == .orderedAscending || key1.compare(key2) == .orderedSame
             }
 
-            #if !os(OSX)
+            #if !os(macOS)
 
             let service: String
             let accessGroup: String
@@ -1431,7 +1431,7 @@ class KeychainAccessTests: XCTestCase {
                 return key1.compare(key2) == .orderedAscending || key1.compare(key2) == .orderedSame
             }
 
-            #if !os(OSX)
+            #if !os(macOS)
 
             let accessGroup: String
             #if targetEnvironment(macCatalyst)
@@ -1504,7 +1504,7 @@ class KeychainAccessTests: XCTestCase {
                 return key1.compare(key2) == .orderedAscending || key1.compare(key2) == .orderedSame
             }
 
-            #if !os(OSX)
+            #if !os(macOS)
             XCTAssertEqual(sortedItems[0]["synchronizable"] as? String, "false")
             XCTAssertEqual(sortedItems[0]["value"] as? String, "google.com_value1")
             XCTAssertEqual(sortedItems[0]["key"] as? String, "google.com_key1")
@@ -1544,7 +1544,7 @@ class KeychainAccessTests: XCTestCase {
             #endif
         }
 
-        #if !os(OSX)
+        #if !os(macOS)
         do {
             let allKeys = Keychain.allKeys(.genericPassword)
             XCTAssertEqual(allKeys.count, 5)
@@ -1598,7 +1598,7 @@ class KeychainAccessTests: XCTestCase {
     // MARK:
 
     func testAuthenticationPolicy() {
-        guard #available(iOS 9.0, OSX 10.11, *) else {
+        guard #available(iOS 9.0, macOS 10.11, *) else {
             return
         }
 
@@ -1796,7 +1796,7 @@ class KeychainAccessTests: XCTestCase {
             XCTAssertTrue(accessControl != nil)
         }
         #endif
-        #if os(OSX)
+        #if os(macOS)
         do {
             let accessibility: Accessibility = .whenPasscodeSetThisDeviceOnly
 
