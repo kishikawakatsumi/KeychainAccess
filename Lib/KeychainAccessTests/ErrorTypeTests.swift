@@ -46,7 +46,7 @@ class ErrorTypeTests: XCTestCase {
             XCTAssertEqual(status, .unimplemented)
             XCTAssertEqual(status?.description, "Function or operation not implemented.")
         }
-        #if os(OSX)
+        #if os(macOS)
         do {
             let status = Status(rawValue: errSecDiskFull)
             XCTAssertEqual(status, .diskFull)
@@ -70,7 +70,7 @@ class ErrorTypeTests: XCTestCase {
             XCTAssertEqual(status, .param)
             XCTAssertEqual(status?.description, "One or more parameters passed to a function were not valid.")
         }
-        #if os(OSX)
+        #if os(macOS)
         do {
             let status = Status(rawValue: errSecWrPerm)
             XCTAssertEqual(status, .wrPerm)
@@ -102,7 +102,7 @@ class ErrorTypeTests: XCTestCase {
             XCTAssertEqual(status, .notAvailable)
             XCTAssertEqual(status?.description, "No keychain is available. You may need to restart your computer.")
         }
-        #if os(OSX)
+        #if os(macOS)
         do {
             let status = Status(rawValue: errSecReadOnly)
             XCTAssertEqual(status, .readOnly)
@@ -114,7 +114,7 @@ class ErrorTypeTests: XCTestCase {
             XCTAssertEqual(status, .authFailed)
             XCTAssertEqual(status?.description, "The user name or passphrase you entered is not correct.")
         }
-        #if os(OSX)
+        #if os(macOS)
         do {
             let status = Status(rawValue: errSecNoSuchKeychain)
             XCTAssertEqual(status, .noSuchKeychain)
@@ -151,7 +151,7 @@ class ErrorTypeTests: XCTestCase {
             XCTAssertEqual(status, .itemNotFound)
             XCTAssertEqual(status?.description, "The specified item could not be found in the keychain.")
         }
-        #if os(OSX)
+        #if os(macOS)
         do {
             let status = Status(rawValue: errSecBufferTooSmall)
             XCTAssertEqual(status, .bufferTooSmall)
@@ -193,7 +193,7 @@ class ErrorTypeTests: XCTestCase {
             XCTAssertEqual(status, .interactionNotAllowed)
             XCTAssertEqual(status?.description, "User interaction is not allowed.")
         }
-        #if os(OSX)
+        #if os(macOS)
         do {
             let status = Status(rawValue: errSecReadOnlyAttr)
             XCTAssertEqual(status, .readOnlyAttr)
@@ -364,7 +364,7 @@ class ErrorTypeTests: XCTestCase {
             XCTAssertEqual(status, .internal)
             XCTAssertEqual(status?.description, "An internal error occurred in the Security framework.")
         }
-        #if os(OSX)
+        #if os(macOS)
         do {
             let status = Status(rawValue: errSecServiceNotAvailable)
             XCTAssertEqual(status, .serviceNotAvailable)
