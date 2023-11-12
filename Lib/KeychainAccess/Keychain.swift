@@ -485,12 +485,6 @@ public final class Keychain {
         self.init(options)
     }
 
-    public convenience init(service: String) {
-        var options = Options()
-        options.service = service
-        self.init(options)
-    }
-
     public convenience init(accessGroup: String) {
         var options = Options()
         if let bundleIdentifier = Bundle.main.bundleIdentifier {
@@ -500,7 +494,7 @@ public final class Keychain {
         self.init(options)
     }
 
-    public convenience init(service: String, accessGroup: String) {
+    public convenience init(service: String, accessGroup: String? = nil) {
         var options = Options()
         options.service = service
         options.accessGroup = accessGroup
