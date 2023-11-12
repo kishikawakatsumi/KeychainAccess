@@ -829,9 +829,9 @@ public final class Keychain {
 
     // MARK:
 
-    public func contains(_ key: String, withoutAuthenticationUI: Bool = false) throws -> Bool {
+    private func contains(query queryAttributes: [String:Any], withoutAuthenticationUI: Bool = false) throws -> Bool {
         var query = options.query()
-        query[AttributeAccount] = key
+        queryAttributes.forEach { query.updateValue($1, forKey: $0) }
 
         if withoutAuthenticationUI {
             #if os(iOS) || os(watchOS) || os(tvOS)
@@ -878,7 +878,15 @@ public final class Keychain {
             throw securityError(status: status)
         }
     }
-
+    
+    public func contains(_ key: String, withoutAuthenticationUI: Bool = false) throws -> Bool {
+        return try self.contains(query:[AttributeAccount:key])
+    }
+    
+    public func containsAny(withoutAuthenticationUI: Bool = false) throws -> Bool {
+        return try self.contains(query:[:])
+    }
+    
     // MARK:
 
     public class func allKeys(_ itemClass: ItemClass) -> [(String, String)] {
