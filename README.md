@@ -541,6 +541,15 @@ OSStatus error:[-34018] Internal error when a required entitlement isn't present
 
 <img src="https://user-images.githubusercontent.com/40610/67627072-333b1580-f890-11e9-9feb-bf507abc2724.png" width="500" />
 
+
+## Property wrapper
+
+It provides a property wrapper, example usage:
+```swift
+@KeychainAccess("keyname") var myItem: MyKeychainSerializableItem?
+```
+String and Data have default implementations of the ```KeychainSerializable``` protocol. 
+
 ## Requirements
 
 |            | OS                                                         | Swift              |
