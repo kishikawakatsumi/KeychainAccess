@@ -307,20 +307,20 @@ public struct AuthenticationPolicy: OptionSet {
 
 public struct Attributes {
     public var `class`: String? {
-        return attributes[Class] as? String
+        attributes[Class] as? String
     }
     public var data: Data? {
-        return attributes[ValueData] as? Data
+        attributes[ValueData] as? Data
     }
     public var ref: Data? {
-        return attributes[ValueRef] as? Data
+        attributes[ValueRef] as? Data
     }
     public var persistentRef: Data? {
-        return attributes[ValuePersistentRef] as? Data
+        attributes[ValuePersistentRef] as? Data
     }
 
     public var accessible: String? {
-        return attributes[AttributeAccessible] as? String
+        attributes[AttributeAccessible] as? String
     }
     public var accessControl: SecAccessControl? {
         if #available(macOS 10.10, *) {
@@ -333,64 +333,64 @@ public struct Attributes {
         }
     }
     public var accessGroup: String? {
-        return attributes[AttributeAccessGroup] as? String
+        attributes[AttributeAccessGroup] as? String
     }
     public var synchronizable: Bool? {
-        return attributes[AttributeSynchronizable] as? Bool
+        attributes[AttributeSynchronizable] as? Bool
     }
     public var creationDate: Date? {
-        return attributes[AttributeCreationDate] as? Date
+        attributes[AttributeCreationDate] as? Date
     }
     public var modificationDate: Date? {
-        return attributes[AttributeModificationDate] as? Date
+        attributes[AttributeModificationDate] as? Date
     }
     public var attributeDescription: String? {
-        return attributes[AttributeDescription] as? String
+        attributes[AttributeDescription] as? String
     }
     public var comment: String? {
-        return attributes[AttributeComment] as? String
+        attributes[AttributeComment] as? String
     }
     public var creator: String? {
-        return attributes[AttributeCreator] as? String
+        attributes[AttributeCreator] as? String
     }
     public var type: String? {
-        return attributes[AttributeType] as? String
+        attributes[AttributeType] as? String
     }
     public var label: String? {
-        return attributes[AttributeLabel] as? String
+        attributes[AttributeLabel] as? String
     }
     public var isInvisible: Bool? {
-        return attributes[AttributeIsInvisible] as? Bool
+        attributes[AttributeIsInvisible] as? Bool
     }
     public var isNegative: Bool? {
-        return attributes[AttributeIsNegative] as? Bool
+        attributes[AttributeIsNegative] as? Bool
     }
     public var account: String? {
-        return attributes[AttributeAccount] as? String
+        attributes[AttributeAccount] as? String
     }
     public var service: String? {
-        return attributes[AttributeService] as? String
+        attributes[AttributeService] as? String
     }
     public var generic: Data? {
-        return attributes[AttributeGeneric] as? Data
+        attributes[AttributeGeneric] as? Data
     }
     public var securityDomain: String? {
-        return attributes[AttributeSecurityDomain] as? String
+        attributes[AttributeSecurityDomain] as? String
     }
     public var server: String? {
-        return attributes[AttributeServer] as? String
+        attributes[AttributeServer] as? String
     }
     public var `protocol`: String? {
-        return attributes[AttributeProtocol] as? String
+        attributes[AttributeProtocol] as? String
     }
     public var authenticationType: String? {
-        return attributes[AttributeAuthenticationType] as? String
+        attributes[AttributeAuthenticationType] as? String
     }
     public var port: Int? {
-        return attributes[AttributePort] as? Int
+        attributes[AttributePort] as? Int
     }
     public var path: String? {
-        return attributes[AttributePath] as? String
+        attributes[AttributePath] as? String
     }
 
     fileprivate let attributes: [String: Any]
@@ -401,75 +401,75 @@ public struct Attributes {
 
     public subscript(key: String) -> Any? {
         get {
-            return attributes[key]
+            attributes[key]
         }
     }
 }
 
 public final class Keychain {
     public var itemClass: ItemClass {
-        return options.itemClass
+        options.itemClass
     }
 
     public var service: String {
-        return options.service
+        options.service
     }
 
     // This attribute (kSecAttrAccessGroup) applies to macOS keychain items only if you also set a value of true for the
     // kSecUseDataProtectionKeychain key, the kSecAttrSynchronizable key, or both.
     public var accessGroup: String? {
-        return options.accessGroup
+        options.accessGroup
     }
 
     public var server: URL {
-        return options.server
+        options.server
     }
 
     public var protocolType: ProtocolType {
-        return options.protocolType
+        options.protocolType
     }
 
     public var authenticationType: AuthenticationType {
-        return options.authenticationType
+        options.authenticationType
     }
 
     public var accessibility: Accessibility {
-        return options.accessibility
+        options.accessibility
     }
 
     @available(iOS 8.0, macOS 10.10, *)
     @available(watchOS, unavailable)
     public var authenticationPolicy: AuthenticationPolicy? {
-        return options.authenticationPolicy
+        options.authenticationPolicy
     }
 
     public var synchronizable: Bool {
-        return options.synchronizable
+        options.synchronizable
     }
 
     public var label: String? {
-        return options.label
+        options.label
     }
 
     public var comment: String? {
-        return options.comment
+        options.comment
     }
 
     @available(iOS 8.0, macOS 10.10, *)
     @available(watchOS, unavailable)
     public var authenticationPrompt: String? {
-        return options.authenticationPrompt
+        options.authenticationPrompt
     }
 
     @available(iOS 9.0, macOS 10.11, *)
     public var authenticationUI: AuthenticationUI {
-        return options.authenticationUI ?? .allow
+        options.authenticationUI ?? .allow
     }
 
     #if os(iOS) || os(macOS)
     @available(iOS 9.0, macOS 10.11, *)
     public var authenticationContext: LAContext? {
-        return options.authenticationContext as? LAContext
+        options.authenticationContext as? LAContext
     }
     #endif
 
@@ -587,7 +587,7 @@ public final class Keychain {
     // MARK:
 
     public func get(_ key: String, ignoringAttributeSynchronizable: Bool = true) throws -> String? {
-        return try getString(key, ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
+        try getString(key, ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
     }
 
     public func getString(_ key: String, ignoringAttributeSynchronizable: Bool = true) throws -> String? {
@@ -742,9 +742,9 @@ public final class Keychain {
     public subscript(key: String) -> String? {
         get {
             #if swift(>=5.0)
-            return try? get(key)
+            try? get(key)
             #else
-            return (try? get(key)).flatMap { $0 }
+            (try? get(key)).flatMap { $0 }
             #endif
         }
 
@@ -763,7 +763,7 @@ public final class Keychain {
 
     public subscript(string key: String) -> String? {
         get {
-            return self[key]
+            self[key]
         }
 
         set {
@@ -774,9 +774,9 @@ public final class Keychain {
     public subscript(data key: String) -> Data? {
         get {
             #if swift(>=5.0)
-            return try? getData(key)
+            try? getData(key)
             #else
-            return (try? getData(key)).flatMap { $0 }
+            (try? getData(key)).flatMap { $0 }
             #endif
         }
 
@@ -796,9 +796,9 @@ public final class Keychain {
     public subscript(attributes key: String) -> Attributes? {
         get {
             #if swift(>=5.0)
-            return try? get(key) { $0 }
+            try? get(key) { $0 }
             #else
-            return (try? get(key) { $0 }).flatMap { $0 }
+            (try? get(key) { $0 }).flatMap { $0 }
             #endif
         }
     }
@@ -950,7 +950,7 @@ public final class Keychain {
     }
 
     public func allItems() -> [[String: Any]] {
-        return type(of: self).prettify(itemClass: itemClass, items: items())
+        type(of: self).prettify(itemClass: itemClass, items: items())
     }
 
     #if os(iOS) && !targetEnvironment(macCatalyst)
@@ -1090,7 +1090,7 @@ public final class Keychain {
      */
     @available(iOS 8.0, *)
     public class func generatePassword() -> String {
-        return SecCreateSharedWebCredentialPassword()! as String
+        SecCreateSharedWebCredentialPassword()! as String
     }
     #endif
 
@@ -1191,7 +1191,7 @@ public final class Keychain {
 
     @discardableResult
     fileprivate func securityError(status: OSStatus) -> Error {
-        return type(of: self).securityError(status: status)
+        type(of: self).securityError(status: status)
     }
 }
 
@@ -1314,7 +1314,7 @@ extension Keychain: CustomStringConvertible, CustomDebugStringConvertible {
     }
 
     public var debugDescription: String {
-        return "\(items())"
+        "\(items())"
     }
 }
 
@@ -1406,11 +1406,11 @@ extension Options {
 
 extension Attributes: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
-        return "\(attributes)"
+        "\(attributes)"
     }
 
     public var debugDescription: String {
-        return description
+        description
     }
 }
 
@@ -3059,10 +3059,10 @@ extension Status: CustomNSError {
     public static let errorDomain = KeychainAccessErrorDomain
 
     public var errorCode: Int {
-        return Int(rawValue)
+        Int(rawValue)
     }
 
     public var errorUserInfo: [String : Any] {
-        return [NSLocalizedDescriptionKey: description]
+        [NSLocalizedDescriptionKey: description]
     }
 }
