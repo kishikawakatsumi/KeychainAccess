@@ -21,7 +21,7 @@ let package = Package(
         .target(
           name: "KeychainAccess",
           path: "Lib/KeychainAccess",
-          exclude: ["Info.plist"],
+          exclude: ["Info.plist", "PrivacyInfo.xcprivacy"],
           linkerSettings: [.unsafeFlags(["-Xlinker", "-no_application_extension"])]
         )
     ]
