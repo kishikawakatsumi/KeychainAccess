@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.10
 
 //  Package.swift
 //  KeychainAccess
@@ -11,8 +11,9 @@ import PackageDescription
 
 let package = Package(
     name: "KeychainAccess",
+	defaultLocalization: "en",
     platforms: [
-        .macOS(.v10_10), .iOS(.v9), .tvOS(.v9), .watchOS(.v2)
+		.iOS(.v13), .macOS(.v13), .watchOS(.v9), .tvOS(.v16)
     ],
     products: [
         .library(name: "KeychainAccess", targets: ["KeychainAccess"])
@@ -21,8 +22,7 @@ let package = Package(
         .target(
           name: "KeychainAccess",
           path: "Lib/KeychainAccess",
-          exclude: ["Info.plist"],
-          linkerSettings: [.unsafeFlags(["-Xlinker", "-no_application_extension"])]
+          exclude: ["Info.plist"]
         )
     ]
 )

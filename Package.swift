@@ -20,7 +20,6 @@ let package = Package(
     targets: [
         .target(
           name: "KeychainAccess",
-          path: "Lib/KeychainAccess",
-          linkerSettings: [.unsafeFlags(["-Xlinker", "-no_application_extension"])])
+          path: "Lib/KeychainAccess")
     ]
 )
